@@ -1,0 +1,449 @@
+================================================================================
+                    FIREBASE DEPLOYMENT GUIDE
+                    Leafin E-commerce PWA
+================================================================================
+
+TABLE OF CONTENTS
+-----------------
+1. Prerequisites
+2. Initial Setup
+3. Project Configuration
+4. Building the Application
+5. Deploying to Firebase
+6. Post-Deployment
+7. Troubleshooting
+8. Useful Commands
+
+
+================================================================================
+1. PREREQUISITES
+================================================================================
+
+Before deploying to Firebase, ensure you have:
+
+1.1 Node.js and npm
+-------------------
+Check if installed:
+  node --version    (Should be v18 or higher)
+  npm --version     (Should be v9 or higher)
+
+1.2 Firebase CLI
+----------------
+Install Firebase CLI globally:
+  npm install -g firebase-tools
+
+Verify installation:
+  firebase --version
+
+1.3 Google Account
+------------------
+- You need a Google account to use Firebase
+- Go to: https://console.firebase.google.com/
+
+
+================================================================================
+2. INITIAL SETUP
+================================================================================
+
+2.1 Install Firebase CLI (if not already installed)
+----------------------------------------------------
+  npm install -g firebase-tools
+
+2.2 Login to Firebase
+---------------------
+  firebase login
+
+This will:
+- Open your browser
+- Ask you to sign in with your Google account
+- Grant Firebase CLI access to your account
+
+Alternative for servers without browser:
+  firebase login --no-localhost
+
+2.3 Verify Login
+----------------
+  firebase projects:list
+
+This shows all your Firebase projects.
+
+
+================================================================================
+3. PROJECT CONFIGURATION
+================================================================================
+
+3.1 Create Firebase Project
+----------------------------
+
+Option A: Using Firebase Console (Recommended for first-time users)
+1. Go to https://console.firebase.google.com/
+2. Click "Add project"
+3. Enter project name (e.g., "leafin-ecommerce")
+4. Accept terms and click "Continue"
+5. Choose whether to enable Google Analytics (optional)
+6. Click "Create project"
+
+Option B: Using Firebase CLI
+  firebase projects:create leafin-ecommerce --display-name "Leafin E-commerce PWA"
+
+3.2 Create Configuration Files
+-------------------------------
+
+Create firebase.json (Hosting configuration):
+{
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|ico)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(js|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+Create .firebaserc (Project configuration):
+{
+  "projects": {
+    "default": "leafin-ecommerce"
+  }
+}
+
+3.3 Update .gitignore
+---------------------
+Add these lines to your .gitignore:
+  # Firebase
+  .firebase/
+  firebase-debug.log
+  .firebaserc
+
+
+================================================================================
+4. BUILDING THE APPLICATION
+================================================================================
+
+4.1 Install Dependencies
+------------------------
+  npm install
+
+4.2 Build Production Version
+-----------------------------
+  npm run build
+
+This will:
+- Compile TypeScript to JavaScript
+- Bundle all assets with Vite
+- Optimize images and code
+- Generate service worker for PWA
+- Create a dist folder with production files
+
+Expected Output:
+  ✓ 1713 modules transformed.
+  dist/index.html                   1.71 kB
+  dist/assets/index-[hash].css     61.08 kB
+  dist/assets/index-[hash].js     334.54 kB
+  ✓ built in 6.27s
+
+4.3 Test Build Locally (Optional)
+----------------------------------
+  npm run preview
+
+This serves the production build locally at http://localhost:4173
+
+
+================================================================================
+5. DEPLOYING TO FIREBASE
+================================================================================
+
+5.1 Deploy to Firebase Hosting
+-------------------------------
+  firebase deploy --only hosting
+
+What happens during deployment:
+1. Validates your configuration
+2. Compresses and uploads files from dist folder
+3. Creates a new version
+4. Releases the version to production
+5. Provides you with live URLs
+
+Expected Output:
+  ✔ hosting[leafin-ecommerce]: file upload complete
+  ✔ hosting[leafin-ecommerce]: version finalized
+  ✔ hosting[leafin-ecommerce]: release complete
+  
+  ✔ Deploy complete!
+  
+  Hosting URL: https://leafin-ecommerce.web.app
+
+5.2 Access Your Deployed App
+-----------------------------
+Your app will be available at:
+- Primary URL: https://[project-id].web.app
+- Alternative URL: https://[project-id].firebaseapp.com
+
+For this project:
+- https://leafin-ecommerce.web.app
+- https://leafin-ecommerce.firebaseapp.com
+
+
+================================================================================
+6. POST-DEPLOYMENT
+================================================================================
+
+6.1 Verify Deployment
+----------------------
+Visit your hosting URL and check:
+✓ All pages load correctly
+✓ Images and assets display properly
+✓ Routing works (refresh on different pages)
+✓ PWA features work (install prompt, offline mode)
+✓ Mobile responsiveness
+
+6.2 View Deployment History
+----------------------------
+  firebase hosting:channel:list
+
+6.3 Check Firebase Console
+---------------------------
+Visit: https://console.firebase.google.com/project/[project-id]/hosting
+
+Here you can:
+- View deployment history
+- See traffic analytics
+- Manage custom domains
+- Configure SSL certificates
+- View release versions
+
+6.4 Set Up Custom Domain (Optional)
+------------------------------------
+In Firebase Console:
+1. Go to Hosting section
+2. Click "Add custom domain"
+3. Enter your domain name
+4. Follow DNS configuration instructions
+5. Wait for SSL certificate provisioning (can take up to 24 hours)
+
+
+================================================================================
+7. TROUBLESHOOTING
+================================================================================
+
+Common Issues and Solutions:
+
+Issue 1: "Firebase project not found"
+--------------------------------------
+Solution: Check your project ID
+  firebase projects:list
+  
+Update .firebaserc with correct project ID
+
+Issue 2: "Permission denied"
+----------------------------
+Solution: Re-login to Firebase
+  firebase logout
+  firebase login
+
+Issue 3: "Build fails with TypeScript errors"
+----------------------------------------------
+Solution: Fix TypeScript errors first
+  npm run build
+  
+Check for errors in terminal
+Fix all TypeScript errors before deploying
+
+Issue 4: "404 on page refresh"
+------------------------------
+Solution: Ensure firebase.json has the rewrite rule:
+{
+  "hosting": {
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
+
+Issue 5: "Old version still showing"
+------------------------------------
+Solution: Clear browser cache or use incognito mode
+Or force a new deployment:
+  firebase deploy --only hosting --force
+
+Issue 6: "Service Worker not updating"
+---------------------------------------
+- Clear browser cache
+- Unregister old service worker in DevTools
+- Hard refresh (Ctrl+Shift+R or Cmd+Shift+R)
+
+
+================================================================================
+8. USEFUL COMMANDS
+================================================================================
+
+8.1 Firebase CLI Commands
+--------------------------
+
+Login/Logout:
+  firebase login
+  firebase logout
+  firebase login --no-localhost    # For servers
+
+Project Management:
+  firebase projects:list                      # List all projects
+  firebase projects:create [project-id]       # Create new project
+  firebase use [project-id]                   # Switch project
+
+Deployment:
+  firebase deploy                             # Deploy everything
+  firebase deploy --only hosting              # Deploy only hosting
+  firebase deploy --only hosting --force      # Force deploy
+  firebase deploy -m "Deployment message"     # Deploy with message
+
+Hosting Management:
+  firebase hosting:channel:list               # List hosting channels
+  firebase hosting:channel:deploy preview     # Deploy to preview channel
+  firebase hosting:channel:delete preview     # Delete preview channel
+
+Local Development:
+  firebase serve                              # Serve locally
+  firebase serve --only hosting               # Serve only hosting
+
+Logs and Info:
+  firebase hosting:sites:list                 # List hosting sites
+  firebase hosting:releases:list              # List releases
+
+8.2 NPM Scripts
+---------------
+  npm run dev          # Start development server
+  npm run build        # Build for production
+  npm run preview      # Preview production build
+  npm run lint         # Run ESLint
+
+
+================================================================================
+9. CONTINUOUS DEPLOYMENT WORKFLOW
+================================================================================
+
+Recommended Workflow:
+
+1. Make Changes
+   - Edit your code
+   - Test locally with npm run dev
+
+2. Build and Test
+   npm run build
+   npm run preview
+
+3. Deploy
+   firebase deploy --only hosting -m "Description of changes"
+
+4. Verify
+   - Visit your live URL
+   - Test all functionality
+   - Check on mobile devices
+
+Preview Channels (Optional):
+Deploy to a preview URL before production:
+  firebase hosting:channel:deploy preview
+
+This gives you a temporary URL like:
+  https://leafin-ecommerce--preview-[hash].web.app
+
+When ready, deploy to production:
+  firebase deploy --only hosting
+
+
+================================================================================
+10. QUICK REFERENCE CARD
+================================================================================
+
+Complete Deployment Flow:
+1. npm install                                # Install dependencies
+2. npm run build                              # Build production
+3. firebase login                             # Login to Firebase
+4. firebase projects:create [project-id]      # Create project (first time)
+5. firebase deploy --only hosting             # Deploy to Firebase
+6. Visit: https://[project-id].web.app        # Access your app
+
+Update Deployment:
+1. Make code changes
+2. npm run build
+3. firebase deploy --only hosting
+
+
+================================================================================
+11. DEPLOYMENT CHECKLIST
+================================================================================
+
+Before deploying, ensure:
+□ All TypeScript errors are fixed
+□ Build completes successfully (npm run build)
+□ All features tested locally
+□ Environment variables configured
+□ firebase.json configured correctly
+□ .firebaserc has correct project ID
+□ Logged into Firebase CLI
+□ Production build tested (npm run preview)
+□ Mobile responsiveness checked
+□ PWA features working
+
+After deploying:
+□ Live URL accessible
+□ All pages load correctly
+□ Images and assets display
+□ Routing works on refresh
+□ Mobile version works
+□ PWA install prompt appears
+□ Service worker registered
+□ Performance is acceptable
+
+
+================================================================================
+12. GETTING HELP
+================================================================================
+
+If you encounter issues:
+
+1. Check Firebase Status: https://status.firebase.google.com/
+2. Firebase Support: https://firebase.google.com/support
+3. Stack Overflow: Tag questions with 'firebase' and 'firebase-hosting'
+4. Firebase Community: https://firebase.google.com/community
+
+
+================================================================================
+PROJECT INFORMATION
+================================================================================
+
+Project Name: Leafin E-commerce PWA
+Deployed URL: https://leafin-ecommerce.web.app
+Firebase Console: https://console.firebase.google.com/project/leafin-ecommerce
+Last Updated: November 26, 2025
+
+================================================================================

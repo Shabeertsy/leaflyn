@@ -1,0 +1,151 @@
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
+import { useAuthStore } from '../../store/useAuthStore';
+
+const Login: React.FC = () => {
+  const navigate = useNavigate();
+  const setUser = useAuthStore((state) => state.setUser);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    // Simulate API call
+    setTimeout(() => {
+      setLoading(false);
+      if (email && password) {
+        // Mock successful login
+        setUser({
+          id: '1',
+          name: 'John Doe',
+          email: email,
+          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+        });
+        navigate('/');
+      } else {
+        setError('Invalid email or password');
+      }
+    }, 1500);
+  };
+
+  return (
+    <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-6">
+      <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden">
+        <div className="p-8 md:p-10">
+          <div className="text-center mb-8">
+            <Link to="/" className="inline-block mb-6">
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-10 h-10 bg-[#2d5016] rounded-full flex items-center justify-center">
+                  <span className="text-white text-xl font-bold">L</span>
+                </div>
+                <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">Leafin</span>
+              </div>
+            </Link>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2 font-['Playfair_Display']">Welcome Back</h1>
+            <p className="text-gray-500">Sign in to continue to your green space</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <div className="bg-red-50 text-red-500 text-sm p-4 rounded-xl text-center">
+                {error}
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-gray-700 uppercase tracking-wide">Email Address</label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                  <Mail size={20} />
+                </div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#2d5016] focus:ring-0 outline-none transition-all font-medium"
+                  placeholder="john@example.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-bold text-gray-700 uppercase tracking-wide">Password</label>
+                <Link to="/forgot-password" className="text-xs font-semibold text-[#2d5016] hover:underline">
+                  Forgot Password?
+                </Link>
+              </div>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                  <Lock size={20} />
+                </div>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-12 pr-12 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#2d5016] focus:ring-0 outline-none transition-all font-medium"
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#2d5016] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {loading ? (
+                <Loader2 size={24} className="animate-spin" />
+              ) : (
+                <>
+                  Sign In <ArrowRight size={20} />
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="mt-8 text-center">
+            <p className="text-gray-500">
+              Don't have an account?{' '}
+              <Link to="/register" className="font-bold text-[#2d5016] hover:underline">
+                Create Account
+              </Link>
+            </p>
+          </div>
+
+          <div className="mt-8 pt-8 border-t border-gray-100">
+            <p className="text-xs text-center text-gray-400 mb-4 uppercase tracking-wider font-bold">Or continue with</p>
+            <div className="grid grid-cols-2 gap-4">
+              <button className="flex items-center justify-center gap-2 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors font-semibold text-gray-700">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
+                Google
+              </button>
+              <button className="flex items-center justify-center gap-2 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors font-semibold text-gray-700">
+                <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" className="w-5 h-5" />
+                Facebook
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Login;

@@ -1,0 +1,104 @@
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  originalPrice?: number;
+  discount?: number;
+  category: 'indoor-plants' | 'outdoor-plants' | 'aquatics' | 'accessories' | 'fertilizers' | 'pots';
+  subcategory?: string;
+  image: string;
+  images?: string[];
+  rating: number;
+  reviewCount: number;
+  inStock: boolean;
+  stock?: number;
+  featured?: boolean;
+  bestseller?: boolean;
+  newArrival?: boolean;
+  tags?: string[];
+  specifications?: {
+    [key: string]: string;
+  };
+  careInstructions?: string[];
+}
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  avatar?: string;
+  addresses?: Address[];
+}
+
+export interface Address {
+  id: string;
+  name: string;
+  phone: string;
+  addressLine1: string;
+  addressLine2?: string;
+  city: string;
+  state: string;
+  pincode: string;
+  isDefault?: boolean;
+}
+
+export interface Order {
+  id: string;
+  userId: string;
+  items: CartItem[];
+  total: number;
+  subtotal: number;
+  shipping: number;
+  tax: number;
+  discount?: number;
+  status: 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  paymentMethod: 'cod' | 'card' | 'upi' | 'wallet';
+  paymentStatus: 'pending' | 'paid' | 'failed';
+  shippingAddress: Address;
+  createdAt: Date;
+  updatedAt: Date;
+  deliveryDate?: Date;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  icon: string;
+  image: string;
+  description?: string;
+  productCount?: number;
+}
+
+export interface Review {
+  id: string;
+  productId: string;
+  userId: string;
+  userName: string;
+  userAvatar?: string;
+  rating: number;
+  comment: string;
+  images?: string[];
+  createdAt: Date;
+  helpful?: number;
+}
+
+export interface WishlistItem {
+  productId: string;
+  addedAt: Date;
+}
+
+export interface SearchFilters {
+  category?: string;
+  priceRange?: [number, number];
+  rating?: number;
+  inStock?: boolean;
+  sortBy?: 'price-low' | 'price-high' | 'rating' | 'newest' | 'popular';
+}

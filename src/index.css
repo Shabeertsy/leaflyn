@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@layer theme {
+  :root {
+    --color-primary: #2d5016;
+    --color-secondary: #8b7355;
+    --color-accent: #d4af37;
+    --bottom-nav-height: 64px;
+    --header-height: 56px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-gray-800;
+  }
+  
+  body {
+    @apply bg-neutral-50 text-gray-900 antialiased;
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    letter-spacing: -0.02em;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Premium Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+@keyframes spin-slow {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.animate-fade-in { animation: fadeIn 0.4s ease-out; }
+.animate-slide-up { animation: slideUp 0.5s ease-out; }
+.animate-slide-down { animation: slideDown 0.3s ease-out; }
+.animate-scale-in { animation: scaleIn 0.3s ease-out; }
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-spin-slow { animation: spin-slow 20s linear infinite; }
+
+/* Mobile Safe Areas */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Premium Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, #2d5016 0%, #5a7c3e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Luxury Card Shadow */
+.luxury-shadow {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.luxury-shadow-hover {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+}
