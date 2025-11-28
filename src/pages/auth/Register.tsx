@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, User, ArrowRight, Loader2 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
-  const setUser = useAuthStore((state) => state.setUser);
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
+  const register = useAuthStore((state) => state.register);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,7 +16,7 @@ const Register: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -25,18 +27,14 @@ const Register: React.FC = () => {
 
     setLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      await register(name, email, password);
+      navigate(from, { replace: true });
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+    } finally {
       setLoading(false);
-      // Mock successful registration
-      setUser({
-        id: '1',
-        name: name,
-        email: email,
-        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2d5016&color=fff`,
-      });
-      navigate('/');
-    }, 1500);
+    }
   };
 
   return (

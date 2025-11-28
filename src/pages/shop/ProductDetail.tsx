@@ -409,7 +409,7 @@ const ProductDetail: React.FC = () => {
               addedToCart
                 ? 'bg-green-600'
                 : product.inStock
-                ? 'bg-gradient-to-r from-[#2d5016] to-[#3d6622] hover:shadow-xl hover:-translate-y-0.5 active:scale-95'
+                ? 'bg-[#2d5016] hover:bg-[#3d6622] hover:shadow-xl hover:-translate-y-0.5 active:scale-95'
                 : 'bg-gray-400 cursor-not-allowed'
             }`}
           >
@@ -433,6 +433,21 @@ const ProductDetail: React.FC = () => {
               </>
             )}
           </button>
+
+          {/* Buy Now Button */}
+          {product.inStock && (
+            <button
+              onClick={() => {
+                addToCart(product, quantity);
+                navigate('/cart');
+              }}
+              className="flex-1 py-3 lg:py-4 bg-gradient-to-r from-[#d4af37] to-[#bfa040] text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95 text-sm lg:text-base"
+            >
+              <Truck size={18} />
+              <span className="hidden sm:inline">Buy Now</span>
+              <span className="sm:hidden">Buy</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, ArrowRight } from 'lucide-react';
 import ProductCard from '../components/features/ProductCard';
-import { categories, featuredProducts, bestsellerProducts } from '../data/products';
+import { featuredProducts, bestsellerProducts } from '../data/products';
+import { useCategoriesStore } from '../store/useCategoriesStore';
 
 const Home: React.FC = () => {
+  const { categories, fetchCategories } = useCategoriesStore();
+  
   // Carousel state
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
@@ -14,6 +17,11 @@ const Home: React.FC = () => {
     'https://images.unsplash.com/photo-1509587584298-0f3b3a3a1797?auto=format&fit=crop&q=80&w=800',
     'https://images.unsplash.com/photo-1466781783364-36c955e42a7f?auto=format&fit=crop&q=80&w=800',
   ];
+
+  // Fetch categories on mount
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   // Auto-rotate carousel
   useEffect(() => {
@@ -240,75 +248,107 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Categories */}
-      <section className="px-6 py-20 max-w-7xl mx-auto">
-        <div className="flex items-end justify-between mb-10">
-          <div>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#2d5016] mb-3 font-['Playfair_Display']">Shop by Category</h2>
-            <p className="text-gray-500 font-light tracking-wide">Curated collections for every space</p>
-          </div>
-          <Link to="/categories" className="group flex items-center gap-2 text-[#2d5016] font-semibold hover:text-[#d4af37] transition-colors">
-            <span className="relative">
-              View All
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#d4af37] transition-all duration-300 group-hover:w-full"></span>
-            </span>
-            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
-        
-        {/* Desktop Grid View */}
-        <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {categories.map((category) => (
-            <Link
-              key={category.id}
-              to={`/category/${category.slug}`}
-              className="group relative"
-            >
-              <div className="relative aspect-[4/5] bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 group-hover:-translate-y-2 border border-gray-100">
-                {/* Background Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/5 group-hover:to-black/20 transition-colors duration-500" />
-                
-                {/* Icon Container */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-                  <div className="w-16 h-16 bg-[#f5f5f0] rounded-full flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#2d5016] transition-all duration-500 shadow-sm">
-                    <span className="text-3xl group-hover:text-white transition-colors duration-500">{category.icon}</span>
-                  </div>
-                  
-                  <h3 className="text-base font-bold text-gray-900 text-center group-hover:text-[#2d5016] transition-colors duration-300 font-['Playfair_Display']">
-                    {category.name}
-                  </h3>
-                  <p className="text-[10px] text-gray-500 mt-1 uppercase tracking-wider opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500">
-                    Explore
-                  </p>
-                </div>
-                
-                {/* Decorative Corner */}
-                <div className="absolute top-0 right-0 w-12 h-12 bg-[#2d5016]/5 rounded-bl-[2rem] -mr-6 -mt-6 transition-all duration-500 group-hover:bg-[#d4af37]/20 group-hover:scale-150" />
-              </div>
-            </Link>
-          ))}
+      {/* Categories Section - Redesigned */}
+      <section className="py-24 bg-white relative overflow-hidden">
+        {/* Decorative Background Elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#2d5016]/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-neutral-50 to-transparent" />
         </div>
 
-        {/* Mobile Horizontal Scroll View */}
-        <div className="md:hidden flex overflow-x-auto gap-4 pb-4 -mx-6 px-6 no-scrollbar snap-x snap-mandatory">
-          {categories.map((category) => (
-            <Link
-              key={category.id}
-              to={`/category/${category.slug}`}
-              className="flex-shrink-0 w-32 snap-start"
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <div className="max-w-2xl">
+              <span className="text-[#d4af37] font-bold tracking-widest uppercase text-xs mb-2 block">Collections</span>
+              <h2 className="text-4xl lg:text-5xl font-bold text-[#2d5016] font-['Playfair_Display'] mb-4">
+                Explore Our <span className="italic text-gray-400 font-light">Green Worlds</span>
+              </h2>
+              <p className="text-gray-500 text-lg font-light leading-relaxed">
+                Discover curated selections of plants and accessories tailored to your unique style and space.
+              </p>
+            </div>
+            <Link 
+              to="/categories" 
+              className="group inline-flex items-center gap-2 px-6 py-3 bg-neutral-100 hover:bg-[#2d5016] text-[#2d5016] hover:text-white rounded-full transition-all duration-300 font-semibold"
             >
-              <div className="relative aspect-square bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 mb-2">
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
-                  <div className="w-12 h-12 bg-[#f5f5f0] rounded-full flex items-center justify-center mb-2">
-                    <span className="text-2xl">{category.icon}</span>
+              <span>View All Categories</span>
+              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+          
+          {/* Mobile View: App-like Horizontal Scroll */}
+          <div className="md:hidden flex overflow-x-auto pb-6 -mx-6 px-6 gap-4 no-scrollbar snap-x snap-mandatory">
+            {categories.map((category, index) => (
+              <Link
+                key={category.id}
+                to={`/category/${category.slug}`}
+                className="flex flex-col items-center gap-3 min-w-[100px] snap-center group"
+              >
+                <div className={`w-20 h-20 rounded-full flex items-center justify-center text-3xl shadow-sm transition-transform group-active:scale-95 ${
+                  index % 3 === 0 ? 'bg-green-50 text-green-700' :
+                  index % 3 === 1 ? 'bg-teal-50 text-teal-700' :
+                  'bg-amber-50 text-amber-700'
+                }`}>
+                  {category.icon}
+                </div>
+                <span className="text-xs font-bold text-gray-700 text-center leading-tight px-1">
+                  {category.category_name}
+                </span>
+              </Link>
+            ))}
+          </div>
+
+          {/* Desktop View: Professional Grid */}
+          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {categories.map((category, index) => (
+              <Link
+                key={category.id}
+                to={`/category/${category.slug}`}
+                className="group relative h-64 lg:h-72 rounded-3xl overflow-hidden cursor-pointer"
+              >
+                {/* Background Image/Gradient */}
+                <div className="absolute inset-0 bg-neutral-100 transition-transform duration-700 group-hover:scale-110">
+                  <div className={`absolute inset-0 bg-gradient-to-br ${
+                    index % 3 === 0 ? 'from-green-50 to-emerald-100' :
+                    index % 3 === 1 ? 'from-teal-50 to-cyan-100' :
+                    'from-amber-50 to-orange-100'
+                  }`} />
+                  
+                  {/* Abstract Shapes */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/40 rounded-full blur-2xl transform translate-x-10 -translate-y-10" />
+                  <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/40 rounded-full blur-2xl transform -translate-x-10 translate-y-10" />
+                </div>
+
+                {/* Content Container */}
+                <div className="absolute inset-0 p-8 flex flex-col justify-between">
+                  <div className="flex justify-between items-start">
+                    <div className="w-14 h-14 bg-white/80 backdrop-blur-md rounded-2xl flex items-center justify-center text-3xl shadow-sm group-hover:scale-110 transition-transform duration-300">
+                      {category.icon}
+                    </div>
+                    <div className="w-10 h-10 rounded-full border border-gray-900/10 flex items-center justify-center opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300 bg-white">
+                      <ArrowRight size={16} className="text-[#2d5016]" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 font-['Playfair_Display'] mb-2 group-hover:text-[#2d5016] transition-colors">
+                      {category.category_name}
+                    </h3>
+                    <p className="text-gray-600 text-sm opacity-80 line-clamp-2 mb-4 group-hover:opacity-100 transition-opacity">
+                      {category.description}
+                    </p>
+                    <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
+                      <span className="w-8 h-[1px] bg-gray-400 group-hover:w-12 group-hover:bg-[#2d5016] transition-all duration-300" />
+                      {category.productCount} Products
+                    </div>
                   </div>
                 </div>
-              </div>
-              <h3 className="text-xs font-bold text-gray-900 text-center font-['Playfair_Display']">
-                {category.name}
-              </h3>
-            </Link>
-          ))}
+
+                {/* Hover Border Effect */}
+                <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#2d5016]/10 rounded-3xl transition-colors duration-300 pointer-events-none" />
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

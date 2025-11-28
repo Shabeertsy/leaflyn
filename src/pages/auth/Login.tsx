@@ -1,38 +1,32 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const setUser = useAuthStore((state) => state.setUser);
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
+  const login = useAuthStore((state) => state.login);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      await login(email, password);
+      navigate(from, { replace: true });
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Invalid email or password');
+    } finally {
       setLoading(false);
-      if (email && password) {
-        // Mock successful login
-        setUser({
-          id: '1',
-          name: 'John Doe',
-          email: email,
-          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        });
-        navigate('/');
-      } else {
-        setError('Invalid email or password');
-      }
-    }, 1500);
+    }
   };
 
   return (

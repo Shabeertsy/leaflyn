@@ -69,7 +69,7 @@ export interface Order {
 
 export interface Category {
   id: string;
-  name: string;
+  category_name: string;
   slug: string;
   icon: string;
   image: string;
