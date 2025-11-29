@@ -102,3 +102,61 @@ export interface SearchFilters {
   inStock?: boolean;
   sortBy?: 'price-low' | 'price-high' | 'rating' | 'newest' | 'popular';
 }
+
+export interface APIProduct {
+  id: number;
+  uuid: string;
+  created_at: string;
+  updated_at: string;
+  active_status: boolean;
+  deleted_at: string | null;
+  name: string;
+  title: string;
+  description: string;
+  base_price: string | null;
+  category: number;
+}
+
+export interface APISize {
+  id: number;
+  uuid: string;
+  created_at: string;
+  updated_at: string;
+  active_status: boolean;
+  deleted_at: string | null;
+  size: string;
+  measurement: string | null;
+}
+
+export interface APIProductVariant {
+  uuid: string;
+  product: APIProduct;
+  color: string | null;
+  size: APISize | null;
+  stock: number;
+  price: string;
+  variant: string;
+  offer_type: string;
+  offer: number;
+  height: string | null;
+  pot_size: string | null;
+  light: string | null;
+  water: string | null;
+  growth_rate: string | null;
+  care_guides: string[];
+  images: APIProductImage[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface APIProductImage {
+  uuid: string;
+  image: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProductCollectionResponse {
+  featured_products: APIProductVariant[];
+  bestseller_products: APIProductVariant[];
+}

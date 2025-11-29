@@ -9,6 +9,8 @@ import { useCartStore } from '../../store/useCartStore';
 import { useWishlistStore } from '../../store/useWishlistStore';
 import { products } from '../../data/products';
 import ProductCard from '../../components/features/ProductCard';
+import { useProductCollectionStore } from '../../store/useProductCollectionStore';
+import { mapVariantToProduct } from '../../lib/mappers';
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,7 +18,17 @@ const ProductDetail: React.FC = () => {
   const addToCart = useCartStore((state) => state.addToCart);
   const { addToWishlist, removeFromWishlist, wishlist } = useWishlistStore();
   
-  const product = products.find((p) => p.id === id);
+  const { featuredProducts, bestsellerProducts } = useProductCollectionStore();
+  
+  let product = products.find((p) => p.id === id);
+  
+  if (!product && id) {
+    const variant = [...featuredProducts, ...bestsellerProducts].find(v => v.uuid === id);
+    if (variant) {
+      product = mapVariantToProduct(variant);
+    }
+  }
+
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);

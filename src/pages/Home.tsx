@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, ArrowRight } from 'lucide-react';
 import ProductCard from '../components/features/ProductCard';
-import { featuredProducts, bestsellerProducts } from '../data/products';
 import { useCategoriesStore } from '../store/useCategoriesStore';
+import { useProductCollectionStore } from '../store/useProductCollectionStore';
+import { mapVariantToProduct } from '../lib/mappers';
 
 const Home: React.FC = () => {
   const { categories, fetchCategories } = useCategoriesStore();
+  const { featuredProducts, bestsellerProducts, fetchProductCollections } = useProductCollectionStore();
   
   // Carousel state
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -18,10 +20,11 @@ const Home: React.FC = () => {
     'https://images.unsplash.com/photo-1466781783364-36c955e42a7f?auto=format&fit=crop&q=80&w=800',
   ];
 
-  // Fetch categories on mount
+  // Fetch categories and products on mount
   useEffect(() => {
     fetchCategories();
-  }, [fetchCategories]);
+    fetchProductCollections();
+  }, [fetchCategories, fetchProductCollections]);
 
   // Auto-rotate carousel
   useEffect(() => {
@@ -366,9 +369,15 @@ const Home: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {featuredProducts.slice(0, 8).map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+            {featuredProducts.length > 0 ? (
+              featuredProducts.slice(0, 8).map((variant) => (
+                <ProductCard key={variant.uuid} product={mapVariantToProduct(variant)} />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-10 text-gray-500">
+                No featured products available at the moment.
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -387,9 +396,15 @@ const Home: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {bestsellerProducts.slice(0, 8).map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+            {bestsellerProducts.length > 0 ? (
+              bestsellerProducts.slice(0, 8).map((variant) => (
+                <ProductCard key={variant.uuid} product={mapVariantToProduct(variant)} />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-10 text-gray-500">
+                No bestseller products available at the moment.
+              </div>
+            )}
           </div>
         </div>
       </section>
