@@ -3,7 +3,7 @@ import type { Product, Category } from '../types';
 export const categories: Category[] = [
   {
     id: '1',
-    name: 'Indoor Plants',
+    category_name: 'Indoor Plants',
     slug: 'indoor-plants',
     icon: '🌿',
     image: '/categories/indoor.jpg',
@@ -12,7 +12,7 @@ export const categories: Category[] = [
   },
   {
     id: '2',
-    name: 'Outdoor Plants',
+    category_name: 'Outdoor Plants',
     slug: 'outdoor-plants',
     icon: '🌳',
     image: '/categories/outdoor.jpg',
@@ -21,7 +21,7 @@ export const categories: Category[] = [
   },
   {
     id: '3',
-    name: 'Aquatics',
+    category_name: 'Aquatics',
     slug: 'aquatics',
     icon: '🐠',
     image: '/categories/aquatics.jpg',
@@ -30,7 +30,7 @@ export const categories: Category[] = [
   },
   {
     id: '4',
-    name: 'Accessories',
+    category_name: 'Accessories',
     slug: 'accessories',
     icon: '🛠️',
     image: '/categories/accessories.jpg',
@@ -39,7 +39,7 @@ export const categories: Category[] = [
   },
   {
     id: '5',
-    name: 'Fertilizers',
+    category_name: 'Fertilizers',
     slug: 'fertilizers',
     icon: '🌱',
     image: '/categories/fertilizers.jpg',
@@ -48,7 +48,7 @@ export const categories: Category[] = [
   },
   {
     id: '6',
-    name: 'Pots & Planters',
+    category_name: 'Pots & Planters',
     slug: 'pots',
     icon: '🏺',
     image: '/categories/pots.jpg',

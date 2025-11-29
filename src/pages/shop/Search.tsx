@@ -111,7 +111,7 @@ const Search: React.FC = () => {
               }`}
             >
               <span>{category.icon}</span>
-              <span>{category.name}</span>
+              <span>{category.category_name}</span>
             </button>
           ))}
         </div>
