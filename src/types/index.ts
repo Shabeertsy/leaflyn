@@ -20,7 +20,7 @@ export interface Product {
   specifications?: {
     [key: string]: string;
   };
-  careInstructions?: string[];
+  careInstructions?: (string | { title: string; content: string })[];
 }
 
 export interface CartItem {
@@ -128,6 +128,14 @@ export interface APISize {
   measurement: string | null;
 }
 
+export interface APICareGuide {
+  uuid: string;
+  title: string;
+  content: string;
+  is_active: boolean;
+  order: number;
+}
+
 export interface APIProductVariant {
   uuid: string;
   product: APIProduct;
@@ -137,13 +145,16 @@ export interface APIProductVariant {
   price: string;
   variant: string;
   offer_type: string;
-  offer: number;
+  original_price: string;
+  offer_symbol: string;
+  offer_percentage: number;
+  name: string;
   height: string | null;
   pot_size: string | null;
   light: string | null;
   water: string | null;
   growth_rate: string | null;
-  care_guides: string[];
+  care_guides: APICareGuide[];
   images: APIProductImage[];
   created_at: string;
   updated_at: string;
@@ -159,4 +170,11 @@ export interface APIProductImage {
 export interface ProductCollectionResponse {
   featured_products: APIProductVariant[];
   bestseller_products: APIProductVariant[];
+}
+
+export interface PaginatedResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
 }

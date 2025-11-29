@@ -59,8 +59,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         
         {/* Discount Badge */}
         {product.discount && (
-          <div className="absolute top-3 left-3 bg-[#2d5016] text-white text-xs font-bold px-3 py-1.5 rounded">
-            -{product.discount}%
+          <div className="absolute top-3 left-3 bg-gradient-to-r from-[#2d5016] to-[#3d6622] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+            {product.discount}% OFF
           </div>
         )}
 

@@ -1,17 +1,36 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Search as SearchIcon, X, SlidersHorizontal } from 'lucide-react';
 import ProductCard from '../../components/features/ProductCard';
-import { products, categories } from '../../data/products';
+import { useCategoriesStore } from '../../store/useCategoriesStore';
+import { useProductStore } from '../../store/useProductStore';
+import { mapVariantToProduct } from '../../lib/mappers';
 
 const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategoryId, setSelectedCategoryId] = useState('all');
   const [sortBy, setSortBy] = useState<'popular' | 'price-low' | 'price-high' | 'rating'>('popular');
 
-  const filteredProducts = useMemo(() => {
-    let filtered = products;
+  const { products: apiProducts, fetchProducts, isLoading } = useProductStore();
+  const { categories, fetchCategories } = useCategoriesStore();
 
-    // Filter by search query
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+
+  useEffect(() => {
+    console.log('Selected Category ID:', selectedCategoryId);
+    const categoryParam = selectedCategoryId !== 'all' ? selectedCategoryId : undefined;
+    console.log('Passing category_id to API:', categoryParam);
+    
+    fetchProducts({
+      category_id: categoryParam,
+    });
+  }, [selectedCategoryId, fetchProducts]);
+
+  const filteredProducts = useMemo(() => {
+    let filtered = apiProducts.map(mapVariantToProduct);
+
+    // Filter by search query (Client-side for now)
     if (searchQuery) {
       filtered = filtered.filter(
         (product) =>
@@ -21,12 +40,7 @@ const Search: React.FC = () => {
       );
     }
 
-    // Filter by category
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter((product) => product.category === selectedCategory);
-    }
-
-    // Sort products
+    // Sort products (Client-side)
     switch (sortBy) {
       case 'price-low':
         filtered = [...filtered].sort((a, b) => a.price - b.price);
@@ -42,7 +56,7 @@ const Search: React.FC = () => {
     }
 
     return filtered;
-  }, [searchQuery, selectedCategory, sortBy]);
+  }, [apiProducts, searchQuery, sortBy]);
 
   return (
     <div className="pb-20 lg:pb-0 bg-neutral-50 min-h-screen">
@@ -91,9 +105,9 @@ const Search: React.FC = () => {
         {/* Categories Scroll */}
         <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar">
           <button
-            onClick={() => setSelectedCategory('all')}
+            onClick={() => setSelectedCategoryId('all')}
             className={`flex-shrink-0 px-6 py-3 rounded-xl font-semibold text-sm transition-all shadow-sm ${
-              selectedCategory === 'all'
+              selectedCategoryId === 'all'
                 ? 'bg-[#d4af37] text-white shadow-md scale-105'
                 : 'bg-white text-gray-700 hover:bg-gray-50'
             }`}
@@ -103,15 +117,15 @@ const Search: React.FC = () => {
           {categories.map((category) => (
             <button
               key={category.id}
-              onClick={() => setSelectedCategory(category.slug)}
+              onClick={() => setSelectedCategoryId(category.id)}
               className={`flex-shrink-0 px-6 py-3 rounded-xl font-semibold text-sm transition-all shadow-sm flex items-center gap-2 ${
-                selectedCategory === category.slug
+                selectedCategoryId === category.id
                   ? 'bg-[#d4af37] text-white shadow-md scale-105'
                   : 'bg-white text-gray-700 hover:bg-gray-50'
               }`}
             >
-              <span>{category.icon}</span>
-              <span>{category.name}</span>
+              {category.icon && <span>{category.icon}</span>}
+              <span>{category.category_name}</span>
             </button>
           ))}
         </div>
@@ -145,7 +159,11 @@ const Search: React.FC = () => {
         </div>
 
         {/* Products Grid */}
-        {filteredProducts.length === 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2d5016]"></div>
+          </div>
+        ) : filteredProducts.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
             <div className="w-24 h-24 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <SearchIcon size={40} className="text-gray-400" />
@@ -159,7 +177,7 @@ const Search: React.FC = () => {
             <button
               onClick={() => {
                 setSearchQuery('');
-                setSelectedCategory('all');
+                setSelectedCategoryId('all');
               }}
               className="px-8 py-3 bg-[#2d5016] text-white rounded-full font-bold hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >

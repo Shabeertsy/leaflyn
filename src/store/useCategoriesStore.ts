@@ -9,11 +9,18 @@ interface CategoriesState {
   fetchCategories: () => Promise<void>;
 }
 
-export const useCategoriesStore = create<CategoriesState>((set) => ({
+export const useCategoriesStore = create<CategoriesState>((set, get) => ({
   categories: [],
   loading: false,
   error: null,
   fetchCategories: async () => {
+    const { categories, loading } = get();
+    
+    // Don't fetch if already loaded or currently loading
+    if (categories.length > 0 || loading) {
+      return;
+    }
+
     set({ loading: true, error: null });
     try {
       const response = await api.get('/categories/');

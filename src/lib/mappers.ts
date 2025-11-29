@@ -1,19 +1,23 @@
 import type { APIProductVariant, Product } from '../types';
 
+const toTitleCase = (text: string): string => {
+  if (!text) return text;
+  return text
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
+// Helper to capitalize first letter of sentence
+const toSentenceCase = (text: string): string => {
+  if (!text) return text;
+  return text.charAt(0).toUpperCase() + text.slice(1);
+};
+
 export const mapVariantToProduct = (variant: APIProductVariant): Product => {
-  // Calculate original price if there is a percentage offer
-  let originalPrice: number | undefined;
   const price = parseFloat(variant.price);
   
-  if (variant.offer && variant.offer_type === 'percentage') {
-    // Assuming 'price' is the final price after discount
-    // original_price = price / (1 - offer/100)
-    // But sometimes APIs send the original price in 'price' and we calculate the discounted one.
-    // Let's assume 'price' is the selling price for now.
-    // Actually, usually if 'offer' is present, we want to show "was X, now Y".
-    // If 23 is the final price, original was higher.
-    originalPrice = price / (1 - variant.offer / 100);
-  }
 
   // Map category ID to string (mock mapping)
   const categoryMap: Record<number, Product['category']> = {
@@ -47,11 +51,11 @@ export const mapVariantToProduct = (variant: APIProductVariant): Product => {
 
   return {
     id: variant.uuid,
-    name: variant.product.name,
-    description: variant.product.description,
+    name: toTitleCase(variant.name),
+    description: toSentenceCase(variant.product.description),
     price: price,
-    originalPrice: originalPrice ? parseFloat(originalPrice.toFixed(2)) : undefined,
-    discount: variant.offer,
+    originalPrice:parseFloat(variant.original_price),
+    discount: variant.offer_percentage,
     category: categoryMap[variant.product.category] || 'indoor-plants',
     image: mainImage,
     images: images,
@@ -60,7 +64,14 @@ export const mapVariantToProduct = (variant: APIProductVariant): Product => {
     inStock: variant.stock > 0,
     stock: variant.stock,
     featured: true, // Since it's from featured collection
-    tags: variant.care_guides,
-    careInstructions: variant.care_guides,
+    tags: variant.care_guides.map(g => g.title),
+    careInstructions: variant.care_guides.sort((a, b) => a.order - b.order),
+    specifications: {
+      ...(variant.height && { 'Height': variant.height }),
+      ...(variant.pot_size && { 'Pot Size': variant.pot_size }),
+      ...(variant.light && { 'Light': variant.light }),
+      ...(variant.water && { 'Water': variant.water }),
+      ...(variant.growth_rate && { 'Growth Rate': variant.growth_rate }),
+    },
   };
 };

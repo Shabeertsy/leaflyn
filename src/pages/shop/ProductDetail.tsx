@@ -165,8 +165,8 @@ const ProductDetail: React.FC = () => {
             </div>
             
             {product.discount && (
-              <div className="absolute top-6 left-6 bg-gradient-to-r from-[#2d5016] to-[#3d6622] text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg z-10">
-                {product.discount}% OFF
+              <div className="absolute top-6 left-6 bg-gradient-to-r from-[#2d5016] to-[#3d6622] text-white text-base font-bold px-5 py-2.5 rounded-full shadow-xl z-10 border-2 border-white/20">
+                <span className="text-lg">{product.discount}%</span> OFF
               </div>
             )}
             {!product.inStock && (
@@ -259,7 +259,7 @@ const ProductDetail: React.FC = () => {
                 <>
                   <span className="text-xl text-gray-400 line-through">₹{product.originalPrice}</span>
                   <span className="px-3 py-1 bg-green-50 text-green-700 text-sm font-bold rounded-full">
-                    Save ₹{product.originalPrice - product.price}
+                    Save ₹{(product.originalPrice - product.price).toFixed(2)}
                   </span>
                 </>
               )}
@@ -348,7 +348,16 @@ const ProductDetail: React.FC = () => {
                 {product.careInstructions.map((instruction, index) => (
                   <div key={index} className="flex gap-3 p-4 bg-green-50 rounded-xl">
                     <CheckCircle size={20} className="text-green-600 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">{instruction}</span>
+                    <div className="text-gray-700">
+                      {typeof instruction === 'string' ? (
+                        instruction
+                      ) : (
+                        <>
+                          <strong className="block text-gray-900 capitalize mb-1">{instruction.title}</strong>
+                          {instruction.content}
+                        </>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
