@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
   ArrowLeft, Heart, Share2, Star, ShoppingCart, Truck, Shield, 
   RefreshCw, ChevronRight, Leaf, Droplet, Sun, ThermometerSun,
   Package, Award, CheckCircle, Minus, Plus
 } from 'lucide-react';
+import axios from '../../lib/axios';
 import { useCartStore } from '../../store/useCartStore';
 import { useWishlistStore } from '../../store/useWishlistStore';
 import { products } from '../../data/products';
 import ProductCard from '../../components/features/ProductCard';
 import { useProductCollectionStore } from '../../store/useProductCollectionStore';
+import { useProductStore } from '../../store/useProductStore';
 import { mapVariantToProduct } from '../../lib/mappers';
+import type { Product } from '../../types';
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,16 +21,49 @@ const ProductDetail: React.FC = () => {
   const addToCart = useCartStore((state) => state.addToCart);
   const { addToWishlist, removeFromWishlist, wishlist } = useWishlistStore();
   
-  const { featuredProducts, bestsellerProducts } = useProductCollectionStore();
+  const { featuredProducts, bestsellerProducts, fetchProductCollections } = useProductCollectionStore();
+  const { products: searchProducts } = useProductStore();
   
-  let product = products.find((p) => p.id === id);
+  const [fetchedProduct, setFetchedProduct] = useState<Product | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
+
+  // Try to find product in all available local sources
+  let product = products.find((p) => p.id === id) || fetchedProduct;
   
   if (!product && id) {
-    const variant = [...featuredProducts, ...bestsellerProducts].find(v => v.uuid === id);
+    const variant = [...featuredProducts, ...bestsellerProducts, ...searchProducts].find(v => v.uuid === id);
     if (variant) {
       product = mapVariantToProduct(variant);
     }
   }
+
+  // Fetch product if not found locally
+  useEffect(() => {
+    const fetchProductData = async () => {
+      if (!product && id && !isLoading && !fetchError) {
+        setIsLoading(true);
+        try {
+          // First try to fetch collections as they are common
+          if (featuredProducts.length === 0) {
+            await fetchProductCollections();
+          }
+
+          // If still not found (checked in next render), or if we want to be sure, fetch specific
+          // We can try fetching the specific variant directly
+          const response = await axios.get(`/product-variants/${id}/`);
+          setFetchedProduct(mapVariantToProduct(response.data));
+        } catch (error) {
+          console.error("Failed to fetch product:", error);
+          setFetchError(true);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchProductData();
+  }, [id, product, featuredProducts.length, fetchProductCollections, isLoading, fetchError]);
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -35,6 +71,14 @@ const ProductDetail: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'description' | 'specs' | 'care'>('description');
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  if (isLoading && !product) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-neutral-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2d5016]"></div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -225,7 +269,7 @@ const ProductDetail: React.FC = () => {
           </div>
 
           {/* Product Name */}
-          <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 font-['Playfair_Display'] leading-tight">
+          <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-4 font-['Playfair_Display'] leading-tight">
             {product.name}
           </h1>
 
@@ -252,12 +296,12 @@ const ProductDetail: React.FC = () => {
           {/* Price Section */}
           <div className="mb-8">
             <div className="flex items-baseline gap-3 mb-2">
-              <span className="text-4xl lg:text-5xl font-bold text-[#2d5016]">
+              <span className="text-3xl lg:text-5xl font-bold text-[#2d5016] font-sans tracking-wide">
                 ₹{product.price}
               </span>
               {product.originalPrice && (
                 <>
-                  <span className="text-xl text-gray-400 line-through">₹{product.originalPrice}</span>
+                  <span className="text-lg lg:text-xl text-gray-400 line-through font-sans">₹{product.originalPrice}</span>
                   <span className="px-3 py-1 bg-green-50 text-green-700 text-sm font-bold rounded-full">
                     Save ₹{(product.originalPrice - product.price).toFixed(2)}
                   </span>

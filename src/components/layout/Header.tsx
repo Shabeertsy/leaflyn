@@ -27,8 +27,21 @@ const Header: React.FC = () => {
           <div className="w-10 h-10 bg-gradient-to-br from-[#2d5016] to-[#3d6622] rounded-full flex items-center justify-center">
             <span className="text-white text-xl font-bold">L</span>
           </div>
-          <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">Leafin</span>
+          <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">Leaflyn</span>
         </Link>
+
+        {/* Navigation Links - Hidden on mobile, visible on desktop */}
+        <nav className="hidden lg:flex items-center gap-6">
+          <Link to="/search" className="text-gray-700 hover:text-[#2d5016] font-medium transition-colors">
+            Shop
+          </Link>
+          <Link to="/categories" className="text-gray-700 hover:text-[#2d5016] font-medium transition-colors">
+            Categories
+          </Link>
+          <Link to="/contact-us" className="text-gray-700 hover:text-[#2d5016] font-medium transition-colors">
+            Contact Us
+          </Link>
+        </nav>
 
         {/* Actions */}
         <div className="flex items-center gap-4">
@@ -70,6 +83,7 @@ const Header: React.FC = () => {
             )}
           </button>
         </div>
+
       </div>
     </header>
   );

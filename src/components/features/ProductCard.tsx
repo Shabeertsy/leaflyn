@@ -127,11 +127,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         {/* Price */}
         <div className="flex items-baseline gap-2">
-          <span className="text-xl font-bold text-[#2d5016]">
+          <span className="text-lg md:text-xl font-bold text-[#2d5016] font-sans tracking-wide">
             ₹{product.price}
           </span>
           {product.originalPrice && (
-            <span className="text-sm text-gray-400 line-through">
+            <span className="text-xs md:text-sm text-gray-400 line-through font-sans">
               ₹{product.originalPrice}
             </span>
           )}

@@ -95,7 +95,7 @@ const CartDrawer: React.FC = () => {
                     <h3 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2">
                       {item.product.name}
                     </h3>
-                    <p className="text-sm text-gray-600 mb-2">
+                    <p className="text-sm text-gray-600 mb-2 font-sans">
                       ₹{item.product.price} each
                     </p>
 
@@ -137,7 +137,7 @@ const CartDrawer: React.FC = () => {
 
                   {/* Item Total */}
                   <div className="text-right">
-                    <p className="font-bold text-gray-900">
+                    <p className="font-bold text-gray-900 font-sans">
                       ₹{item.product.price * item.quantity}
                     </p>
                   </div>
@@ -150,7 +150,7 @@ const CartDrawer: React.FC = () => {
               {/* Subtotal */}
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">Subtotal</span>
-                <span className="font-semibold text-gray-900">₹{cartTotal}</span>
+                <span className="font-semibold text-gray-900 font-sans">₹{cartTotal}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">Shipping</span>
@@ -158,7 +158,7 @@ const CartDrawer: React.FC = () => {
               </div>
               <div className="flex justify-between items-center pt-4 border-t border-gray-300">
                 <span className="text-lg font-bold text-gray-900">Total</span>
-                <span className="text-2xl font-bold text-emerald-600">₹{cartTotal}</span>
+                <span className="text-xl md:text-2xl font-bold text-emerald-600 font-sans tracking-wide">₹{cartTotal}</span>
               </div>
 
               {/* Checkout Button */}

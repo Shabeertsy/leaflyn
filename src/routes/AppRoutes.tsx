@@ -11,8 +11,11 @@ import Wishlist from '../pages/shop/Wishlist';
 import Categories from '../pages/shop/Categories';
 import Account from '../pages/user/Account';
 import Notifications from '../pages/user/Notifications';
+import ContactUs from '../pages/ContactUs';
+import TermsConditions from '../pages/TermsConditions';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
+
 
 const AppRoutes: React.FC = () => {
   return (
@@ -49,7 +52,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/bestsellers" element={<Search />} />
       <Route path="/new-arrivals" element={<Search />} />
       <Route path="/help" element={<Account />} />
-      <Route path="/terms" element={<Account />} />
+      <Route path="/terms" element={<TermsConditions />} />
+      <Route path="/contact-us" element={<ContactUs />} />
       <Route path="/privacy" element={<Account />} />
       <Route path="/care-guide" element={<Account />} />
     </Routes>

@@ -178,3 +178,24 @@ export interface PaginatedResponse<T> {
   previous: string | null;
   results: T[];
 }
+
+export interface ContactUs {
+  id?: string;
+  name: string;
+  email: string;
+  subject: string;
+  phone: string;
+  content: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface TermsCondition {
+  id: string;
+  uuid: string;
+  title: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+}
+export * from './company';

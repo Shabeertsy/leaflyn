@@ -37,7 +37,7 @@ const Checkout: React.FC = () => {
         </div>
         <h1 className="text-4xl font-bold text-[#2d5016] mb-4 font-['Playfair_Display']">Order Confirmed!</h1>
         <p className="text-gray-500 mb-10 max-w-md text-lg font-light">
-          Thank you for choosing Leafin. Your green friends are being prepared with care and will be with you soon!
+          Thank you for choosing Leaflyn. Your green friends are being prepared with care and will be with you soon!
         </p>
         
         <div className="bg-white rounded-2xl p-6 w-full max-w-sm mb-10 shadow-lg border border-gray-100 relative overflow-hidden">
@@ -255,7 +255,7 @@ const Checkout: React.FC = () => {
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-gray-900 text-sm line-clamp-1">{item.product.name}</p>
                       <p className="text-xs text-gray-500 mt-1">Qty: {item.quantity}</p>
-                      <p className="text-sm font-bold text-[#2d5016] mt-1">₹{item.product.price * item.quantity}</p>
+                      <p className="text-sm font-bold text-[#2d5016] mt-1 font-sans">₹{item.product.price * item.quantity}</p>
                     </div>
                   </div>
                 ))}
@@ -264,19 +264,19 @@ const Checkout: React.FC = () => {
               <div className="space-y-3 pt-4 border-t border-gray-100">
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>Subtotal</span>
-                  <span className="font-semibold">₹{cartTotal}</span>
+                  <span className="font-semibold font-sans">₹{cartTotal}</span>
                 </div>
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>Shipping</span>
-                  <span className="font-semibold text-[#2d5016]">{shipping === 0 ? 'Free' : `₹${shipping}`}</span>
+                  <span className="font-semibold text-[#2d5016] font-sans">{shipping === 0 ? 'Free' : `₹${shipping}`}</span>
                 </div>
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>Tax (5%)</span>
-                  <span className="font-semibold">₹{tax}</span>
+                  <span className="font-semibold font-sans">₹{tax}</span>
                 </div>
                 <div className="flex justify-between items-end pt-3 border-t border-dashed border-gray-200">
                   <span className="font-bold text-gray-900">Total Amount</span>
-                  <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">₹{total}</span>
+                  <span className="text-xl md:text-2xl font-bold text-[#2d5016] font-sans tracking-wide">₹{total}</span>
                 </div>
               </div>
 

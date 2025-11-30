@@ -80,7 +80,7 @@ const Cart: React.FC = () => {
                         <Trash2 size={18} />
                       </button>
                     </div>
-                    <p className="text-sm font-medium text-[#2d5016]">₹{item.product.price}</p>
+                    <p className="text-sm font-medium text-[#2d5016] font-sans">₹{item.product.price}</p>
                   </div>
 
                   <div className="flex items-center justify-between mt-3">
@@ -106,7 +106,7 @@ const Cart: React.FC = () => {
                     </div>
 
                     {/* Item Total */}
-                    <p className="font-bold text-lg text-gray-900">
+                    <p className="font-bold text-lg text-gray-900 font-sans">
                       ₹{item.product.price * item.quantity}
                     </p>
                   </div>
@@ -123,12 +123,12 @@ const Cart: React.FC = () => {
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal</span>
-                  <span className="font-semibold text-gray-900">₹{cartTotal}</span>
+                  <span className="font-semibold text-gray-900 font-sans">₹{cartTotal}</span>
                 </div>
                 
                 <div className="flex justify-between text-gray-600">
                   <span>Shipping</span>
-                  <span className="font-semibold text-gray-900">
+                  <span className="font-semibold text-gray-900 font-sans">
                     {shipping === 0 ? (
                       <span className="text-[#2d5016] font-bold">Free</span>
                     ) : (
@@ -139,7 +139,7 @@ const Cart: React.FC = () => {
                 
                 <div className="flex justify-between text-gray-600">
                   <span>Tax (5%)</span>
-                  <span className="font-semibold text-gray-900">₹{tax}</span>
+                  <span className="font-semibold text-gray-900 font-sans">₹{tax}</span>
                 </div>
 
                 {cartTotal < 499 && (
@@ -153,7 +153,7 @@ const Cart: React.FC = () => {
               <div className="border-t border-dashed border-gray-200 pt-4 mb-6">
                 <div className="flex justify-between items-end">
                   <span className="text-gray-900 font-bold">Total</span>
-                  <span className="text-3xl font-bold text-[#2d5016] font-['Playfair_Display']">₹{total}</span>
+                  <span className="text-2xl md:text-3xl font-bold text-[#2d5016] font-sans tracking-wide">₹{total}</span>
                 </div>
                 <p className="text-xs text-gray-500 mt-1 text-right">Including all taxes</p>
               </div>

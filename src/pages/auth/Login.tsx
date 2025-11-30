@@ -39,7 +39,7 @@ const Login: React.FC = () => {
                 <div className="w-10 h-10 bg-[#2d5016] rounded-full flex items-center justify-center">
                   <span className="text-white text-xl font-bold">L</span>
                 </div>
-                <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">Leafin</span>
+                <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">Leaflyn</span>
               </div>
             </Link>
             <h1 className="text-3xl font-bold text-gray-900 mb-2 font-['Playfair_Display']">Welcome Back</h1>

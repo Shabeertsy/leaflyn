@@ -178,7 +178,7 @@ const Account: React.FC = () => {
 
         {/* App Info */}
         <div className="py-6 text-center text-sm text-gray-400">
-          <p className="font-medium mb-2">Leafin v1.0.0</p>
+          <p className="font-medium mb-2">Leaflyn v1.0.0</p>
           <div className="flex justify-center gap-4">
             <Link to="/terms" className="hover:text-[#2d5016] transition-colors">Terms of Service</Link>
             <span>•</span>

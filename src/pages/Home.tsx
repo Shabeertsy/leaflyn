@@ -263,7 +263,7 @@ const Home: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div className="max-w-2xl">
               <span className="text-[#d4af37] font-bold tracking-widest uppercase text-xs mb-2 block">Collections</span>
-              <h2 className="text-4xl lg:text-5xl font-bold text-[#2d5016] font-['Playfair_Display'] mb-4">
+              <h2 className="text-3xl lg:text-5xl font-bold text-[#2d5016] font-['Playfair_Display'] mb-4">
                 Explore Our <span className="italic text-gray-400 font-light">Green Worlds</span>
               </h2>
               <p className="text-gray-500 text-lg font-light leading-relaxed">
@@ -360,7 +360,7 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-2 font-['Playfair_Display']">Featured Collection</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 font-['Playfair_Display']">Featured Collection</h2>
               <p className="text-gray-600">Handpicked premium selections</p>
             </div>
             <Link to="/featured" className="text-[#2d5016] font-semibold flex items-center gap-1 hover:gap-2 transition-all">
@@ -387,7 +387,7 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-2 font-['Playfair_Display']">Bestsellers</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 font-['Playfair_Display']">Bestsellers</h2>
               <p className="text-gray-600">Most loved by our customers</p>
             </div>
             <Link to="/bestsellers" className="text-[#2d5016] font-semibold flex items-center gap-1 hover:gap-2 transition-all">

@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Twitter, Youtube, Mail, MapPin, Phone, ArrowRight, CheckCircle, Package, Clock, Heart } from 'lucide-react';
+import { Facebook, Instagram, Twitter, Youtube, Mail, MapPin, Phone, ArrowRight, CheckCircle, Package, Clock, Heart, Linkedin } from 'lucide-react';
+import { useCompanyStore } from '../../store/useCompanyStore';
 
 const Footer: React.FC = () => {
+  const { companyContact, fetchCompanyContact } = useCompanyStore();
+
+  useEffect(() => {
+    fetchCompanyContact();
+  }, [fetchCompanyContact]);
+
+  const socialLinks = [
+    { icon: Facebook, url: companyContact?.facebook, show: !!companyContact?.facebook },
+    { icon: Instagram, url: companyContact?.instagram, show: !!companyContact?.instagram },
+    { icon: Twitter, url: companyContact?.twitter, show: !!companyContact?.twitter },
+    { icon: Youtube, url: companyContact?.youtube, show: !!companyContact?.youtube },
+    { icon: Linkedin, url: companyContact?.linkedin, show: !!companyContact?.linkedin },
+  ].filter(link => link.show);
+
   return (
     <footer className="bg-[#1a3a0f] text-white">
       {/* Features Strip */}
@@ -35,24 +50,23 @@ const Footer: React.FC = () => {
               <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
                 <span className="text-[#1a3a0f] text-xl font-bold">L</span>
               </div>
-              <span className="text-2xl font-bold font-['Playfair_Display']">Leafin</span>
+              <span className="text-2xl font-bold font-['Playfair_Display']">{companyContact?.company_name || 'Leaflyn'}</span>
             </Link>
             <p className="text-white/60 leading-relaxed text-sm max-w-xs">
               Bringing nature closer to you with our premium collection of plants, aquatics, and accessories.
             </p>
             <div className="flex items-center gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#d4af37] hover:text-[#1a3a0f] transition-all duration-300">
-                <Facebook size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#d4af37] hover:text-[#1a3a0f] transition-all duration-300">
-                <Instagram size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#d4af37] hover:text-[#1a3a0f] transition-all duration-300">
-                <Twitter size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#d4af37] hover:text-[#1a3a0f] transition-all duration-300">
-                <Youtube size={18} />
-              </a>
+              {socialLinks.map((social, index) => (
+                <a 
+                  key={index}
+                  href={social.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#d4af37] hover:text-[#1a3a0f] transition-all duration-300"
+                >
+                  <social.icon size={18} />
+                </a>
+              ))}
             </div>
           </div>
 
@@ -76,34 +90,46 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-white/60 hover:text-[#d4af37] transition-colors text-sm">
-                  Our Story
+                <Link to="/contact-us" className="text-white/60 hover:text-[#d4af37] transition-colors text-sm">
+                  Contact Us
                 </Link>
               </li>
             </ul>
           </div>
 
+
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-bold font-['Playfair_Display'] mb-6">Contact Us</h3>
-            <ul className="space-y-4">
+            <h3 className="text-lg font-bold font-['Playfair_Display'] mb-6">Get in Touch</h3>
+            <ul className="space-y-4 mb-6">
               <li className="flex items-start gap-3 text-white/60 text-sm">
                 <MapPin size={18} className="text-[#d4af37] shrink-0 mt-0.5" />
-                <span>123 Green Street, Eco Valley,<br />Nature City, NC 12345</span>
+                <span>
+                  {companyContact?.company_address || '123 Green Street, Eco Valley'}<br />
+                  {companyContact?.company_city}, {companyContact?.company_state} {companyContact?.company_zip}
+                </span>
               </li>
               <li className="flex items-center gap-3 text-white/60 text-sm">
                 <Phone size={18} className="text-[#d4af37] shrink-0" />
-                <span>+91 98765 43210</span>
+                <a href={`tel:${companyContact?.company_phone}`} className="hover:text-[#d4af37] transition-colors">
+                  {companyContact?.company_phone || '+91 98765 43210'}
+                </a>
               </li>
               <li className="flex items-center gap-3 text-white/60 text-sm">
                 <Mail size={18} className="text-[#d4af37] shrink-0" />
-                <span>hello@leafin.com</span>
+                <a href={`mailto:${companyContact?.company_email}`} className="hover:text-[#d4af37] transition-colors">
+                  {companyContact?.company_email || 'hello@leaflyn.com'}
+                </a>
               </li>
             </ul>
+            <Link to="/contact-us" className="inline-flex items-center gap-2 bg-[#d4af37] text-[#1a3a0f] px-5 py-2.5 rounded-full text-sm font-bold hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl">
+              <Mail size={16} />
+              Contact Us
+            </Link>
           </div>
 
           {/* Newsletter */}
-          <div>
+          {/* <div>
             <h3 className="text-lg font-bold font-['Playfair_Display'] mb-6">Newsletter</h3>
             <p className="text-white/60 text-sm mb-4">
               Subscribe to get special offers and updates.
@@ -118,13 +144,13 @@ const Footer: React.FC = () => {
                 <ArrowRight size={16} />
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/50 text-sm">
-            © 2024 Leafin. All rights reserved.
+            © {new Date().getFullYear()} {companyContact?.company_name || 'Leaflyn'}. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-sm text-white/50">
             <Link to="/privacy" className="hover:text-[#d4af37] transition-colors">Privacy Policy</Link>

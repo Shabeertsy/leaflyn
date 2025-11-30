@@ -53,7 +53,7 @@ const Notifications: React.FC = () => {
     {
       id: '5',
       type: 'general',
-      title: 'Welcome to Leafin',
+      title: 'Welcome to Leaflyn',
       message: 'Thank you for joining our plant-loving community! Explore our collection.',
       time: '3 days ago',
       read: true,

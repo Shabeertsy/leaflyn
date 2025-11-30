@@ -49,7 +49,7 @@ const PWAInstallBanner: React.FC = () => {
           </div>
           
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-base mb-1">Install Leafin App</h3>
+            <h3 className="font-bold text-base mb-1">Install Leaflyn App</h3>
             <p className="text-sm text-white/90 leading-snug">
               Add to your home screen for a better experience!
             </p>
