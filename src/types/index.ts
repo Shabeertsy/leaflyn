@@ -29,11 +29,16 @@ export interface CartItem {
 }
 
 export interface User {
-  id: string;
-  name: string;
+  id: number;
   email: string;
-  phone?: string;
-  avatar?: string;
+  phone_number: string | null;
+  first_name: string;
+  last_name: string;
+  avatar: string | null;
+  bio: string;
+  created_at: string;
+  is_verified: boolean;
+  user_type: string;
   addresses?: Address[];
 }
 

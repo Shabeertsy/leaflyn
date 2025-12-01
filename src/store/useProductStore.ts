@@ -45,7 +45,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
 
     set({ isLoading: true, error: null, lastFetchParams: paramsString });
     
-    const apiUrl = `product-variants/?${paramsString}`;
+    const apiUrl = `/api/product-variants/?${paramsString}`;
     console.log('Fetching products from:', apiUrl);
     console.log('Filters:', filters);
     

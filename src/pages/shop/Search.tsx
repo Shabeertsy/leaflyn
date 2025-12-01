@@ -10,7 +10,8 @@ const Search: React.FC = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState('all');
   const [sortBy, setSortBy] = useState<'popular' | 'price-low' | 'price-high' | 'rating'>('popular');
 
-  const { products: apiProducts, fetchProducts, isLoading } = useProductStore();
+  const [currentPage, setCurrentPage] = useState(1);
+  const { products: apiProducts, fetchProducts, isLoading, nextPage, previousPage } = useProductStore();
   const { categories, fetchCategories } = useCategoriesStore();
 
   useEffect(() => {
@@ -24,8 +25,9 @@ const Search: React.FC = () => {
     
     fetchProducts({
       category_id: categoryParam,
+      page: currentPage,
     });
-  }, [selectedCategoryId, fetchProducts]);
+  }, [selectedCategoryId, currentPage, fetchProducts]);
 
   const filteredProducts = useMemo(() => {
     let filtered = apiProducts.map(mapVariantToProduct);
@@ -185,11 +187,46 @@ const Search: React.FC = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10">
+              {filteredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {(nextPage || previousPage) && (
+              <div className="mt-12 flex justify-center items-center gap-4">
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={!previousPage}
+                  className={`px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 ${
+                    !previousPage
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-white text-[#2d5016] hover:bg-[#2d5016] hover:text-white shadow-md hover:shadow-lg border border-[#2d5016]/20'
+                  }`}
+                >
+                  Previous
+                </button>
+                
+                <span className="font-bold text-gray-700 bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-100">
+                  Page {currentPage}
+                </span>
+
+                <button
+                  onClick={() => setCurrentPage(p => p + 1)}
+                  disabled={!nextPage}
+                  className={`px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 ${
+                    !nextPage
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-white text-[#2d5016] hover:bg-[#2d5016] hover:text-white shadow-md hover:shadow-lg border border-[#2d5016]/20'
+                  }`}
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

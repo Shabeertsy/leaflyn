@@ -37,7 +37,7 @@ const Account: React.FC = () => {
       items: [
         { icon: UserIcon, label: 'Personal Information', path: '/profile/edit', subtitle: 'Edit your details' },
         { icon: MapPin, label: 'Saved Addresses', path: '/addresses', badge: '2', subtitle: 'Manage delivery locations' },
-        { icon: CreditCard, label: 'Payment Methods', path: '/payment-methods', subtitle: 'Cards and UPI' },
+        // { icon: CreditCard, label: 'Payment Methods', path: '/payment-methods', subtitle: 'Cards and UPI' },
       ],
     },
     {
@@ -51,8 +51,8 @@ const Account: React.FC = () => {
     {
       title: 'App Settings',
       items: [
-        { icon: Bell, label: 'Notifications', path: '/notifications', subtitle: 'Manage alerts' },
-        { icon: Settings, label: 'Preferences', path: '/settings', subtitle: 'Language and theme' },
+        // { icon: Bell, label: 'Notifications', path: '/notifications', subtitle: 'Manage alerts' },
+        // { icon: Settings, label: 'Preferences', path: '/settings', subtitle: 'Language and theme' },
         { icon: HelpCircle, label: 'Help & Support', path: '/help', subtitle: 'FAQs and contact' },
       ],
     },
@@ -80,8 +80,8 @@ const Account: React.FC = () => {
           <div className="relative inline-block mb-4">
             <div className="w-28 h-28 rounded-full p-1 bg-gradient-to-br from-[#d4af37] to-[#8b7355] shadow-2xl">
               <img
-                src={user.avatar}
-                alt={user.name}
+                src={user.avatar || `https://ui-avatars.com/api/?name=${user.first_name}+${user.last_name}&background=random`}
+                alt={`${user.first_name} ${user.last_name}`}
                 className="w-full h-full rounded-full border-4 border-[#2d5016] object-cover"
               />
             </div>
@@ -90,7 +90,7 @@ const Account: React.FC = () => {
             </button>
           </div>
           
-          <h1 className="text-3xl font-bold font-['Playfair_Display'] mb-1">{user.name}</h1>
+          <h1 className="text-3xl font-bold font-['Playfair_Display'] mb-1">{user.first_name} {user.last_name}</h1>
           <p className="text-white/70 mb-6">{user.email}</p>
           
           {/* Stats Cards */}

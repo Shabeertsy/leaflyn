@@ -51,7 +51,7 @@ const ProductDetail: React.FC = () => {
 
           // If still not found (checked in next render), or if we want to be sure, fetch specific
           // We can try fetching the specific variant directly
-          const response = await axios.get(`/product-variants/${id}/`);
+          const response = await axios.get(`/api/product-variants/${id}/`);
           setFetchedProduct(mapVariantToProduct(response.data));
         } catch (error) {
           console.error("Failed to fetch product:", error);

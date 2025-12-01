@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Bell, ShoppingCart, User as UserIcon } from 'lucide-react';
+import { Bell, ShoppingCart, User as UserIcon, LogOut } from 'lucide-react';
 import { useCartStore } from '../../store/useCartStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useUIStore } from '../../store/useUIStore';
@@ -11,6 +11,7 @@ const Header: React.FC = () => {
   const { user, isAuthenticated } = useAuthStore();
 
   const getInitials = (name: string) => {
+    if (!name) return 'U';
     return name
       .split(' ')
       .map((n) => n[0])
@@ -45,30 +46,7 @@ const Header: React.FC = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-4">
-          {isAuthenticated && user ? (
-            <Link 
-              to="/account" 
-              className="hidden lg:flex items-center gap-2 p-2 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center border border-gray-200 overflow-hidden">
-                {user.avatar ? (
-                  <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-                ) : (
-                  <span className="text-sm font-bold text-[#2d5016]">{getInitials(user.name)}</span>
-                )}
-              </div>
-            </Link>
-          ) : (
-            <Link 
-              to="/login"
-              className="hidden lg:flex items-center gap-2 px-4 py-2 bg-[#2d5016] text-white rounded-full text-sm font-bold hover:bg-[#3d6622] transition-colors"
-            >
-              <UserIcon size={16} />
-              <span>Login</span>
-            </Link>
-          )}
-
-          <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+           <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             <Bell size={22} className="text-gray-700" />
           </button>
           <button
@@ -82,6 +60,42 @@ const Header: React.FC = () => {
               </span>
             )}
           </button>
+          {isAuthenticated && user ? (
+            <div className="hidden lg:flex items-center gap-3">
+              <Link 
+                to="/account" 
+                className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center border border-gray-200 overflow-hidden">
+                  {user.avatar ? (
+                    <img src={user.avatar} alt={`${user.first_name} ${user.last_name}`} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-sm font-bold text-[#2d5016]">{getInitials(`${user.first_name} ${user.last_name}`)}</span>
+                  )}
+                </div>
+              </Link>
+              <button
+                onClick={() => {
+                  useAuthStore.getState().logout();
+                  window.location.href = '/login';
+                }}
+                className="p-2 hover:bg-red-50 text-gray-500 hover:text-red-500 rounded-full transition-colors"
+                title="Sign Out"
+              >
+                <LogOut size={20} />
+              </button>
+            </div>
+          ) : (
+            <Link 
+              to="/login"
+              className="hidden lg:flex items-center gap-2 px-4 py-2 bg-[#2d5016] text-white rounded-full text-sm font-bold hover:bg-[#3d6622] transition-colors"
+            >
+              <UserIcon size={16} />
+              <span>Login</span>
+            </Link>
+          )}
+
+         
         </div>
 
       </div>
