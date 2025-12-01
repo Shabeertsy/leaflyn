@@ -5,12 +5,9 @@ import {
   MapPin, 
   Package, 
   Heart, 
-  Settings, 
   HelpCircle, 
   LogOut,
   ChevronRight,
-  Bell,
-  CreditCard,
   Gift,
   Download,
   Camera
