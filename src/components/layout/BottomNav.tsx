@@ -2,17 +2,19 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Search, ShoppingCart, Heart, User } from 'lucide-react';
 import { useCartStore } from '../../store/useCartStore';
+import { useAuthStore } from '../../store/useAuthStore';
 
 const BottomNav: React.FC = () => {
   const location = useLocation();
   const cartCount = useCartStore((state) => state.getCartCount());
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const navItems = [
     { icon: Home, label: 'Home', path: '/' },
     { icon: Search, label: 'Search', path: '/search' },
     { icon: ShoppingCart, label: 'Cart', path: '/cart', badge: cartCount },
     { icon: Heart, label: 'Wishlist', path: '/wishlist' },
-    { icon: User, label: 'Account', path: '/account' },
+    { icon: User, label: 'Account', path: isAuthenticated ? '/account' : '/login' },
   ];
 
   return (

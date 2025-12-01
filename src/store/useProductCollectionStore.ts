@@ -18,7 +18,7 @@ export const useProductCollectionStore = create<ProductCollectionStore>((set) =>
   fetchProductCollections: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.get<ProductCollectionResponse>('product-collection/');
+      const response = await axios.get<ProductCollectionResponse>('/api/product-collection/');
       set({
         featuredProducts: response.data.featured_products,
         bestsellerProducts: response.data.bestseller_products,

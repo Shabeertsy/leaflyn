@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, ArrowRight } from 'lucide-react';
 import ProductCard from '../components/features/ProductCard';
+import AdBanner from '../components/features/AdBanner';
 import { useCategoriesStore } from '../store/useCategoriesStore';
 import { useProductCollectionStore } from '../store/useProductCollectionStore';
 import { mapVariantToProduct } from '../lib/mappers';
@@ -251,104 +252,121 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Ad Banner Section */}
+      <div className="py-8 bg-white">
+        <AdBanner />
+      </div>
+
       {/* Categories Section - Redesigned */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-12 md:py-16 bg-white relative overflow-hidden">
         {/* Decorative Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#2d5016]/5 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-neutral-50 to-transparent" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-8 gap-3">
             <div className="max-w-2xl">
-              <span className="text-[#d4af37] font-bold tracking-widest uppercase text-xs mb-2 block">Collections</span>
-              <h2 className="text-3xl lg:text-5xl font-bold text-[#2d5016] font-['Playfair_Display'] mb-4">
-                Explore Our <span className="italic text-gray-400 font-light">Green Worlds</span>
+              <span className="text-[#d4af37] font-bold tracking-widest uppercase text-xs mb-1.5 block">Collections</span>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#2d5016] font-['Playfair_Display'] mb-2">
+                Explore Our <span className="italic text-gray-400 font-light">Categories</span>
               </h2>
-              <p className="text-gray-500 text-lg font-light leading-relaxed">
-                Discover curated selections of plants and accessories tailored to your unique style and space.
+              <p className="text-gray-500 text-sm md:text-base font-light leading-relaxed hidden md:block">
+                Discover curated selections tailored to your unique style
               </p>
             </div>
             <Link 
               to="/categories" 
-              className="group inline-flex items-center gap-2 px-6 py-3 bg-neutral-100 hover:bg-[#2d5016] text-[#2d5016] hover:text-white rounded-full transition-all duration-300 font-semibold"
+              className="group inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-100 hover:bg-[#2d5016] text-[#2d5016] hover:text-white rounded-full transition-all duration-300 font-semibold text-sm self-start md:self-auto"
             >
-              <span>View All Categories</span>
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              <span>View All</span>
+              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
           
-          {/* Mobile View: App-like Horizontal Scroll */}
-          <div className="md:hidden flex overflow-x-auto pb-6 -mx-6 px-6 gap-4 no-scrollbar snap-x snap-mandatory">
-            {categories.map((category, index) => (
+          {/* Mobile View: Compact Grid */}
+          <div className="md:hidden grid grid-cols-3 gap-3">
+            {categories.slice(0, 6).map((category, index) => (
               <Link
                 key={category.id}
                 to={`/category/${category.slug}`}
-                className="flex flex-col items-center gap-3 min-w-[100px] snap-center group"
+                className="group flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-100 hover:border-[#2d5016]/20 hover:shadow-md transition-all active:scale-95"
               >
-                <div className={`w-20 h-20 rounded-full flex items-center justify-center text-3xl shadow-sm transition-transform group-active:scale-95 ${
-                  index % 3 === 0 ? 'bg-green-50 text-green-700' :
-                  index % 3 === 1 ? 'bg-teal-50 text-teal-700' :
-                  'bg-amber-50 text-amber-700'
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl shadow-sm transition-all group-hover:scale-110 ${
+                  index % 3 === 0 ? 'bg-gradient-to-br from-green-50 to-emerald-100' :
+                  index % 3 === 1 ? 'bg-gradient-to-br from-teal-50 to-cyan-100' :
+                  'bg-gradient-to-br from-amber-50 to-orange-100'
                 }`}>
                   {category.icon}
                 </div>
-                <span className="text-xs font-bold text-gray-700 text-center leading-tight px-1">
-                  {category.category_name}
-                </span>
+                <div className="text-center">
+                  <span className="text-xs font-bold text-gray-700 leading-tight line-clamp-2">
+                    {category.category_name}
+                  </span>
+                  {category.productCount !== undefined && (
+                    <span className="text-[10px] text-gray-400 block mt-0.5">
+                      {category.productCount}
+                    </span>
+                  )}
+                </div>
               </Link>
             ))}
           </div>
 
-          {/* Desktop View: Professional Grid */}
-          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {/* Desktop View: Compact Cards Grid */}
+          <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5">
             {categories.map((category, index) => (
               <Link
                 key={category.id}
                 to={`/category/${category.slug}`}
-                className="group relative h-64 lg:h-72 rounded-3xl overflow-hidden cursor-pointer"
+                className="group relative h-48 lg:h-52 rounded-2xl overflow-hidden cursor-pointer border border-gray-100 hover:border-transparent transition-all duration-300 hover:shadow-xl"
               >
-                {/* Background Image/Gradient */}
-                <div className="absolute inset-0 bg-neutral-100 transition-transform duration-700 group-hover:scale-110">
-                  <div className={`absolute inset-0 bg-gradient-to-br ${
-                    index % 3 === 0 ? 'from-green-50 to-emerald-100' :
-                    index % 3 === 1 ? 'from-teal-50 to-cyan-100' :
-                    'from-amber-50 to-orange-100'
-                  }`} />
-                  
-                  {/* Abstract Shapes */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/40 rounded-full blur-2xl transform translate-x-10 -translate-y-10" />
-                  <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/40 rounded-full blur-2xl transform -translate-x-10 translate-y-10" />
+                {/* Background Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br transition-transform duration-700 group-hover:scale-110" style={{
+                  background: index % 4 === 0 ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)' :
+                              index % 4 === 1 ? 'linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%)' :
+                              index % 4 === 2 ? 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)' :
+                              'linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%)'
+                }}>
+                  {/* Subtle Pattern Overlay */}
+                  <div className="absolute inset-0 opacity-5" style={{
+                    backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)',
+                    backgroundSize: '24px 24px'
+                  }} />
                 </div>
 
                 {/* Content Container */}
-                <div className="absolute inset-0 p-8 flex flex-col justify-between">
+                <div className="absolute inset-0 p-5 flex flex-col justify-between">
                   <div className="flex justify-between items-start">
-                    <div className="w-14 h-14 bg-white/80 backdrop-blur-md rounded-2xl flex items-center justify-center text-3xl shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-12 h-12 bg-white/80 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl shadow-sm group-hover:scale-110 transition-transform duration-300">
                       {category.icon}
                     </div>
-                    <div className="w-10 h-10 rounded-full border border-gray-900/10 flex items-center justify-center opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300 bg-white">
-                      <ArrowRight size={16} className="text-[#2d5016]" />
+                    <div className="w-8 h-8 rounded-full border border-gray-900/10 flex items-center justify-center opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 bg-white/90 backdrop-blur-sm">
+                      <ArrowRight size={14} className="text-[#2d5016]" />
                     </div>
                   </div>
 
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 font-['Playfair_Display'] mb-2 group-hover:text-[#2d5016] transition-colors">
+                    <h3 className="text-lg font-bold text-gray-900 font-['Playfair_Display'] mb-1 group-hover:text-[#2d5016] transition-colors line-clamp-1">
                       {category.category_name}
                     </h3>
-                    <p className="text-gray-600 text-sm opacity-80 line-clamp-2 mb-4 group-hover:opacity-100 transition-opacity">
-                      {category.description}
-                    </p>
-                    <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                      <span className="w-8 h-[1px] bg-gray-400 group-hover:w-12 group-hover:bg-[#2d5016] transition-all duration-300" />
-                      {category.productCount} Products
-                    </div>
+                    {category.description && (
+                      <p className="text-gray-600 text-xs opacity-80 line-clamp-2 mb-2 group-hover:opacity-100 transition-opacity">
+                        {category.description}
+                      </p>
+                    )}
+                    {category.productCount !== undefined && (
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-gray-400 uppercase tracking-wider">
+                        <span className="w-6 h-[1px] bg-gray-400 group-hover:w-8 group-hover:bg-[#2d5016] transition-all duration-300" />
+                        {category.productCount} Items
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 {/* Hover Border Effect */}
-                <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#2d5016]/10 rounded-3xl transition-colors duration-300 pointer-events-none" />
+                <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#2d5016]/10 rounded-2xl transition-colors duration-300 pointer-events-none" />
               </Link>
             ))}
           </div>

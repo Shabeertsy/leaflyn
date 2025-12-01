@@ -23,7 +23,7 @@ export const useCategoriesStore = create<CategoriesState>((set, get) => ({
 
     set({ loading: true, error: null });
     try {
-      const response = await api.get('/categories/');
+      const response = await api.get('/api/categories/');
       set({ categories: response.data, loading: false });
     } catch (error: any) {
       set({ 

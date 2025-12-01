@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, User, ArrowRight, Loader2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff, User, ArrowRight, Loader2, X } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
-  const register = useAuthStore((state) => state.register);
+  // const location = useLocation();
+  // const from = location.state?.from?.pathname || '/';
+  const { register, verifyOtp, resendOtp, sendOtp } = useAuthStore();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,6 +15,32 @@ const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [timer, setTimer] = useState(0);
+
+  React.useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [timer]);
+
+  const handleResendOtp = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      await resendOtp(email);
+      setTimer(120); // 2 minutes
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Failed to resend OTP');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +55,10 @@ const Register: React.FC = () => {
 
     try {
       await register(name, email, password);
-      navigate(from, { replace: true });
+      // If successful, send OTP and show modal
+      await sendOtp(email);
+      setShowOtpModal(true);
+      setTimer(120); // Start timer
     } catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
@@ -37,9 +66,35 @@ const Register: React.FC = () => {
     }
   };
 
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      await verifyOtp(email, otp);
+      navigate('/', { replace: true });
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Invalid OTP. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData('text').slice(0, 6).replace(/[^0-9]/g, '');
+    if (pastedData) {
+      setOtp(pastedData);
+      // Focus the next empty input or the last one
+      const nextIndex = Math.min(pastedData.length, 5);
+      document.getElementById(`otp-${nextIndex}`)?.focus();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-6">
-      <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden">
+      <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden relative">
         <div className="p-8 md:p-10">
           <div className="text-center mb-8">
             <Link to="/" className="inline-block mb-6">
@@ -55,7 +110,7 @@ const Register: React.FC = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {error && (
+            {error && !showOtpModal && (
               <div className="bg-red-50 text-red-500 text-sm p-4 rounded-xl text-center">
                 {error}
               </div>
@@ -167,6 +222,103 @@ const Register: React.FC = () => {
             </p>
           </div>
         </div>
+
+        {/* OTP Modal */}
+        {showOtpModal && (
+          <div className="absolute inset-0 bg-white z-50 flex flex-col items-center justify-center p-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+            <button 
+              onClick={() => setShowOtpModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            >
+              <X size={24} />
+            </button>
+            
+            <div className="w-full max-w-sm text-center">
+              <div className="w-16 h-16 bg-[#2d5016]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Mail size={32} className="text-[#2d5016]" />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-gray-900 mb-2 font-['Playfair_Display']">Verify Your Email</h2>
+              <p className="text-gray-500 mb-8">
+                We've sent a verification code to <br/>
+                <span className="font-semibold text-gray-900">{email}</span>
+              </p>
+
+              <form onSubmit={handleVerifyOtp} className="space-y-6">
+                {error && (
+                  <div className="bg-red-50 text-red-500 text-sm p-4 rounded-xl text-center">
+                    {error}
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700 uppercase tracking-wide block text-left">Enter OTP</label>
+                  <div className="flex gap-2 justify-between">
+                    {[0, 1, 2, 3, 4, 5].map((index) => (
+                      <input
+                        key={index}
+                        id={`otp-${index}`}
+                        type="text"
+                        maxLength={1}
+                        value={otp[index] || ''}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (/[^0-9]/.test(value)) return;
+                          
+                          const newOtp = otp.split('');
+                          newOtp[index] = value;
+                          const newOtpString = newOtp.join('');
+                          setOtp(newOtpString);
+
+                          if (value && index < 5) {
+                            document.getElementById(`otp-${index + 1}`)?.focus();
+                          }
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Backspace' && !otp[index] && index > 0) {
+                            document.getElementById(`otp-${index - 1}`)?.focus();
+                          }
+                        }}
+                        onPaste={handlePaste}
+                        className="w-12 h-14 text-center text-xl font-bold border border-gray-200 rounded-xl focus:border-[#2d5016] focus:ring-0 outline-none transition-all bg-gray-50"
+                        required={index === 0}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading || otp.length !== 6}
+                  className="w-full bg-[#2d5016] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {loading ? (
+                    <Loader2 size={24} className="animate-spin" />
+                  ) : (
+                    'Verify Email'
+                  )}
+                </button>
+
+                <div className="text-center">
+                  {timer > 0 ? (
+                    <p className="text-sm text-gray-500">
+                      Resend code in <span className="font-bold text-[#2d5016]">{Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, '0')}</span>
+                    </p>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleResendOtp}
+                      disabled={loading}
+                      className="text-sm font-bold text-[#2d5016] hover:underline disabled:opacity-50"
+                    >
+                      Resend OTP
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

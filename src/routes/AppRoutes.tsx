@@ -10,6 +10,7 @@ import Search from '../pages/shop/Search';
 import Wishlist from '../pages/shop/Wishlist';
 import Categories from '../pages/shop/Categories';
 import Account from '../pages/user/Account';
+import PersonalInfo from '../pages/user/PersonalInfo';
 import Notifications from '../pages/user/Notifications';
 import ContactUs from '../pages/ContactUs';
 import TermsConditions from '../pages/TermsConditions';
@@ -23,6 +24,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/" element={<Home />} />
       <Route path="/search" element={<Search />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/checkout" element={<Checkout />} />
       <Route path="/wishlist" element={<Wishlist />} />
       <Route path="/categories" element={<Categories />} />
       <Route path="/product/:id" element={<ProductDetail />} />
@@ -35,10 +37,9 @@ const AppRoutes: React.FC = () => {
       
       {/* Protected Routes (only accessible if logged in) */}
       <Route element={<PrivateRoute />}>
-        <Route path="/checkout" element={<Checkout />} />
         <Route path="/account" element={<Account />} />
         <Route path="/orders" element={<Account />} />
-        <Route path="/profile/edit" element={<Account />} />
+        <Route path="/profile/edit" element={<PersonalInfo />} />
         <Route path="/addresses" element={<Account />} />
         <Route path="/payment-methods" element={<Account />} />
         <Route path="/rewards" element={<Account />} />

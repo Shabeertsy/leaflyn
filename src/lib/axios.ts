@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api/',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -11,7 +11,20 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
-    if (token) {
+    
+    // List of endpoints that don't require authentication
+    const publicEndpoints = [
+      '/api/login/',
+      '/api/register/',
+      '/api/verify-otp/',
+      '/api/resend-otp/',
+      '/api/send-otp/',
+    ];
+
+    // Check if the current request URL matches any public endpoint
+    const isPublicEndpoint = publicEndpoints.some(endpoint => config.url?.includes(endpoint));
+
+    if (token && !isPublicEndpoint) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -24,12 +37,40 @@ api.interceptors.request.use(
 // Add response interceptor for error handling
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    // Handle global errors like 401 Unauthorized
-    if (error.response?.status === 401) {
-      // Clear token and redirect to login if needed
-      localStorage.removeItem('token');
-      // window.location.href = '/login';
+  async (error: any) => {
+    const originalRequest = error.config;
+
+    // Handle 401 Unauthorized
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      const refreshToken = localStorage.getItem('refreshToken');
+
+      if (refreshToken) {
+        try {
+          const response = await axios.post(`${api.defaults.baseURL}/api/refresh-token/`, {
+            refresh: refreshToken,
+          });
+
+          const { access } = response.data;
+          localStorage.setItem('token', access);
+          
+          // Update the header for the original request
+          originalRequest.headers.Authorization = `Bearer ${access}`;
+          
+          // Retry the original request
+          return api(originalRequest);
+        } catch (refreshError) {
+          // If refresh fails, clear tokens and logout
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
+          // but clearing tokens effectively logs out.
+          window.location.href = '/login';
+        }
+      } else {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
