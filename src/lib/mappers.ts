@@ -55,7 +55,7 @@ export const mapVariantToProduct = (variant: APIProductVariant): Product => {
     description: toSentenceCase(variant.product.description),
     price: price,
     originalPrice:parseFloat(variant.original_price),
-    discount: variant.offer_percentage,
+    discount: Math.round(variant.offer_percentage),
     category: categoryMap[variant.product.category] || 'indoor-plants',
     image: mainImage,
     images: images,

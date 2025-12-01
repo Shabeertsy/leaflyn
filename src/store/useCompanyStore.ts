@@ -16,7 +16,7 @@ export const useCompanyStore = create<CompanyStore>((set) => ({
   fetchCompanyContact: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.get('/company-contact/');
+      const response = await axios.get('/api/company-contact/');
       set({ companyContact: response.data, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });

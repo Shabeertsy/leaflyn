@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { Search as SearchIcon, X, SlidersHorizontal } from 'lucide-react';
 import ProductCard from '../../components/features/ProductCard';
 import { useCategoriesStore } from '../../store/useCategoriesStore';
@@ -11,34 +11,112 @@ const Search: React.FC = () => {
   const [sortBy, setSortBy] = useState<'popular' | 'price-low' | 'price-high' | 'rating'>('popular');
 
   const [currentPage, setCurrentPage] = useState(1);
-  const { products: apiProducts, fetchProducts, isLoading, nextPage, previousPage } = useProductStore();
+  const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [lastLoadedPage, setLastLoadedPage] = useState(0);
+  
+  const { products, fetchProducts, isLoading, nextPage } = useProductStore();
   const { categories, fetchCategories } = useCategoriesStore();
+  
+  const observerTarget = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
 
+  // Reset products when category changes
   useEffect(() => {
     console.log('Selected Category ID:', selectedCategoryId);
     const categoryParam = selectedCategoryId !== 'all' ? selectedCategoryId : undefined;
     console.log('Passing category_id to API:', categoryParam);
     
+    setCurrentPage(1);
+    setAllProducts([]);
+    setIsLoadingMore(false);
+    setLastLoadedPage(0);
+    
     fetchProducts({
       category_id: categoryParam,
-      page: currentPage,
+      page: 1,
     });
-  }, [selectedCategoryId, currentPage, fetchProducts]);
+  }, [selectedCategoryId, fetchProducts]);
+
+  // Watch for products changes and accumulate them
+  useEffect(() => {
+    console.log('Products from store:', products.length, 'Current page:', currentPage, 'Last loaded:', lastLoadedPage);
+    
+    if (products.length > 0 && currentPage !== lastLoadedPage) {
+      const mappedProducts = products.map(mapVariantToProduct);
+      
+      if (currentPage === 1) {
+        console.log('Setting initial products:', mappedProducts.length);
+        setAllProducts(mappedProducts);
+      } else {
+        console.log('Appending products from page', currentPage);
+        setAllProducts(prev => {
+          const existingIds = new Set(prev.map(p => p.id));
+          const uniqueNewProducts = mappedProducts.filter(p => !existingIds.has(p.id));
+          console.log('Adding', uniqueNewProducts.length, 'unique products. Total:', prev.length + uniqueNewProducts.length);
+          return [...prev, ...uniqueNewProducts];
+        });
+      }
+      
+      setLastLoadedPage(currentPage);
+      setIsLoadingMore(false);
+    }
+  }, [products, currentPage, lastLoadedPage]);
+
+  // Infinite scroll observer
+  const loadMore = useCallback(() => {
+    console.log('loadMore called', { nextPage, isLoading, isLoadingMore, currentPage, lastLoadedPage });
+    
+    if (nextPage && !isLoading && !isLoadingMore && currentPage === lastLoadedPage) {
+      console.log('Loading next page...');
+      setIsLoadingMore(true);
+      const categoryParam = selectedCategoryId !== 'all' ? selectedCategoryId : undefined;
+      const nextPageNum = currentPage + 1;
+      
+      setCurrentPage(nextPageNum);
+      
+      fetchProducts({
+        category_id: categoryParam,
+        page: nextPageNum,
+      });
+    }
+  }, [nextPage, isLoading, isLoadingMore, selectedCategoryId, currentPage, lastLoadedPage, fetchProducts]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentTarget = observerTarget.current;
+    if (currentTarget) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [loadMore]);
 
   const filteredProducts = useMemo(() => {
-    let filtered = apiProducts.map(mapVariantToProduct);
+    let filtered = [...allProducts];
 
-    // Filter by search query (Client-side for now)
+    // Filter by search query (Client-side)
     if (searchQuery) {
       filtered = filtered.filter(
         (product) =>
           product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          product.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+          product.tags?.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     }
 
@@ -58,7 +136,7 @@ const Search: React.FC = () => {
     }
 
     return filtered;
-  }, [apiProducts, searchQuery, sortBy]);
+  }, [allProducts, searchQuery, sortBy]);
 
   return (
     <div className="pb-20 lg:pb-0 bg-neutral-50 min-h-screen">
@@ -161,7 +239,7 @@ const Search: React.FC = () => {
         </div>
 
         {/* Products Grid */}
-        {isLoading ? (
+        {isLoading && currentPage === 1 ? (
           <div className="flex justify-center items-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2d5016]"></div>
           </div>
@@ -194,36 +272,17 @@ const Search: React.FC = () => {
               ))}
             </div>
 
-            {/* Pagination */}
-            {(nextPage || previousPage) && (
-              <div className="mt-12 flex justify-center items-center gap-4">
-                <button
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  disabled={!previousPage}
-                  className={`px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 ${
-                    !previousPage
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'bg-white text-[#2d5016] hover:bg-[#2d5016] hover:text-white shadow-md hover:shadow-lg border border-[#2d5016]/20'
-                  }`}
-                >
-                  Previous
-                </button>
-                
-                <span className="font-bold text-gray-700 bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-100">
-                  Page {currentPage}
-                </span>
+            {/* Infinite Scroll Trigger */}
+            {nextPage && (
+              <div ref={observerTarget} className="mt-12 flex justify-center items-center py-8">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#2d5016]"></div>
+              </div>
+            )}
 
-                <button
-                  onClick={() => setCurrentPage(p => p + 1)}
-                  disabled={!nextPage}
-                  className={`px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 ${
-                    !nextPage
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'bg-white text-[#2d5016] hover:bg-[#2d5016] hover:text-white shadow-md hover:shadow-lg border border-[#2d5016]/20'
-                  }`}
-                >
-                  Next
-                </button>
+            {/* End of Results */}
+            {!nextPage && allProducts.length > 0 && (
+              <div className="mt-12 text-center py-8">
+                <p className="text-gray-500 font-medium">You've reached the end of the results</p>
               </div>
             )}
           </>

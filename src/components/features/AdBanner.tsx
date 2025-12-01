@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface BannerSlide {
@@ -11,6 +11,8 @@ interface BannerSlide {
 
 const AdBanner: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
   const slides: BannerSlide[] = [
     {
@@ -50,6 +52,32 @@ const AdBanner: React.FC = () => {
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  // Touch handling for mobile slide swipe
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = null;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current === null || touchEndX.current === null) return;
+    const difference = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 50; // px
+
+    if (difference > minSwipeDistance) {
+      // Swiped left (next)
+      nextSlide();
+    } else if (difference < -minSwipeDistance) {
+      // Swiped right (prev)
+      prevSlide();
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
   };
 
   return (
@@ -127,7 +155,12 @@ const AdBanner: React.FC = () => {
 
       {/* Mobile Banner - App-like compact design */}
       <div className="md:hidden">
-        <div className="relative h-32 overflow-hidden">
+        <div
+          className="relative h-32 overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           {slides.map((slide, index) => (
             <div
               key={slide.id}

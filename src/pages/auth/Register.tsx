@@ -46,6 +46,11 @@ const Register: React.FC = () => {
     e.preventDefault();
     setError('');
 
+    if (password.length !== 8) {
+      setError('Password must be exactly 8 characters');
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -172,6 +177,10 @@ const Register: React.FC = () => {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {/* Show live error if password is not 8 chars */}
+              {(password.length > 0 && password.length !== 8) && (
+                <p className="text-red-500 text-xs mt-1 ml-2">Password must be exactly 8 characters.</p>
+              )}
             </div>
 
             <div className="space-y-2">
