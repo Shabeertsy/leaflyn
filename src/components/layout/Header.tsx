@@ -39,6 +39,9 @@ const Header: React.FC = () => {
           <Link to="/categories" className="text-gray-700 hover:text-[#2d5016] font-medium transition-colors">
             Categories
           </Link>
+          <Link to="/services" className="text-gray-700 hover:text-[#2d5016] font-medium transition-colors">
+            Services
+          </Link>
           <Link to="/contact-us" className="text-gray-700 hover:text-[#2d5016] font-medium transition-colors">
             Contact Us
           </Link>

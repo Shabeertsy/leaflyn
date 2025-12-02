@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Search, ShoppingCart, Heart, User } from 'lucide-react';
+import { Home, Search, ShoppingCart, Briefcase, User } from 'lucide-react';
 import { useCartStore } from '../../store/useCartStore';
 import { useAuthStore } from '../../store/useAuthStore';
 
@@ -13,7 +13,7 @@ const BottomNav: React.FC = () => {
     { icon: Home, label: 'Home', path: '/' },
     { icon: Search, label: 'Search', path: '/search' },
     { icon: ShoppingCart, label: 'Cart', path: '/cart', badge: cartCount },
-    { icon: Heart, label: 'Wishlist', path: '/wishlist' },
+    { icon: Briefcase, label: 'Services', path: '/services' },
     { icon: User, label: 'Account', path: isAuthenticated ? '/account' : '/login' },
   ];
 

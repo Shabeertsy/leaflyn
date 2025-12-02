@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import { Search as SearchIcon, X, SlidersHorizontal } from 'lucide-react';
 import ProductCard from '../../components/features/ProductCard';
 import { useCategoriesStore } from '../../store/useCategoriesStore';
@@ -6,9 +7,13 @@ import { useProductStore } from '../../store/useProductStore';
 import { mapVariantToProduct } from '../../lib/mappers';
 
 const Search: React.FC = () => {
+  const { slug } = useParams<{ slug?: string }>();
+  const location = useLocation();
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState('all');
   const [sortBy, setSortBy] = useState<'popular' | 'price-low' | 'price-high' | 'rating'>('popular');
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [allProducts, setAllProducts] = useState<any[]>([]);
@@ -20,12 +25,63 @@ const Search: React.FC = () => {
   
   const observerTarget = useRef<HTMLDivElement>(null);
 
+  // Fetch categories first
   useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
 
-  // Reset products when category changes
+  // Handle category from URL params (when coming from Home page)
   useEffect(() => {
+    if (categories.length > 0 && !isInitialized) {
+      console.log('Initializing with slug:', slug);
+      console.log('Available categories:', categories.map(c => ({ id: c.id, slug: c.slug, name: c.category_name })));
+      
+      if (slug) {
+        // Try to find category by slug first
+        let category = categories.find(cat => cat.slug === slug);
+        
+        // If not found by slug, try by ID (in case slug is actually an ID)
+        if (!category) {
+          category = categories.find(cat => cat.id === slug);
+        }
+        
+        if (category) {
+          console.log('✓ Found category:', category.category_name, 'ID:', category.id);
+          setSelectedCategoryId(category.id);
+        } else {
+          console.log('✗ Category not found for slug/id:', slug, '- defaulting to "all"');
+          setSelectedCategoryId('all');
+        }
+      } else {
+        console.log('No slug in URL - setting to "all"');
+        setSelectedCategoryId('all');
+      }
+      setIsInitialized(true);
+    }
+  }, [slug, categories, isInitialized]);
+
+  // Reset when navigating to /search without params
+  useEffect(() => {
+    if (location.pathname === '/search' && !slug && isInitialized) {
+      console.log('Resetting to "all" - direct /search navigation');
+      setSelectedCategoryId('all');
+    }
+  }, [location.pathname, slug, isInitialized]);
+
+  // Scroll selected category button into view
+  useEffect(() => {
+    if (isInitialized && selectedCategoryId !== 'all') {
+      const button = document.querySelector(`button[data-category-id="${selectedCategoryId}"]`);
+      if (button) {
+        button.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+  }, [isInitialized, selectedCategoryId]);
+
+  // Reset products when category changes (only after initialization)
+  useEffect(() => {
+    if (!isInitialized) return;
+    
     console.log('Selected Category ID:', selectedCategoryId);
     const categoryParam = selectedCategoryId !== 'all' ? selectedCategoryId : undefined;
     console.log('Passing category_id to API:', categoryParam);
@@ -39,7 +95,7 @@ const Search: React.FC = () => {
       category_id: categoryParam,
       page: 1,
     });
-  }, [selectedCategoryId, fetchProducts]);
+  }, [selectedCategoryId, fetchProducts, isInitialized]);
 
   // Watch for products changes and accumulate them
   useEffect(() => {
@@ -197,6 +253,7 @@ const Search: React.FC = () => {
           {categories.map((category) => (
             <button
               key={category.id}
+              data-category-id={category.id}
               onClick={() => setSelectedCategoryId(category.id)}
               className={`flex-shrink-0 px-6 py-3 rounded-xl font-semibold text-sm transition-all shadow-sm flex items-center gap-2 ${
                 selectedCategoryId === category.id
