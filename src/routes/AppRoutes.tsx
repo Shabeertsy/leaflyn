@@ -9,8 +9,8 @@ import Checkout from '../pages/shop/Checkout';
 import Search from '../pages/shop/Search';
 import Wishlist from '../pages/shop/Wishlist';
 import Categories from '../pages/shop/Categories';
-import Services from '../pages/Services';
-import ServiceDetail from '../pages/ServiceDetail';
+import ServicesAPI from '../pages/ServicesAPI';
+import ServiceDetailAPI from '../pages/ServiceDetailAPI';
 import Account from '../pages/user/Account';
 import PersonalInfo from '../pages/user/PersonalInfo';
 import Notifications from '../pages/user/Notifications';
@@ -29,8 +29,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/wishlist" element={<Wishlist />} />
       <Route path="/categories" element={<Categories />} />
-      <Route path="/services" element={<Services />} />
-      <Route path="/services/:id" element={<ServiceDetail />} />
+      <Route path="/services" element={<ServicesAPI />} />
+      <Route path="/services/:id" element={<ServiceDetailAPI />} />
       <Route path="/product/:id" element={<ProductDetail />} />
       
       {/* Public Routes (only accessible if NOT logged in) */}

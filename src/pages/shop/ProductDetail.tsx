@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
-  ArrowLeft, Heart, Share2, Star, ShoppingCart, Truck, Shield, 
-  RefreshCw, ChevronRight, Leaf, Droplet, Sun, ThermometerSun,
+  ArrowLeft, Heart, Share2, Star, ShoppingCart, Truck,
+  ChevronRight, Leaf, Droplet, Sun, ThermometerSun,
   Package, Award, CheckCircle, Minus, Plus
 } from 'lucide-react';
 import axios from '../../lib/axios';
@@ -311,19 +311,7 @@ const ProductDetail: React.FC = () => {
             <p className="text-sm text-gray-500">Inclusive of all taxes</p>
           </div>
 
-          {/* Quick Features */}
-          <div className="grid grid-cols-3 gap-3 mb-8">
-            {[
-              { icon: Truck, label: 'Free Delivery', color: 'text-blue-600', bg: 'bg-blue-50' },
-              { icon: Shield, label: 'Quality Assured', color: 'text-green-600', bg: 'bg-green-50' },
-              { icon: RefreshCw, label: '7 Day Return', color: 'text-purple-600', bg: 'bg-purple-50' },
-            ].map((feature, index) => (
-              <div key={index} className={`${feature.bg} rounded-xl p-4 text-center transition-transform hover:scale-105`}>
-                <feature.icon className={`mx-auto mb-2 ${feature.color}`} size={24} />
-                <p className="text-xs font-bold text-gray-700">{feature.label}</p>
-              </div>
-            ))}
-          </div>
+        
 
           {/* Tabs */}
           <div className="border-b border-gray-200 mb-6">

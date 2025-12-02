@@ -52,7 +52,7 @@ export const mapVariantToProduct = (variant: APIProductVariant): Product => {
   return {
     id: variant.uuid,
     name: toTitleCase(variant.name),
-    description: toSentenceCase(variant.product.description),
+    description: toSentenceCase(variant.description),
     price: price,
     originalPrice:parseFloat(variant.original_price),
     discount: Math.round(variant.offer_percentage),

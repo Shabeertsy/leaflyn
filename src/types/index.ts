@@ -144,6 +144,7 @@ export interface APICareGuide {
 export interface APIProductVariant {
   uuid: string;
   product: APIProduct;
+  description: string;
   color: string | null;
   size: APISize | null;
   stock: number;
@@ -203,4 +204,44 @@ export interface TermsCondition {
   created_at: string;
   updated_at: string;
 }
+
+// Service-related types
+export interface ServiceCategory {
+  id: number;
+  uuid: string;
+  created_at: string;
+  updated_at: string;
+  active_status: boolean;
+  deleted_at: string | null;
+  name: string;
+  icon: string | null;
+}
+
+export interface ServiceFeature {
+  uuid: string;
+  id: number;
+  name: string;
+}
+
+export interface ServiceImage {
+  uuid: string;
+  id: number;
+  image: string;
+  order_by: number;
+}
+
+export interface Service {
+  uuid: string;
+  id: number;
+  category: ServiceCategory | number; // Can be either full object or just ID
+  name: string;
+  description: string | null;
+  price: string;
+  image: string;
+  features: ServiceFeature[];
+  images: ServiceImage[];
+  created_at: string;
+  updated_at: string;
+}
+
 export * from './company';
