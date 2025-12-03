@@ -33,6 +33,8 @@ const ProductDetail: React.FC = () => {
   const [fetchedProduct, setFetchedProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
+  const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
+  const [loadingSimilar, setLoadingSimilar] = useState(false);
 
   // Try to find product in all available local sources
   let product = products.find((p) => p.id === id) || fetchedProduct;
@@ -71,6 +73,39 @@ const ProductDetail: React.FC = () => {
     fetchProductData();
   }, [id, product, featuredProducts.length, fetchProductCollections, isLoading, fetchError]);
 
+  // Fetch similar products from API
+  useEffect(() => {
+    const fetchSimilarProducts = async () => {
+      if (!id) return;
+      
+      setLoadingSimilar(true);
+      try {
+        const response = await axios.get(`/api/similar-product/`, {
+          params: { product_id: id }
+        });
+        
+        // Map API variants to Product format
+        const mappedProducts = response.data.map(mapVariantToProduct);
+        setSimilarProducts(mappedProducts);
+      } catch (error) {
+        console.error("Failed to fetch similar products:", error);
+        // Fallback to local related products if API fails
+        if (product) {
+          const fallbackProducts = products
+            .filter((p) => p.category === product.category && p.id !== product.id)
+            .slice(0, 4);
+          setSimilarProducts(fallbackProducts);
+        }
+      } finally {
+        setLoadingSimilar(false);
+      }
+    };
+
+    if (product) {
+      fetchSimilarProducts();
+    }
+  }, [id, product]);
+
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
@@ -99,9 +134,6 @@ const ProductDetail: React.FC = () => {
 
   const inWishlist = isInWishlist(product.id);
   const images = product.images || [product.image];
-  const relatedProducts = products
-    .filter((p) => p.category === product.category && p.id !== product.id)
-    .slice(0, 4);
 
   const handleAddToCart = async () => {
     if (cartLoading || !product) return;
@@ -447,23 +479,38 @@ const ProductDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Related Products */}
-        {relatedProducts.length > 0 && (
+        {/* Similar Products */}
+        {(similarProducts.length > 0 || loadingSimilar) && (
           <div className="px-6 py-12 bg-white mt-2">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-bold text-gray-900 font-['Playfair_Display']">You May Also Like</h3>
-              <Link
-                to={`/category/${product.category}`}
-                className="text-[#2d5016] font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all"
-              >
-                See All <ChevronRight size={16} />
-              </Link>
+              <h3 className="text-2xl font-bold text-gray-900 font-['Playfair_Display']">Similar Products</h3>
+              {product.category && (
+                <Link
+                  to={`/category/${product.category}`}
+                  className="text-[#2d5016] font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all"
+                >
+                  See All <ChevronRight size={16} />
+                </Link>
+              )}
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {relatedProducts.map((relatedProduct) => (
-                <ProductCard key={relatedProduct.id} product={relatedProduct} />
-              ))}
-            </div>
+            
+            {loadingSimilar ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="animate-pulse">
+                    <div className="bg-gray-200 aspect-square rounded-2xl mb-3"></div>
+                    <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {similarProducts.map((similarProduct) => (
+                  <ProductCard key={similarProduct.id} product={similarProduct} />
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

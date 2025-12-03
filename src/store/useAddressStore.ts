@@ -9,6 +9,7 @@ export interface Address {
   addressLine2?: string;
   city: string;
   state: string;
+  country: string;
   pincode: string;
   isDefault: boolean;
 }
@@ -22,21 +23,23 @@ interface AddressState {
   addAddress: (addressData: {
     name: string;
     phone: string;
-    address_line1: string;
-    address_line2?: string;
+    address_line_1: string;
+    address_line_2?: string;
     city: string;
     state: string;
-    pincode: string;
+    country: string;
+    pin_code: string;
     is_default?: boolean;
   }) => Promise<void>;
   updateAddress: (uuid: string, addressData: Partial<{
     name: string;
     phone: string;
-    address_line1: string;
-    address_line2?: string;
+    address_line_1: string;
+    address_line_2?: string;
     city: string;
     state: string;
-    pincode: string;
+    country: string;
+    pin_code: string;
     is_default: boolean;
   }>) => Promise<void>;
   deleteAddress: (uuid: string) => Promise<void>;
@@ -48,11 +51,12 @@ const mapAPIAddressToLocal = (apiAddress: APIAddress): Address => ({
   uuid: apiAddress.uuid,
   name: apiAddress.name,
   phone: apiAddress.phone,
-  addressLine1: apiAddress.address_line1,
-  addressLine2: apiAddress.address_line2,
+  addressLine1: apiAddress.address_line_1,
+  addressLine2: apiAddress.address_line_2,
   city: apiAddress.city,
   state: apiAddress.state,
-  pincode: apiAddress.pincode,
+  country: apiAddress.country,
+  pincode: apiAddress.pin_code,
   isDefault: apiAddress.is_default,
 });
 

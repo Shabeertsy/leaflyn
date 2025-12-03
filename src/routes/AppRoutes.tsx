@@ -13,6 +13,8 @@ import ServicesAPI from '../pages/ServicesAPI';
 import ServiceDetailAPI from '../pages/ServiceDetailAPI';
 import Account from '../pages/user/Account';
 import PersonalInfo from '../pages/user/PersonalInfo';
+import Addresses from '../pages/user/Addresses';
+import AddressForm from '../pages/user/AddressForm';
 import Notifications from '../pages/user/Notifications';
 import ContactUs from '../pages/ContactUs';
 import TermsConditions from '../pages/TermsConditions';
@@ -44,7 +46,9 @@ const AppRoutes: React.FC = () => {
         <Route path="/account" element={<Account />} />
         <Route path="/orders" element={<Account />} />
         <Route path="/profile/edit" element={<PersonalInfo />} />
-        <Route path="/addresses" element={<Account />} />
+        <Route path="/addresses" element={<Addresses />} />
+        <Route path="/addresses/add" element={<AddressForm />} />
+        <Route path="/addresses/edit/:id" element={<AddressForm />} />
         <Route path="/payment-methods" element={<Account />} />
         <Route path="/rewards" element={<Account />} />
         <Route path="/notifications" element={<Notifications />} />

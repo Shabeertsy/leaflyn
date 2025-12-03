@@ -5,11 +5,12 @@ export interface APIAddress {
   user: number;
   name: string;
   phone: string;
-  address_line1: string;
-  address_line2?: string;
+  address_line_1: string;
+  address_line_2?: string;
   city: string;
   state: string;
-  pincode: string;
+  country: string;
+  pin_code: string;
   is_default: boolean;
   created_at: string;
   updated_at: string;
@@ -21,7 +22,7 @@ export const addressService = {
    * Note: Backend needs to implement GET /api/addresses/ endpoint
    */
   fetchAddresses: async (): Promise<APIAddress[]> => {
-    const response = await api.get('/api/addresses/');
+    const response = await api.get('/api/address-list/');
     return response.data;
   },
 
@@ -31,11 +32,12 @@ export const addressService = {
   addAddress: async (addressData: {
     name: string;
     phone: string;
-    address_line1: string;
-    address_line2?: string;
+    address_line_1: string;
+    address_line_2?: string;
     city: string;
     state: string;
-    pincode: string;
+    country: string;
+    pin_code: string;
     is_default?: boolean;
   }): Promise<APIAddress> => {
     const response = await api.post('/api/address-add/', addressData);
@@ -51,11 +53,12 @@ export const addressService = {
     addressData: {
       name?: string;
       phone?: string;
-      address_line1?: string;
-      address_line2?: string;
+      address_line_1?: string;
+      address_line_2?: string;
       city?: string;
       state?: string;
-      pincode?: string;
+      country?: string;
+      pin_code?: string;
       is_default?: boolean;
     }
   ): Promise<APIAddress> => {

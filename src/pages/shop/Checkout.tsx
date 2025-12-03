@@ -4,6 +4,8 @@ import { ArrowLeft, CheckCircle, CreditCard, MapPin, Plus, ShieldCheck, Truck, C
 import { useCartStore } from '../../store/useCartStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import api from '../../lib/axios';
+import OTPVerificationModal from '../../components/ui/OTPVerificationModal';
+import { useAddressStore } from '../../store/useAddressStore';
 
 interface PaymentGateway {
   id: number;
@@ -41,10 +43,12 @@ interface Address {
   isDefault?: boolean;
 }
 
+
 const Checkout: React.FC = () => {
   const navigate = useNavigate();
   const { cart, clearCart, getCartTotal } = useCartStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, setUser } = useAuthStore();
+  const { addresses, fetchAddresses, addAddress, isLoading: addressesLoading } = useAddressStore();
   const cartTotal = getCartTotal();
   const [step, setStep] = useState<'address' | 'payment' | 'success'>('address');
   const [phone, setPhone] = useState('');
@@ -55,29 +59,16 @@ const Checkout: React.FC = () => {
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
 
+  // OTP Verification State
+  const [showOTPModal, setShowOTPModal] = useState(false);
+  const [sendingOTP, setSendingOTP] = useState(false);
+
   // Payment State
   const [gateways, setGateways] = useState<PaymentGateway[]>([]);
   // @ts-ignore
   const [selectedGateway, setSelectedGateway] = useState<number | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<'gateway' | 'cod'>('gateway');
   const [showGatewayModal, setShowGatewayModal] = useState(false);
-
-  // Sample saved addresses
-  const [savedAddresses, setSavedAddresses] = useState<Address[]>([
-    {
-      id: '1',
-      label: 'Home',
-      name: 'John Doe',
-      phone: '+91 98765 43210',
-      buildingName: 'Green Villa, Apt 301',
-      place: '123 Green Street',
-      city: 'Eco Valley',
-      district: 'Nature District',
-      state: 'Kerala',
-      pincode: '670001',
-      isDefault: true
-    }
-  ]);
 
   // New address form state
   const [newAddress, setNewAddress] = useState<Partial<Address>>({
@@ -95,6 +86,13 @@ const Checkout: React.FC = () => {
   const shipping = cartTotal >= 499 ? 0 : 50;
   const tax = Math.round(cartTotal * 0.05);
   const total = cartTotal + shipping + tax;
+
+  // Fetch addresses for authenticated users
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchAddresses();
+    }
+  }, [isAuthenticated, fetchAddresses]);
 
   // Fetch gateways when entering payment step
   useEffect(() => {
@@ -119,13 +117,25 @@ const Checkout: React.FC = () => {
 
   const handlePlaceOrder = async () => {
     if (paymentMethod === 'cod') {
-      // Handle COD
+      // Handle COD - Create order via API
       setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
+      try {
+        const response = await api.post('/api/order/cod/', {
+          // The backend should get cart items from the user's session/cart
+          // and create the order accordingly
+        });
+
+        console.log('COD Order created:', response.data);
+        
+        // Clear cart and show success
         setStep('success');
         clearCart();
-      }, 2000);
+      } catch (error: any) {
+        console.error('COD order creation failed:', error);
+        alert(error.response?.data?.error || 'Failed to place order. Please try again.');
+      } finally {
+        setLoading(false);
+      }
     } else {
       // Handle Gateway Payment
       if (gateways.length === 0) {
@@ -167,24 +177,29 @@ const Checkout: React.FC = () => {
     }
   };
 
-  const handleSaveAddress = () => {
-    if (newAddress.name && newAddress.phone && newAddress.place && newAddress.city && newAddress.pincode) {
-      const address: Address = {
-        id: Date.now().toString(),
-        label: newAddress.label || 'Home',
+  const handleSaveAddress = async () => {
+    if (!newAddress.name || !newAddress.phone || !newAddress.place || !newAddress.city || !newAddress.pincode) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await addAddress({
         name: newAddress.name,
         phone: newAddress.phone,
-        buildingName: newAddress.buildingName || '',
-        place: newAddress.place,
+        address_line_1: newAddress.place,
+        address_line_2: newAddress.buildingName || '',
         city: newAddress.city,
-        district: newAddress.district || '',
         state: newAddress.state || '',
-        pincode: newAddress.pincode,
-        isDefault: savedAddresses.length === 0
-      };
-      setSavedAddresses([...savedAddresses, address]);
+        country: 'India',
+        pin_code: newAddress.pincode,
+        is_default: addresses.length === 0
+      });
+
+      // Close modal and reset form
       setShowAddressModal(false);
-      setSelectedAddressIndex(savedAddresses.length);
+      setSelectedAddressIndex(addresses.length); // Select the newly added address
       setNewAddress({
         label: 'Home',
         name: '',
@@ -196,13 +211,74 @@ const Checkout: React.FC = () => {
         state: '',
         pincode: ''
       });
+    } catch (error: any) {
+      alert(error.response?.data?.error || 'Failed to add address. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Send OTP to guest user's email
+  const handleSendOTP = async () => {
+    if (!email || !newAddress.name || !newAddress.phone || !newAddress.place || !newAddress.city || !newAddress.pincode || !password) {
+      alert('Please fill in all required fields before proceeding');
+      return;
+    }
+
+    setSendingOTP(true);
+    try {
+      await api.post('/api/send-otp/', { email });
+      setShowOTPModal(true);
+    } catch (error: any) {
+      alert(error.response?.data?.error || 'Failed to send OTP. Please try again.');
+    } finally {
+      setSendingOTP(false);
+    }
+  };
+
+  // Handle OTP verification success
+  const handleOTPVerified = async () => {
+    setShowOTPModal(false);
+    
+    // Register user and address
+    await handleGuestRegistration();
+  };
+
+  // Register guest user with address
+  const handleGuestRegistration = async () => {
+    setLoading(true);
+    try {
+      const response = await api.post('/api/register-user-address/', {
+        full_name: newAddress.name,
+        phone_number: newAddress.phone || phone,
+        email,
+        password,
+        building_name_number: newAddress.buildingName || '',
+        place_street: newAddress.place,
+        city: newAddress.city,
+        district: newAddress.district || '',
+        state: newAddress.state || '',
+        pin_code: newAddress.pincode,
+      });
+
+      // Store tokens and user data
+      localStorage.setItem('token', response.data.access);
+      localStorage.setItem('refreshToken', response.data.refresh);
+      setUser(response.data.user);
+
+      // Proceed to payment
+      setStep('payment');
+    } catch (error: any) {
+      alert(error.response?.data?.error || 'Failed to create account. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const scrollAddresses = (direction: 'left' | 'right') => {
     if (direction === 'left' && selectedAddressIndex > 0) {
       setSelectedAddressIndex(selectedAddressIndex - 1);
-    } else if (direction === 'right' && selectedAddressIndex < savedAddresses.length - 1) {
+    } else if (direction === 'right' && selectedAddressIndex < addresses.length - 1) {
       setSelectedAddressIndex(selectedAddressIndex + 1);
     }
   };
@@ -349,67 +425,76 @@ const Checkout: React.FC = () => {
                 {isAuthenticated && (
                   <>
                     {/* Address Slider */}
-                    {savedAddresses.length > 0 && (
-                      <div className="relative">
-                        <div className="overflow-hidden">
+                    {addressesLoading ? (
+                      <div className="animate-pulse">
+                        <div className="h-40 bg-gray-200 rounded-2xl"></div>
+                      </div>
+                    ) : addresses.length > 0 ? (
+                      <div className="relative px-2 sm:px-0">
+                        <div className="overflow-hidden rounded-2xl">
                           <div 
-                            className="flex transition-transform duration-300 ease-out gap-4"
+                            className="flex transition-transform duration-300 ease-out"
                             style={{ transform: `translateX(-${selectedAddressIndex * 100}%)` }}
                           >
-                            {savedAddresses.map((address, index) => (
+                            {addresses.map((address, index) => (
                               <div
-                                key={address.id}
-                                className={`min-w-full border-2 p-5 rounded-2xl cursor-pointer transition-all ${
-                                  index === selectedAddressIndex
-                                    ? 'border-[#2d5016] bg-[#2d5016]/5'
-                                    : 'border-gray-200 bg-white'
-                                }`}
-                                onClick={() => setSelectedAddressIndex(index)}
+                                key={address.uuid}
+                                className={`min-w-full flex-shrink-0 px-2 sm:px-0 ${index > 0 ? 'pl-4' : ''}`}
                               >
-                                <div className="flex items-center justify-between mb-3">
-                                  <span className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide ${
+                                <div
+                                  className={`border-2 p-5 rounded-2xl cursor-pointer transition-all ${
                                     index === selectedAddressIndex
-                                      ? 'bg-[#2d5016] text-white'
-                                      : 'bg-gray-100 text-gray-600'
-                                  }`}>
-                                    {address.label}
-                                  </span>
-                                  {index === selectedAddressIndex && (
-                                    <CheckCircle size={20} className="text-[#2d5016]" fill="currentColor" />
-                                  )}
+                                      ? 'border-[#2d5016] bg-[#2d5016]/5'
+                                      : 'border-gray-200 bg-white'
+                                  }`}
+                                  onClick={() => setSelectedAddressIndex(index)}
+                                >
+                                  <div className="flex items-center justify-between mb-3">
+                                    <span className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide ${
+                                      address.isDefault
+                                        ? 'bg-[#2d5016] text-white'
+                                        : 'bg-gray-100 text-gray-600'
+                                    }`}>
+                                      {address.isDefault ? 'Default' : 'Address'}
+                                    </span>
+                                    {index === selectedAddressIndex && (
+                                      <CheckCircle size={20} className="text-[#2d5016]" fill="currentColor" />
+                                    )}
+                                  </div>
+                                  <h3 className="font-bold text-gray-900 mb-1">{address.name}</h3>
+                                  <p className="text-sm text-gray-600 leading-relaxed">
+                                    {address.addressLine1}
+                                    {address.addressLine2 && `, ${address.addressLine2}`}
+                                    <br />
+                                    {address.city}, {address.state} - {address.pincode}
+                                    {address.country && `, ${address.country}`}
+                                  </p>
+                                  <p className="text-sm text-gray-600 mt-2">{address.phone}</p>
                                 </div>
-                                <h3 className="font-bold text-gray-900 mb-1">{address.name}</h3>
-                                <p className="text-sm text-gray-600 leading-relaxed">
-                                  {address.buildingName && `${address.buildingName}, `}
-                                  {address.place},<br />
-                                  {address.city}, {address.district && `${address.district}, `}
-                                  {address.state} {address.pincode}
-                                </p>
-                                <p className="text-sm text-gray-600 mt-2">{address.phone}</p>
                               </div>
                             ))}
                           </div>
                         </div>
 
                         {/* Navigation */}
-                        {savedAddresses.length > 1 && (
+                        {addresses.length > 1 && (
                           <>
                             <button
                               onClick={() => scrollAddresses('left')}
                               disabled={selectedAddressIndex === 0}
-                              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center hover:border-[#2d5016] hover:bg-[#2d5016] hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg"
+                              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 w-8 h-8 sm:w-10 sm:h-10 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center hover:border-[#2d5016] hover:bg-[#2d5016] hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg z-10"
                             >
-                              <ChevronLeftIcon size={20} />
+                              <ChevronLeftIcon size={18} className="sm:w-5 sm:h-5" />
                             </button>
                             <button
                               onClick={() => scrollAddresses('right')}
-                              disabled={selectedAddressIndex === savedAddresses.length - 1}
-                              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center hover:border-[#2d5016] hover:bg-[#2d5016] hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg"
+                              disabled={selectedAddressIndex === addresses.length - 1}
+                              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-4 w-8 h-8 sm:w-10 sm:h-10 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center hover:border-[#2d5016] hover:bg-[#2d5016] hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg z-10"
                             >
-                              <ChevronRightIcon size={20} />
+                              <ChevronRightIcon size={18} className="sm:w-5 sm:h-5" />
                             </button>
                             <div className="flex justify-center gap-2 mt-4">
-                              {savedAddresses.map((_, index) => (
+                              {addresses.map((_, index) => (
                                 <button
                                   key={index}
                                   onClick={() => setSelectedAddressIndex(index)}
@@ -424,7 +509,7 @@ const Checkout: React.FC = () => {
                           </>
                         )}
                       </div>
-                    )}
+                    ) : null}
 
                     {/* Add Address Button for Authenticated Users */}
                     <button
@@ -615,11 +700,28 @@ const Checkout: React.FC = () => {
                 )}
 
                 <button
-                  onClick={() => setStep('payment')}
-                  className="w-full py-4 bg-[#2d5016] text-white rounded-xl font-bold text-lg hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
+                  onClick={() => {
+                    if (isAuthenticated) {
+                      setStep('payment');
+                    } else {
+                      // Guest checkout - send OTP
+                      handleSendOTP();
+                    }
+                  }}
+                  disabled={sendingOTP || loading}
+                  className="w-full py-4 bg-[#2d5016] text-white rounded-xl font-bold text-lg hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  Continue to Payment
-                  <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  {sendingOTP ? (
+                    <>
+                      <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
+                      Sending OTP...
+                    </>
+                  ) : (
+                    <>
+                      Continue to Payment
+                      <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
                 </button>
               </div>
             ) : (
@@ -877,9 +979,17 @@ const Checkout: React.FC = () => {
 
               <button
                 onClick={handleSaveAddress}
-                className="w-full py-4 bg-[#2d5016] text-white rounded-xl font-bold text-lg hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                disabled={loading}
+                className="w-full py-4 bg-[#2d5016] text-white rounded-xl font-bold text-lg hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                Save Address
+                {loading ? (
+                  <>
+                    <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
+                    Saving...
+                  </>
+                ) : (
+                  'Save Address'
+                )}
               </button>
             </div>
           </div>
@@ -940,6 +1050,15 @@ const Checkout: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* OTP Verification Modal */}
+      {showOTPModal && (
+        <OTPVerificationModal
+          email={email}
+          onVerified={handleOTPVerified}
+          onClose={() => setShowOTPModal(false)}
+        />
       )}
     </div>
   );

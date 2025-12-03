@@ -6,6 +6,8 @@ import { useCategoriesStore } from '../../store/useCategoriesStore';
 import { useProductStore } from '../../store/useProductStore';
 import { mapVariantToProduct } from '../../lib/mappers';
 
+
+
 const Search: React.FC = () => {
   const { slug } = useParams<{ slug?: string }>();
   const location = useLocation();
