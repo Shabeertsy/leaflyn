@@ -8,6 +8,8 @@ import {
 import axios from '../../lib/axios';
 import { useCartStore } from '../../store/useCartStore';
 import { useWishlistStore } from '../../store/useWishlistStore';
+import { useUIStore } from '../../store/useUIStore';
+import { useAuthStore } from '../../store/useAuthStore';
 import { products } from '../../data/products';
 import ProductCard from '../../components/features/ProductCard';
 import { useProductCollectionStore } from '../../store/useProductCollectionStore';
@@ -20,8 +22,10 @@ import type { Product } from '../../types';
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const addToCart = useCartStore((state) => state.addToCart);
-  const { addToWishlist, removeFromWishlist, wishlist } = useWishlistStore();
+  const { addToCart, isLoading: cartLoading } = useCartStore();
+  const { addToWishlist, removeFromWishlist, isInWishlist, isLoading: wishlistLoading } = useWishlistStore();
+  const { setShowLoginPrompt, setPendingAction } = useUIStore();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   
   const { featuredProducts, bestsellerProducts, fetchProductCollections } = useProductCollectionStore();
   const { products: searchProducts } = useProductStore();
@@ -93,23 +97,53 @@ const ProductDetail: React.FC = () => {
     );
   }
 
-  const inWishlist = wishlist.some(item => item.productId === product.id);
+  const inWishlist = isInWishlist(product.id);
   const images = product.images || [product.image];
   const relatedProducts = products
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 4);
 
-  const handleAddToCart = () => {
-    addToCart(product, quantity);
-    setAddedToCart(true);
-    setTimeout(() => setAddedToCart(false), 2000);
+  const handleAddToCart = async () => {
+    if (cartLoading || !product) return;
+    
+    const addToCartAction = async () => {
+      try {
+        await addToCart(product, quantity);
+        setAddedToCart(true);
+        setTimeout(() => setAddedToCart(false), 2000);
+      } catch (error) {
+        console.error('Failed to add to cart:', error);
+      }
+    };
+
+    if (!isAuthenticated) {
+      setPendingAction(addToCartAction);
+      setShowLoginPrompt(true);
+    } else {
+      await addToCartAction();
+    }
   };
 
-  const handleWishlistToggle = () => {
-    if (inWishlist) {
-      removeFromWishlist(product.id);
+  const handleWishlistToggle = async () => {
+    if (wishlistLoading || !product) return;
+    
+    const toggleWishlistAction = async () => {
+      try {
+        if (inWishlist) {
+          await removeFromWishlist(product.id);
+        } else {
+          await addToWishlist(product);
+        }
+      } catch (error) {
+        console.error('Failed to toggle wishlist:', error);
+      }
+    };
+
+    if (!isAuthenticated) {
+      setPendingAction(toggleWishlistAction);
+      setShowLoginPrompt(true);
     } else {
-      addToWishlist(product.id);
+      await toggleWishlistAction();
     }
   };
 
@@ -459,16 +493,22 @@ const ProductDetail: React.FC = () => {
           {/* Add to Cart Button */}
           <button
             onClick={handleAddToCart}
-            disabled={!product.inStock}
+            disabled={!product.inStock || cartLoading}
             className={`flex-1 py-3 lg:py-4 rounded-xl font-bold text-white transition-all flex items-center justify-center gap-2 shadow-lg text-sm lg:text-base ${
               addedToCart
                 ? 'bg-green-600'
                 : product.inStock
                 ? 'bg-[#2d5016] hover:bg-[#3d6622] hover:shadow-xl hover:-translate-y-0.5 active:scale-95'
                 : 'bg-gray-400 cursor-not-allowed'
-            }`}
+            } ${cartLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            {addedToCart ? (
+            {cartLoading ? (
+              <>
+                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                <span className="hidden sm:inline">Adding...</span>
+                <span className="sm:hidden">...</span>
+              </>
+            ) : addedToCart ? (
               <>
                 <CheckCircle size={18} />
                 <span className="hidden sm:inline">Added to Cart</span>
@@ -492,15 +532,33 @@ const ProductDetail: React.FC = () => {
           {/* Buy Now Button */}
           {product.inStock && (
             <button
-              onClick={() => {
-                addToCart(product, quantity);
-                navigate('/cart');
+              onClick={async () => {
+                if (cartLoading) return;
+                
+                const buyNowAction = async () => {
+                  try {
+                    await addToCart(product, quantity);
+                    navigate('/cart');
+                  } catch (error) {
+                    console.error('Failed to buy now:', error);
+                  }
+                };
+
+                if (!isAuthenticated) {
+                  setPendingAction(buyNowAction);
+                  setShowLoginPrompt(true);
+                } else {
+                  await buyNowAction();
+                }
               }}
-              className="flex-1 py-3 lg:py-4 bg-gradient-to-r from-[#d4af37] to-[#bfa040] text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95 text-sm lg:text-base"
+              disabled={cartLoading}
+              className={`flex-1 py-3 lg:py-4 bg-gradient-to-r from-[#d4af37] to-[#bfa040] text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95 text-sm lg:text-base ${
+                cartLoading ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
             >
               <Truck size={18} />
-              <span className="hidden sm:inline">Buy Now</span>
-              <span className="sm:hidden">Buy</span>
+              <span className="hidden sm:inline">{cartLoading ? 'Processing...' : 'Buy Now'}</span>
+              <span className="sm:hidden">{cartLoading ? '...' : 'Buy'}</span>
             </button>
           )}
         </div>

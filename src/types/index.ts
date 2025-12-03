@@ -28,6 +28,33 @@ export interface CartItem {
   quantity: number;
 }
 
+// Backend API Cart Types
+export interface APICartItem {
+  uuid: string;
+  variant: APIProductVariant;
+  quantity: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface APICart {
+  uuid: string;
+  user: number;
+  items: APICartItem[];
+  coupon: string | null;
+  total: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface APIWishlistItem {
+  uuid: string;
+  user: number;
+  variant: APIProductVariant;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface User {
   id: number;
   email: string;

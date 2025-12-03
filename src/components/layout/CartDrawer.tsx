@@ -10,13 +10,24 @@ const CartDrawer: React.FC = () => {
     updateCartQuantity, 
     removeFromCart,
     getCartTotal,
-    getCartCount
+    getCartCount,
+    fetchCart,
+    isLoading,
+    error
   } = useCartStore();
   
   const cartTotal = getCartTotal();
   const cartCount = getCartCount();
   
   const { showCart, setShowCart } = useUIStore();
+
+  // Fetch cart when drawer opens
+  useEffect(() => {
+    if (showCart) {
+      fetchCart();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showCart]);
 
   // Prevent body scroll when cart is open
   useEffect(() => {
@@ -55,6 +66,13 @@ const CartDrawer: React.FC = () => {
             <X size={24} />
           </button>
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="mx-4 mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-600">{error}</p>
+          </div>
+        )}
 
         {/* Cart Items */}
         {cart.length === 0 ? (
@@ -103,10 +121,9 @@ const CartDrawer: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <div className="flex items-center border border-gray-300 rounded-lg">
                         <button
-                          onClick={() =>
-                            updateCartQuantity(item.product.id, item.quantity - 1)
-                          }
-                          className="p-1.5 hover:bg-gray-100 transition-colors rounded-l-lg"
+                          onClick={() => updateCartQuantity(item.product.id, item.quantity - 1)}
+                          disabled={isLoading}
+                          className="p-1.5 hover:bg-gray-100 transition-colors rounded-l-lg disabled:opacity-50 disabled:cursor-not-allowed"
                           aria-label="Decrease quantity"
                         >
                           <Minus size={16} />
@@ -115,22 +132,23 @@ const CartDrawer: React.FC = () => {
                           {item.quantity}
                         </span>
                         <button
-                          onClick={() =>
-                            updateCartQuantity(item.product.id, item.quantity + 1)
-                          }
-                          className="p-1.5 hover:bg-gray-100 transition-colors rounded-r-lg"
+                          onClick={() => updateCartQuantity(item.product.id, item.quantity + 1)}
+                          disabled={isLoading}
+                          className="p-1.5 hover:bg-gray-100 transition-colors rounded-r-lg disabled:opacity-50 disabled:cursor-not-allowed"
                           aria-label="Increase quantity"
                         >
                           <Plus size={16} />
                         </button>
                       </div>
 
+                      {/* Remove Button */}
                       <button
                         onClick={() => removeFromCart(item.product.id)}
-                        className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                        aria-label="Remove item"
+                        disabled={isLoading}
+                        className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Remove from cart"
                       >
-                        <Trash2 size={18} />
+                        <Trash2 size={16} />
                       </button>
                     </div>
                   </div>

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useAuthStore } from '../store/useAuthStore';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
@@ -60,16 +61,22 @@ api.interceptors.response.use(
           // Retry the original request
           return api(originalRequest);
         } catch (refreshError) {
-          // If refresh fails, clear tokens and logout
-          localStorage.removeItem('token');
-          localStorage.removeItem('refreshToken');
-          // but clearing tokens effectively logs out.
-          window.location.href = '/login';
+          // If refresh fails, logout via store
+          useAuthStore.getState().logout();
+          
+          // Only redirect if not already on login page
+          if (window.location.pathname !== '/login') {
+            window.location.href = '/login';
+          }
         }
       } else {
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-        window.location.href = '/login';
+        // No refresh token, logout via store
+        useAuthStore.getState().logout();
+        
+        // Only redirect if not already on login page
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
       }
     }
     return Promise.reject(error);
