@@ -1,5 +1,6 @@
 export interface Product {
   id: string;
+  uuid?: string; // Optional UUID for API products
   name: string;
   description: string;
   price: number;

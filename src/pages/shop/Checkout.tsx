@@ -58,6 +58,7 @@ const Checkout: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
+  const [orderSuccessData, setOrderSuccessData] = useState<{ order_id: string; total_amount: number } | null>(null);
 
   // OTP Verification State
   const [showOTPModal, setShowOTPModal] = useState(false);
@@ -119,14 +120,28 @@ const Checkout: React.FC = () => {
     if (paymentMethod === 'cod') {
       // Handle COD - Create order via API
       setLoading(true);
+      
+      // Get selected address
+      const selectedAddress = addresses[selectedAddressIndex];
+      
+      if (!selectedAddress || !selectedAddress.uuid) {
+        alert('Please select a shipping address');
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await api.post('/api/order/cod/', {
-          // The backend should get cart items from the user's session/cart
-          // and create the order accordingly
+          shipping_address_id: selectedAddress.uuid
         });
 
         console.log('COD Order created:', response.data);
         
+        setOrderSuccessData({
+          order_id: response.data.order_id || response.data.uuid || 'N/A',
+          total_amount: response.data.total_amount || total
+        });
+
         // Clear cart and show success
         setStep('success');
         clearCart();
@@ -303,11 +318,15 @@ const Checkout: React.FC = () => {
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#d4af37] to-[#f4d03f]" />
           <div className="flex justify-between items-center mb-4 pb-4 border-b border-gray-100">
             <span className="text-sm text-gray-500 uppercase tracking-wider">Order ID</span>
-            <span className="font-mono font-bold text-[#2d5016]">#LF-{Math.floor(Math.random() * 100000)}</span>
+            <span className="font-mono font-bold text-[#2d5016]">
+              {orderSuccessData?.order_id || `#LF-${Math.floor(Math.random() * 100000)}`}
+            </span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-500 uppercase tracking-wider">Amount Paid</span>
-            <span className="font-bold text-xl text-[#2d5016]">₹{total}</span>
+            <span className="font-bold text-xl text-[#2d5016]">
+              ₹{orderSuccessData?.total_amount || total}
+            </span>
           </div>
         </div>
 

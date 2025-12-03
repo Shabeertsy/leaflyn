@@ -51,6 +51,7 @@ export const mapVariantToProduct = (variant: APIProductVariant): Product => {
 
   return {
     id: variant.uuid,
+    uuid: variant.uuid, // Include uuid for components that need it
     name: toTitleCase(variant.name),
     description: toSentenceCase(variant.description),
     price: price,
