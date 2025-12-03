@@ -15,6 +15,8 @@ import { useProductStore } from '../../store/useProductStore';
 import { mapVariantToProduct } from '../../lib/mappers';
 import type { Product } from '../../types';
 
+
+
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();

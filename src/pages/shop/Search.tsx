@@ -23,6 +23,9 @@ const Search: React.FC = () => {
   const { products, fetchProducts, isLoading, nextPage } = useProductStore();
   const { categories, fetchCategories } = useCategoriesStore();
   
+  // Track the category we're currently fetching to prevent race conditions
+  const activeCategoryRef = useRef<string>('all');
+  
   const observerTarget = useRef<HTMLDivElement>(null);
 
   // Fetch categories first
@@ -82,33 +85,54 @@ const Search: React.FC = () => {
   useEffect(() => {
     if (!isInitialized) return;
     
-    console.log('Selected Category ID:', selectedCategoryId);
+    console.log('Category changed to:', selectedCategoryId);
     const categoryParam = selectedCategoryId !== 'all' ? selectedCategoryId : undefined;
-    console.log('Passing category_id to API:', categoryParam);
+    console.log('Fetching products with category_id:', categoryParam);
     
+    // Update the active category ref
+    activeCategoryRef.current = selectedCategoryId;
+    
+    // Reset all state
     setCurrentPage(1);
-    setAllProducts([]);
+    setAllProducts([]); 
     setIsLoadingMore(false);
     setLastLoadedPage(0);
     
+    // Fetch new products
     fetchProducts({
       category_id: categoryParam,
       page: 1,
     });
-  }, [selectedCategoryId, fetchProducts, isInitialized]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategoryId, isInitialized]); // fetchProducts is stable from Zustand store
 
   // Watch for products changes and accumulate them
   useEffect(() => {
-    console.log('Products from store:', products.length, 'Current page:', currentPage, 'Last loaded:', lastLoadedPage);
+    console.log('Products from store:', products.length, 'Current page:', currentPage, 'Last loaded:', lastLoadedPage, 'isLoading:', isLoading);
+    console.log('Active category:', activeCategoryRef.current, 'Selected category:', selectedCategoryId);
     
+    // Only process products if they're for the currently selected category
+    if (activeCategoryRef.current !== selectedCategoryId) {
+      console.log('⚠️ Ignoring products - category mismatch');
+      return;
+    }
+    
+    // Don't process products if we're currently loading (prevents using stale data)
+    if (isLoading && currentPage === 1) {
+      console.log('⏳ Waiting for fresh products to load...');
+      return;
+    }
+    
+    // If we have products and they haven't been loaded yet for this page
     if (products.length > 0 && currentPage !== lastLoadedPage) {
       const mappedProducts = products.map(mapVariantToProduct);
       
       if (currentPage === 1) {
-        console.log('Setting initial products:', mappedProducts.length);
+        console.log('✓ Setting initial products (page 1):', mappedProducts.length);
+        // For page 1, always replace (this handles category changes)
         setAllProducts(mappedProducts);
       } else {
-        console.log('Appending products from page', currentPage);
+        console.log('✓ Appending products from page', currentPage);
         setAllProducts(prev => {
           const existingIds = new Set(prev.map(p => p.id));
           const uniqueNewProducts = mappedProducts.filter(p => !existingIds.has(p.id));
@@ -119,8 +143,14 @@ const Search: React.FC = () => {
       
       setLastLoadedPage(currentPage);
       setIsLoadingMore(false);
+    } else if (products.length === 0 && currentPage === 1 && currentPage !== lastLoadedPage && !isLoading) {
+      // Handle empty results for page 1 (e.g., category with no products)
+      console.log('✓ No products found for page 1 - clearing allProducts');
+      setAllProducts([]);
+      setLastLoadedPage(currentPage);
+      setIsLoadingMore(false);
     }
-  }, [products, currentPage, lastLoadedPage]);
+  }, [products, currentPage, lastLoadedPage, selectedCategoryId, isLoading]);
 
   // Infinite scroll observer
   const loadMore = useCallback(() => {
@@ -139,7 +169,8 @@ const Search: React.FC = () => {
         page: nextPageNum,
       });
     }
-  }, [nextPage, isLoading, isLoadingMore, selectedCategoryId, currentPage, lastLoadedPage, fetchProducts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nextPage, isLoading, isLoadingMore, selectedCategoryId, currentPage, lastLoadedPage]); // fetchProducts is stable
 
   useEffect(() => {
     const observer = new IntersectionObserver(
