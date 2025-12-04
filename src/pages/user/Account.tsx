@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   User as UserIcon, 
@@ -10,7 +10,8 @@ import {
   ChevronRight,
   Gift,
   Download,
-  Camera
+  Camera,
+  Bell
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { usePWA } from '../../hooks/usePWA';
@@ -19,9 +20,10 @@ const Account: React.FC = () => {
   const navigate = useNavigate();
   const { user, setUser, isAuthenticated } = useAuthStore();
   const { isInstallable, installApp } = usePWA();
+  const isLoggingOut = useRef(false);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && !isLoggingOut.current) {
       navigate('/login');
     }
   }, [isAuthenticated, navigate]);
@@ -48,7 +50,7 @@ const Account: React.FC = () => {
     {
       title: 'App Settings',
       items: [
-        // { icon: Bell, label: 'Notifications', path: '/notifications', subtitle: 'Manage alerts' },
+        { icon: Bell, label: 'Notifications', path: '/notifications', subtitle: 'Manage alerts' },
         // { icon: Settings, label: 'Preferences', path: '/settings', subtitle: 'Language and theme' },
         { icon: HelpCircle, label: 'Help & Support', path: '/help', subtitle: 'FAQs and contact' },
       ],
@@ -57,8 +59,9 @@ const Account: React.FC = () => {
 
   const handleLogout = () => {
     if (confirm('Are you sure you want to logout?')) {
+      isLoggingOut.current = true;
       setUser(null);
-      navigate('/login');
+      navigate('/');
     }
   };
 

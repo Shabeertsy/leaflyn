@@ -1,89 +1,85 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Bell, Package, Heart, Gift, Truck, CheckCircle, X } from 'lucide-react';
-
-interface Notification {
-  id: string;
-  type: 'order' | 'wishlist' | 'offer' | 'delivery' | 'general';
-  title: string;
-  message: string;
-  time: string;
-  read: boolean;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
-}
+import { ArrowLeft, Bell, Package, Heart, Gift, Truck, CheckCircle } from 'lucide-react';
+import { useNotificationStore } from '../../store/useNotificationStore';
+import type { APINotification } from '../../types';
 
 const Notifications: React.FC = () => {
-  const [notifications, setNotifications] = useState<Notification[]>([
-    {
-      id: '1',
-      type: 'order',
-      title: 'Order Confirmed',
-      message: 'Your order #LF-12345 has been confirmed and is being prepared.',
-      time: '2 hours ago',
-      read: false,
-      icon: Package,
-    },
-    {
-      id: '2',
-      type: 'delivery',
-      title: 'Out for Delivery',
-      message: 'Your order #LF-12340 is out for delivery and will arrive today.',
-      time: '5 hours ago',
-      read: false,
-      icon: Truck,
-    },
-    {
-      id: '3',
-      type: 'wishlist',
-      title: 'Price Drop Alert',
-      message: 'Monstera Deliciosa is now 20% off! Get it before stock runs out.',
-      time: '1 day ago',
-      read: true,
-      icon: Heart,
-    },
-    {
-      id: '4',
-      type: 'offer',
-      title: 'Special Offer',
-      message: 'Get 30% off on all indoor plants. Use code: INDOOR30',
-      time: '2 days ago',
-      read: true,
-      icon: Gift,
-    },
-    {
-      id: '5',
-      type: 'general',
-      title: 'Welcome to Leaflyn',
-      message: 'Thank you for joining our plant-loving community! Explore our collection.',
-      time: '3 days ago',
-      read: true,
-      icon: CheckCircle,
-    },
-  ]);
+  const { 
+    notifications, 
+    isLoading, 
+    unreadCount, 
+    nextPage,
+    fetchNotifications, 
+    markAsRead, 
+    markAllAsRead 
+  } = useNotificationStore();
 
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const observerTarget = useRef<HTMLDivElement>(null);
 
-  const markAsRead = (id: string) => {
-    setNotifications(notifications.map(n => 
-      n.id === id ? { ...n, read: true } : n
-    ));
-  };
+  useEffect(() => {
+    fetchNotifications(1);
+  }, [fetchNotifications]);
 
-  const markAllAsRead = () => {
-    setNotifications(notifications.map(n => ({ ...n, read: true })));
-  };
+  // Infinite scroll
+  const loadMore = useCallback(() => {
+    if (nextPage && !isLoading) {
+      const nextPageNum = currentPage + 1;
+      setCurrentPage(nextPageNum);
+      fetchNotifications(nextPageNum);
+    }
+  }, [nextPage, isLoading, currentPage, fetchNotifications]);
 
-  const deleteNotification = (id: string) => {
-    setNotifications(notifications.filter(n => n.id !== id));
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentTarget = observerTarget.current;
+    if (currentTarget) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [loadMore]);
+
+  const handleMarkAsRead = (notification: APINotification) => {
+    if (!notification.is_read) {
+      markAsRead(notification.uuid);
+    }
   };
 
   const filteredNotifications = filter === 'unread' 
-    ? notifications.filter(n => !n.read)
+    ? notifications.filter(n => !n.is_read)
     : notifications;
 
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const getIcon = (type: APINotification['type']) => {
+    switch (type) {
+      case 'order':
+        return Package;
+      case 'delivery':
+        return Truck;
+      case 'wishlist':
+        return Heart;
+      case 'offer':
+        return Gift;
+      default:
+        return CheckCircle;
+    }
+  };
 
-  const getTypeColor = (type: string) => {
+  const getTypeColor = (type: APINotification['type']) => {
     switch (type) {
       case 'order':
         return 'bg-blue-50 text-blue-600';
@@ -95,6 +91,25 @@ const Notifications: React.FC = () => {
         return 'bg-[#d4af37]/10 text-[#d4af37]';
       default:
         return 'bg-gray-50 text-gray-600';
+    }
+  };
+
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInMs = now.getTime() - date.getTime();
+    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+    const diffInDays = Math.floor(diffInHours / 24);
+
+    if (diffInHours < 1) {
+      const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+      return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
+    } else if (diffInHours < 24) {
+      return `${diffInHours} hour${diffInHours !== 1 ? 's' : ''} ago`;
+    } else if (diffInDays < 7) {
+      return `${diffInDays} day${diffInDays !== 1 ? 's' : ''} ago`;
+    } else {
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
   };
 
@@ -153,7 +168,11 @@ const Notifications: React.FC = () => {
 
       {/* Notifications List */}
       <div className="max-w-3xl mx-auto px-6 py-6">
-        {filteredNotifications.length === 0 ? (
+        {isLoading && currentPage === 1 ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2d5016]"></div>
+          </div>
+        ) : filteredNotifications.length === 0 ? (
           <div className="text-center py-16">
             <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Bell size={32} className="text-gray-400" />
@@ -162,53 +181,60 @@ const Notifications: React.FC = () => {
             <p className="text-gray-500">You're all caught up!</p>
           </div>
         ) : (
-          <div className="space-y-3">
-            {filteredNotifications.map((notification) => {
-              const Icon = notification.icon;
-              return (
-                <div
-                  key={notification.id}
-                  onClick={() => !notification.read && markAsRead(notification.id)}
-                  className={`bg-white rounded-2xl p-4 border transition-all cursor-pointer ${
-                    notification.read
-                      ? 'border-gray-100'
-                      : 'border-[#2d5016]/20 shadow-sm'
-                  }`}
-                >
-                  <div className="flex gap-4">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${getTypeColor(notification.type)}`}>
-                      <Icon size={24} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2 mb-1">
-                        <h3 className={`font-bold ${notification.read ? 'text-gray-700' : 'text-gray-900'}`}>
-                          {notification.title}
-                        </h3>
-                        {!notification.read && (
-                          <div className="w-2 h-2 bg-[#2d5016] rounded-full flex-shrink-0 mt-1.5" />
-                        )}
+          <>
+            <div className="space-y-3">
+              {filteredNotifications.map((notification) => {
+                const Icon = getIcon(notification.type);
+                return (
+                  <div
+                    key={notification.uuid}
+                    onClick={() => handleMarkAsRead(notification)}
+                    className={`bg-white rounded-2xl p-4 border transition-all cursor-pointer ${
+                      notification.is_read
+                        ? 'border-gray-100'
+                        : 'border-[#2d5016]/20 shadow-sm'
+                    }`}
+                  >
+                    <div className="flex gap-4">
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${getTypeColor(notification.type)}`}>
+                        <Icon size={24} />
                       </div>
-                      <p className={`text-sm mb-2 ${notification.read ? 'text-gray-500' : 'text-gray-700'}`}>
-                        {notification.message}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-400">{notification.time}</span>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            deleteNotification(notification.id);
-                          }}
-                          className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                        >
-                          <X size={16} className="text-gray-400" />
-                        </button>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2 mb-1">
+                          <h3 className={`font-bold ${notification.is_read ? 'text-gray-700' : 'text-gray-900'}`}>
+                            {notification.title}
+                          </h3>
+                          {!notification.is_read && (
+                            <div className="w-2 h-2 bg-[#2d5016] rounded-full flex-shrink-0 mt-1.5" />
+                          )}
+                        </div>
+                        <p className={`text-sm mb-2 ${notification.is_read ? 'text-gray-500' : 'text-gray-700'}`}>
+                          {notification.message}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-gray-400">{formatTime(notification.created_at)}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+
+            {/* Infinite Scroll Trigger */}
+            {nextPage && (
+              <div ref={observerTarget} className="mt-8 flex justify-center items-center py-8">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#2d5016]"></div>
+              </div>
+            )}
+
+            {/* End of Results */}
+            {!nextPage && notifications.length > 0 && (
+              <div className="mt-8 text-center py-8">
+                <p className="text-gray-500 font-medium">You've reached the end of notifications</p>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

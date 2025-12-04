@@ -43,4 +43,15 @@ export const cartService = {
     });
     return response.data;
   },
+
+  /**
+   * Sync local cart items to backend cart (for guest users after authentication)
+   * @param localCartItems - Array of cart items from local storage
+   */
+  syncLocalCartToBackend: async (localCartItems: { variantUuid: string; quantity: number }[]): Promise<APICart> => {
+    const response = await api.post('/api/sync-cart/', {
+      items: localCartItems,
+    });
+    return response.data;
+  },
 };

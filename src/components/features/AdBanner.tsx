@@ -72,7 +72,7 @@ const AdBanner: React.FC = () => {
           setSlides([
             {
               id: 1,
-              title: '🌿 New Arrivals',
+              title: 'New Arrivals',
               subtitle: 'Fresh plants just for you',
               image: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&q=80&w=800',
               color: 'from-emerald-500 to-teal-600'

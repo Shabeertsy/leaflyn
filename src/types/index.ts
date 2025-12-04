@@ -100,6 +100,56 @@ export interface Order {
   deliveryDate?: Date;
 }
 
+// API Order Types
+export interface APIOrderItem {
+  uuid: string;
+  variant: APIProductVariant;
+  quantity: number;
+  price: string;
+  total: string;
+}
+
+export interface APIOrder {
+  uuid: string;
+  order_number: string;
+  user: number;
+  items: APIOrderItem[];
+  total: string;
+  subtotal: string;
+  shipping: string;
+  tax: string;
+  discount?: string;
+  status: 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  payment_method: 'cod' | 'card' | 'upi' | 'wallet';
+  payment_status: 'pending' | 'paid' | 'failed';
+  shipping_address: Address;
+  created_at: string;
+  updated_at: string;
+  delivery_date?: string;
+}
+
+// Notification Types
+export interface APINotification {
+  uuid: string;
+  id: number;
+  user: number;
+  title: string;
+  message: string;
+  type: 'order' | 'wishlist' | 'offer' | 'delivery' | 'general';
+  is_read: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Notification {
+  id: string;
+  type: 'order' | 'wishlist' | 'offer' | 'delivery' | 'general';
+  title: string;
+  message: string;
+  time: string;
+  read: boolean;
+}
+
 export interface Category {
   id: string;
   category_name: string;

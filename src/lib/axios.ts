@@ -64,18 +64,18 @@ api.interceptors.response.use(
           // If refresh fails, logout via store
           useAuthStore.getState().logout();
           
-          // Only redirect if not already on login page
-          if (window.location.pathname !== '/login') {
-            window.location.href = '/login';
+          // Only redirect if not already on home page
+          if (window.location.pathname !== '/') {
+            window.location.href = '/';
           }
         }
       } else {
         // No refresh token, logout via store
         useAuthStore.getState().logout();
         
-        // Only redirect if not already on login page
-        if (window.location.pathname !== '/login') {
-          window.location.href = '/login';
+        // Only redirect if not already on home page
+        if (window.location.pathname !== '/') {
+          window.location.href = '/';
         }
       }
     }

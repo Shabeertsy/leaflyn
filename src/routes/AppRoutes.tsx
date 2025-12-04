@@ -15,6 +15,7 @@ import Account from '../pages/user/Account';
 import PersonalInfo from '../pages/user/PersonalInfo';
 import Addresses from '../pages/user/Addresses';
 import AddressForm from '../pages/user/AddressForm';
+import Orders from '../pages/user/Orders';
 import Notifications from '../pages/user/Notifications';
 import ContactUs from '../pages/ContactUs';
 import TermsConditions from '../pages/TermsConditions';
@@ -44,7 +45,7 @@ const AppRoutes: React.FC = () => {
       {/* Protected Routes (only accessible if logged in) */}
       <Route element={<PrivateRoute />}>
         <Route path="/account" element={<Account />} />
-        <Route path="/orders" element={<Account />} />
+        <Route path="/orders" element={<Orders />} />
         <Route path="/profile/edit" element={<PersonalInfo />} />
         <Route path="/addresses" element={<Addresses />} />
         <Route path="/addresses/add" element={<AddressForm />} />

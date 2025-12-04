@@ -46,12 +46,12 @@ interface Address {
 
 const Checkout: React.FC = () => {
   const navigate = useNavigate();
-  const { cart, clearCart, getCartTotal } = useCartStore();
+  const { cart, clearCart, getCartTotal, syncLocalCartToBackend } = useCartStore();
   const { isAuthenticated, setUser } = useAuthStore();
   const { addresses, fetchAddresses, addAddress, isLoading: addressesLoading } = useAddressStore();
   const cartTotal = getCartTotal();
   const [step, setStep] = useState<'address' | 'payment' | 'success'>('address');
-  const [phone, setPhone] = useState('');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -70,6 +70,9 @@ const Checkout: React.FC = () => {
   const [selectedGateway, setSelectedGateway] = useState<number | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<'gateway' | 'cod'>('gateway');
   const [showGatewayModal, setShowGatewayModal] = useState(false);
+  
+  // Track if user started as guest to prevent UI flash
+  const [isGuestFlow, setIsGuestFlow] = useState(false);
 
   // New address form state
   const [newAddress, setNewAddress] = useState<Partial<Address>>({
@@ -214,7 +217,7 @@ const Checkout: React.FC = () => {
 
       // Close modal and reset form
       setShowAddressModal(false);
-      setSelectedAddressIndex(addresses.length); // Select the newly added address
+      setSelectedAddressIndex(addresses.length); 
       setNewAddress({
         label: 'Home',
         name: '',
@@ -242,7 +245,10 @@ const Checkout: React.FC = () => {
 
     setSendingOTP(true);
     try {
-      await api.post('/api/send-otp/', { email });
+      await api.post('/api/send-otp/', { 
+        contact: email, // Send OTP to email
+        contact_type: 'email' // Specify that OTP should be sent via email
+      });
       setShowOTPModal(true);
     } catch (error: any) {
       alert(error.response?.data?.error || 'Failed to send OTP. Please try again.');
@@ -252,20 +258,35 @@ const Checkout: React.FC = () => {
   };
 
   // Handle OTP verification success
-  const handleOTPVerified = async () => {
+  const handleOTPVerified = async (tokenData: { access: string; refresh: string; user: any }) => {
     setShowOTPModal(false);
+    setIsGuestFlow(true); // Mark as guest flow to prevent UI flash
     
-    // Register user and address
+    // Store tokens from OTP verification
+    localStorage.setItem('token', tokenData.access);
+    localStorage.setItem('refreshToken', tokenData.refresh);
+    
+    // Update auth store with user data
+    setUser(tokenData.user);
+    
+    // Sync local cart items to backend before proceeding
+    try {
+      await syncLocalCartToBackend();
+    } catch (error) {
+      console.error('Failed to sync cart, but continuing with checkout:', error);
+    }
+    
+    // Register user address using the token
     await handleGuestRegistration();
   };
 
-  // Register guest user with address
+  // Register guest user with address (user already created by OTP verification)
   const handleGuestRegistration = async () => {
     setLoading(true);
     try {
       const response = await api.post('/api/register-user-address/', {
         full_name: newAddress.name,
-        phone_number: newAddress.phone || phone,
+        phone_number: newAddress.phone,
         email,
         password,
         building_name_number: newAddress.buildingName || '',
@@ -276,15 +297,17 @@ const Checkout: React.FC = () => {
         pin_code: newAddress.pincode,
       });
 
-      // Store tokens and user data
-      localStorage.setItem('token', response.data.access);
-      localStorage.setItem('refreshToken', response.data.refresh);
+      // Update user data from response
       setUser(response.data.user);
+
+      // Refresh addresses to include the newly created one
+      await fetchAddresses();
+      setSelectedAddressIndex(0);
 
       // Proceed to payment
       setStep('payment');
     } catch (error: any) {
-      alert(error.response?.data?.error || 'Failed to create account. Please try again.');
+      alert(error.response?.data?.error || 'Failed to add address. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -441,7 +464,7 @@ const Checkout: React.FC = () => {
                 <h2 className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">Shipping Address</h2>
 
                 {/* For Authenticated Users: Show Address Slider */}
-                {isAuthenticated && (
+                {isAuthenticated && !isGuestFlow && (
                   <>
                     {/* Address Slider */}
                     {addressesLoading ? (
@@ -544,8 +567,8 @@ const Checkout: React.FC = () => {
                 )}
 
                 {/* For Guest Users: Show Inline Address Form */}
-                {!isAuthenticated && (
-                  <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                {(!isAuthenticated || isGuestFlow) && (
+                  <div className={`bg-white p-6 rounded-2xl border border-gray-100 shadow-sm ${isGuestFlow ? 'opacity-70 pointer-events-none' : ''}`}>
                     <h3 className="font-bold text-gray-900 mb-6">Delivery Address</h3>
                     <div className="space-y-5">
                       <div className="grid grid-cols-2 gap-5">
@@ -648,8 +671,8 @@ const Checkout: React.FC = () => {
                 )}
 
                 {/* Guest Contact - Now appears after address form */}
-                {!isAuthenticated && (
-                  <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-2xl border-2 border-amber-200 shadow-sm">
+                {(!isAuthenticated || isGuestFlow) && (
+                  <div className={`bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-2xl border-2 border-amber-200 shadow-sm ${isGuestFlow ? 'opacity-70 pointer-events-none' : ''}`}>
                     <div className="flex items-center gap-2 mb-4">
                       <div className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center">
                         <Phone size={16} className="text-white" />
@@ -675,20 +698,7 @@ const Checkout: React.FC = () => {
                         />
                       </div>
 
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wide flex items-center gap-1">
-                          <Phone size={12} />
-                          Phone Number
-                        </label>
-                        <input 
-                          type="tel" 
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          className="w-full p-3.5 bg-white rounded-xl border-2 border-amber-200 focus:border-amber-500 focus:ring-0 transition-colors outline-none font-medium" 
-                          placeholder="+91 98765 43210"
-                          required
-                        />
-                      </div>
+
                       
                       <div className="space-y-1.5">
                         <label className="text-xs font-bold text-gray-700 uppercase tracking-wide flex items-center gap-1">
@@ -720,24 +730,24 @@ const Checkout: React.FC = () => {
 
                 <button
                   onClick={() => {
-                    if (isAuthenticated) {
+                    if (isAuthenticated && !isGuestFlow) {
                       setStep('payment');
                     } else {
                       // Guest checkout - send OTP
                       handleSendOTP();
                     }
                   }}
-                  disabled={sendingOTP || loading}
+                  disabled={sendingOTP || loading || isGuestFlow}
                   className="w-full py-4 bg-[#2d5016] text-white rounded-xl font-bold text-lg hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  {sendingOTP ? (
+                  {sendingOTP || isGuestFlow ? (
                     <>
                       <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
-                      Sending OTP...
+                      {isGuestFlow ? 'Verifying & Registering...' : 'Sending OTP...'}
                     </>
                   ) : (
                     <>
-                      Continue to Payment
+                      {isAuthenticated ? 'Continue to Payment' : 'Verify & Continue'}
                       <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
                     </>
                   )}
@@ -799,7 +809,7 @@ const Checkout: React.FC = () => {
 
                 <button
                   onClick={handlePlaceOrder}
-                  disabled={loading}
+                  disabled={loading || addressesLoading}
                   className="w-full py-4 bg-gradient-to-r from-[#d4af37] to-[#bfa040] text-white rounded-xl font-bold text-lg hover:shadow-xl transition-all shadow-lg disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3 mt-8"
                 >
                   {loading ? (
@@ -822,53 +832,55 @@ const Checkout: React.FC = () => {
             )}
           </div>
 
-          {/* Order Summary */}
-          <div className="lg:w-96">
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 sticky top-24">
-              <h3 className="font-bold text-xl text-[#2d5016] mb-6 font-['Playfair_Display']">Order Summary</h3>
-              
-              <div className="space-y-4 mb-6 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-                {cart.map((item) => (
-                  <div key={item.product.id} className="flex gap-3">
-                    <div className="w-16 h-16 rounded-lg bg-gray-50 overflow-hidden shrink-0">
-                      <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover" />
+          {/* Order Summary - Only show for authenticated users */}
+          {isAuthenticated && (
+            <div className="lg:w-96 animate-in slide-in-from-right duration-500">
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 sticky top-24">
+                <h3 className="font-bold text-xl text-[#2d5016] mb-6 font-['Playfair_Display']">Order Summary</h3>
+                
+                <div className="space-y-4 mb-6 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                  {cart.map((item) => (
+                    <div key={item.product.id} className="flex gap-3">
+                      <div className="w-16 h-16 rounded-lg bg-gray-50 overflow-hidden shrink-0">
+                        <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-gray-900 text-sm line-clamp-1">{item.product.name}</p>
+                        <p className="text-xs text-gray-500 mt-1">Qty: {item.quantity}</p>
+                        <p className="text-sm font-bold text-[#2d5016] mt-1 font-sans">₹{item.product.price * item.quantity}</p>
+                      </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-gray-900 text-sm line-clamp-1">{item.product.name}</p>
-                      <p className="text-xs text-gray-500 mt-1">Qty: {item.quantity}</p>
-                      <p className="text-sm font-bold text-[#2d5016] mt-1 font-sans">₹{item.product.price * item.quantity}</p>
-                    </div>
+                  ))}
+                </div>
+                
+                <div className="space-y-3 pt-4 border-t border-gray-100">
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Subtotal</span>
+                    <span className="font-semibold font-sans">₹{cartTotal}</span>
                   </div>
-                ))}
-              </div>
-              
-              <div className="space-y-3 pt-4 border-t border-gray-100">
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>Subtotal</span>
-                  <span className="font-semibold font-sans">₹{cartTotal}</span>
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Shipping</span>
+                    <span className="font-semibold text-[#2d5016] font-sans">{shipping === 0 ? 'Free' : `₹${shipping}`}</span>
+                  </div>
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Tax (5%)</span>
+                    <span className="font-semibold font-sans">₹{tax}</span>
+                  </div>
+                  <div className="flex justify-between items-end pt-3 border-t border-dashed border-gray-200">
+                    <span className="font-bold text-gray-900">Total Amount</span>
+                    <span className="text-xl md:text-2xl font-bold text-[#2d5016] font-sans tracking-wide">₹{total}</span>
+                  </div>
                 </div>
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>Shipping</span>
-                  <span className="font-semibold text-[#2d5016] font-sans">{shipping === 0 ? 'Free' : `₹${shipping}`}</span>
-                </div>
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>Tax (5%)</span>
-                  <span className="font-semibold font-sans">₹{tax}</span>
-                </div>
-                <div className="flex justify-between items-end pt-3 border-t border-dashed border-gray-200">
-                  <span className="font-bold text-gray-900">Total Amount</span>
-                  <span className="text-xl md:text-2xl font-bold text-[#2d5016] font-sans tracking-wide">₹{total}</span>
-                </div>
-              </div>
 
-              {cartTotal < 499 && (
-                <div className="mt-4 bg-amber-50 text-amber-800 text-xs px-3 py-2 rounded-lg flex items-center gap-2">
-                  <Truck size={14} />
-                  <span>Add <strong>₹{499 - cartTotal}</strong> more for free shipping</span>
-                </div>
-              )}
+                {cartTotal < 499 && (
+                  <div className="mt-4 bg-amber-50 text-amber-800 text-xs px-3 py-2 rounded-lg flex items-center gap-2">
+                    <Truck size={14} />
+                    <span>Add <strong>₹{499 - cartTotal}</strong> more for free shipping</span>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 

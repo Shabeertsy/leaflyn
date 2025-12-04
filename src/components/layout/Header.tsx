@@ -4,10 +4,12 @@ import { Bell, ShoppingCart, User as UserIcon, LogOut } from 'lucide-react';
 import { useCartStore } from '../../store/useCartStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useUIStore } from '../../store/useUIStore';
+import { useNotificationStore } from '../../store/useNotificationStore';
 
 const Header: React.FC = () => {
   const cartCount = useCartStore((state) => state.getCartCount());
   const setShowCart = useUIStore((state) => state.setShowCart);
+  const unreadCount = useNotificationStore((state) => state.unreadCount);
   const { user, isAuthenticated } = useAuthStore();
 
   const getInitials = (name: string) => {
@@ -49,9 +51,14 @@ const Header: React.FC = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-4">
-           <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+           <Link to="/notifications" className="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
             <Bell size={22} className="text-gray-700" />
-          </button>
+            {unreadCount > 0 && (
+              <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white">
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
+            )}
+          </Link>
           <button
             onClick={() => setShowCart(true)}
             className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -80,7 +87,7 @@ const Header: React.FC = () => {
               <button
                 onClick={() => {
                   useAuthStore.getState().logout();
-                  window.location.href = '/login';
+                  window.location.href = '/';
                 }}
                 className="p-2 hover:bg-red-50 text-gray-500 hover:text-red-500 rounded-full transition-colors"
                 title="Sign Out"

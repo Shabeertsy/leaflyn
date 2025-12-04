@@ -5,4 +5,5 @@ export { useAuthStore } from './useAuthStore';
 export { useUIStore } from './useUIStore';
 export { useCategoriesStore } from './useCategoriesStore';
 export { useServiceStore } from './useServiceStore';
-
+export { useOrderStore } from './useOrderStore';
+export { useNotificationStore } from './useNotificationStore';

@@ -4,7 +4,7 @@ import api from '../../lib/axios';
 
 interface OTPVerificationModalProps {
   email: string;
-  onVerified: () => void;
+  onVerified: (tokenData: { access: string; refresh: string; user: any }) => void;
   onClose: () => void;
 }
 
@@ -88,12 +88,17 @@ const OTPVerificationModal: React.FC<OTPVerificationModalProps> = ({ email, onVe
     setError('');
 
     try {
-      await api.post('/api/verify-otp/', {
-        email,
-        otp: code
+      const response = await api.post('/api/verify-otp/', {
+        contact: email, // Use 'contact' instead of 'email'
+        otp_code: code // Use 'otp_code' instead of 'otp'
       });
       
-      onVerified();
+      // Pass token data to parent component
+      onVerified({
+        access: response.data.access,
+        refresh: response.data.refresh,
+        user: response.data.user
+      });
     } catch (err: any) {
       setError(err.response?.data?.error || 'Invalid OTP. Please try again.');
       setOtp(['', '', '', '', '', '']);
@@ -110,7 +115,10 @@ const OTPVerificationModal: React.FC<OTPVerificationModalProps> = ({ email, onVe
     setError('');
 
     try {
-      await api.post('/api/send-otp/', { email });
+      await api.post('/api/send-otp/', { 
+        contact: email, // Use 'contact' instead of 'email'
+        contact_type: 'email' // Specify contact type
+      });
       setCountdown(60);
       setCanResend(false);
       setOtp(['', '', '', '', '', '']);

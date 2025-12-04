@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useAuthStore } from '../store/useAuthStore';
 import { useCartStore } from '../store/useCartStore';
 import { useWishlistStore } from '../store/useWishlistStore';
+import { useNotificationStore } from '../store/useNotificationStore';
 
 /**
  * Custom hook to sync cart and wishlist data when user is authenticated
@@ -25,6 +26,11 @@ export const useAuthSync = () => {
       
       fetchWishlist().catch((error) => {
         console.error('Failed to fetch wishlist on auth:', error);
+      });
+
+      // Fetch notifications
+      useNotificationStore.getState().fetchNotifications().catch((error) => {
+        console.error('Failed to fetch notifications on auth:', error);
       });
     }
     

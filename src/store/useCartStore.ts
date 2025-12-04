@@ -19,6 +19,8 @@ interface CartState {
   getCartCount: () => number;
   // Helper to find cart item UUID by product ID
   findCartItemUuid: (productId: string) => string | null;
+  // Sync local cart to backend after authentication
+  syncLocalCartToBackend: () => Promise<void>;
 }
 
 // Helper function to convert API cart to local cart format
@@ -176,6 +178,33 @@ export const useCartStore = create<CartState>()(
       findCartItemUuid: (productId: string) => {
         const item = get().cart.find((item) => item.product.id === productId);
         return (item as any)?._cartItemUuid || null;
+      },
+
+      syncLocalCartToBackend: async () => {
+        const localCart = get().cart;
+        if (localCart.length === 0) return;
+
+        try {
+          set({ isLoading: true, error: null });
+          
+          // Prepare cart items for sync
+          const itemsToSync = localCart.map(item => ({
+            variantUuid: item.product.id,
+            quantity: item.quantity
+          }));
+
+          // Sync to backend
+          const apiCart = await cartService.syncLocalCartToBackend(itemsToSync);
+          const cart = mapAPICartToLocal(apiCart);
+          set({ cart, isLoading: false });
+        } catch (error: any) {
+          console.error('Failed to sync cart to backend:', error);
+          set({ 
+            error: error.response?.data?.error || 'Failed to sync cart',
+            isLoading: false 
+          });
+          // Don't throw error - keep local cart if sync fails
+        }
       },
     }),
     {

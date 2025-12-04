@@ -6,6 +6,7 @@ interface ProductFilters {
   page?: number;
   category_id?: string;
   size?: string[];
+  q?: string; // Search query parameter
 }
 
 interface ProductStore {
@@ -34,6 +35,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
     if (filters.size) {
       filters.size.forEach(s => params.append('size', s));
     }
+    if (filters.q) params.append('q', filters.q); // Add search query parameter
     
     const paramsString = params.toString();
     const { lastFetchParams, isLoading } = get();

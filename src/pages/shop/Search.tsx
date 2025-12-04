@@ -5,6 +5,7 @@ import ProductCard from '../../components/features/ProductCard';
 import { useCategoriesStore } from '../../store/useCategoriesStore';
 import { useProductStore } from '../../store/useProductStore';
 import { mapVariantToProduct } from '../../lib/mappers';
+import { useSearchUIStore } from '../../store/useSearchUIStore';
 
 
 
@@ -12,21 +13,26 @@ const Search: React.FC = () => {
   const { slug } = useParams<{ slug?: string }>();
   const location = useLocation();
   
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategoryId, setSelectedCategoryId] = useState('all');
-  const [sortBy, setSortBy] = useState<'popular' | 'price-low' | 'price-high' | 'rating'>('popular');
-  const [isInitialized, setIsInitialized] = useState(false);
+  const {
+    searchQuery, setSearchQuery,
+    selectedCategoryId, setSelectedCategoryId,
+    sortBy, setSortBy,
+    allProducts, setAllProducts,
+    currentPage, setCurrentPage,
+    lastLoadedPage, setLastLoadedPage,
+    nextPage: storeNextPage, setNextPage: setStoreNextPage,
+    resetSearchState
+  } = useSearchUIStore();
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
+  const [isInitialized, setIsInitialized] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [lastLoadedPage, setLastLoadedPage] = useState(0);
   
   const { products, fetchProducts, isLoading, nextPage } = useProductStore();
   const { categories, fetchCategories } = useCategoriesStore();
   
   // Track the category we're currently fetching to prevent race conditions
-  const activeCategoryRef = useRef<string>('all');
+  const activeCategoryRef = useRef<string>(selectedCategoryId);
   
   const observerTarget = useRef<HTMLDivElement>(null);
 
@@ -38,8 +44,7 @@ const Search: React.FC = () => {
   // Handle category from URL params (when coming from Home page)
   useEffect(() => {
     if (categories.length > 0 && !isInitialized) {
-      console.log('Initializing with slug:', slug);
-      console.log('Available categories:', categories.map(c => ({ id: c.id, slug: c.slug, name: c.category_name })));
+      let targetCategoryId = 'all';
       
       if (slug) {
         // Try to find category by slug first
@@ -51,27 +56,46 @@ const Search: React.FC = () => {
         }
         
         if (category) {
-          console.log('✓ Found category:', category.category_name, 'ID:', category.id);
-          setSelectedCategoryId(category.id);
-        } else {
-          console.log('✗ Category not found for slug/id:', slug, '- defaulting to "all"');
-          setSelectedCategoryId('all');
+          targetCategoryId = category.id;
         }
-      } else {
-        console.log('No slug in URL - setting to "all"');
-        setSelectedCategoryId('all');
       }
+
+      // If target category differs from store, OR if we have no products (fresh start), reset.
+      // But if target matches store AND we have products, we preserve state (restore).
+      if (targetCategoryId !== selectedCategoryId) {
+        console.log('Resetting search state - category changed');
+        resetSearchState();
+        setSelectedCategoryId(targetCategoryId);
+        activeCategoryRef.current = targetCategoryId;
+      } else if (allProducts.length > 0) {
+        console.log('Restoring search state for category:', targetCategoryId);
+        activeCategoryRef.current = targetCategoryId;
+      }
+      
       setIsInitialized(true);
     }
-  }, [slug, categories, isInitialized]);
+  }, [slug, categories, isInitialized, selectedCategoryId, allProducts.length, resetSearchState, setSelectedCategoryId]);
 
   // Reset when navigating to /search without params
   useEffect(() => {
     if (location.pathname === '/search' && !slug && isInitialized) {
-      console.log('Resetting to "all" - direct /search navigation');
-      setSelectedCategoryId('all');
+      if (selectedCategoryId !== 'all') {
+        console.log('Resetting to "all" - direct /search navigation');
+        resetSearchState();
+        setSelectedCategoryId('all');
+        activeCategoryRef.current = 'all';
+      }
     }
-  }, [location.pathname, slug, isInitialized]);
+  }, [location.pathname, slug, isInitialized, selectedCategoryId, resetSearchState, setSelectedCategoryId]);
+
+  // Debounce search query (500ms delay)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   // Scroll selected category button into view
   useEffect(() => {
@@ -83,45 +107,49 @@ const Search: React.FC = () => {
     }
   }, [isInitialized, selectedCategoryId]);
 
-  // Reset products when category changes (only after initialization)
+  // Reset products when category or search changes (only after initialization)
   useEffect(() => {
     if (!isInitialized) return;
     
-    console.log('Category changed to:', selectedCategoryId);
+    // Check if we are restoring state
+    // If activeCategoryRef matches selectedCategoryId AND we have products AND search query matches
+    // Then we skip the initial fetch (page 1)
+    if (activeCategoryRef.current === selectedCategoryId && allProducts.length > 0 && debouncedSearchQuery === searchQuery && currentPage > 0) {
+       console.log('Skipping fetch - State restored');
+       return;
+    }
+
+    console.log('Filters changed - Category:', selectedCategoryId, 'Search:', debouncedSearchQuery);
     const categoryParam = selectedCategoryId !== 'all' ? selectedCategoryId : undefined;
-    console.log('Fetching products with category_id:', categoryParam);
     
     // Update the active category ref
     activeCategoryRef.current = selectedCategoryId;
     
-    // Reset all state
+    // Reset store state for new search
     setCurrentPage(1);
     setAllProducts([]); 
     setIsLoadingMore(false);
     setLastLoadedPage(0);
+    setStoreNextPage(null);
     
-    // Fetch new products
+    // Fetch new products with search query
     fetchProducts({
       category_id: categoryParam,
+      q: debouncedSearchQuery || undefined,
       page: 1,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategoryId, isInitialized]); // fetchProducts is stable from Zustand store
+  }, [selectedCategoryId, debouncedSearchQuery, isInitialized]); 
 
   // Watch for products changes and accumulate them
   useEffect(() => {
-    console.log('Products from store:', products.length, 'Current page:', currentPage, 'Last loaded:', lastLoadedPage, 'isLoading:', isLoading);
-    console.log('Active category:', activeCategoryRef.current, 'Selected category:', selectedCategoryId);
-    
     // Only process products if they're for the currently selected category
     if (activeCategoryRef.current !== selectedCategoryId) {
-      console.log('⚠️ Ignoring products - category mismatch');
       return;
     }
     
     // Don't process products if we're currently loading (prevents using stale data)
     if (isLoading && currentPage === 1) {
-      console.log('⏳ Waiting for fresh products to load...');
       return;
     }
     
@@ -130,36 +158,29 @@ const Search: React.FC = () => {
       const mappedProducts = products.map(mapVariantToProduct);
       
       if (currentPage === 1) {
-        console.log('✓ Setting initial products (page 1):', mappedProducts.length);
-        // For page 1, always replace (this handles category changes)
         setAllProducts(mappedProducts);
       } else {
-        console.log('✓ Appending products from page', currentPage);
         setAllProducts(prev => {
           const existingIds = new Set(prev.map(p => p.id));
           const uniqueNewProducts = mappedProducts.filter(p => !existingIds.has(p.id));
-          console.log('Adding', uniqueNewProducts.length, 'unique products. Total:', prev.length + uniqueNewProducts.length);
           return [...prev, ...uniqueNewProducts];
         });
       }
       
       setLastLoadedPage(currentPage);
       setIsLoadingMore(false);
+      setStoreNextPage(nextPage);
     } else if (products.length === 0 && currentPage === 1 && currentPage !== lastLoadedPage && !isLoading) {
-      // Handle empty results for page 1 (e.g., category with no products)
-      console.log('✓ No products found for page 1 - clearing allProducts');
       setAllProducts([]);
       setLastLoadedPage(currentPage);
       setIsLoadingMore(false);
+      setStoreNextPage(null);
     }
-  }, [products, currentPage, lastLoadedPage, selectedCategoryId, isLoading]);
+  }, [products, currentPage, lastLoadedPage, selectedCategoryId, isLoading, nextPage, setAllProducts, setLastLoadedPage, setStoreNextPage]);
 
   // Infinite scroll observer
   const loadMore = useCallback(() => {
-    console.log('loadMore called', { nextPage, isLoading, isLoadingMore, currentPage, lastLoadedPage });
-    
-    if (nextPage && !isLoading && !isLoadingMore && currentPage === lastLoadedPage) {
-      console.log('Loading next page...');
+    if (storeNextPage && !isLoading && !isLoadingMore && currentPage === lastLoadedPage) {
       setIsLoadingMore(true);
       const categoryParam = selectedCategoryId !== 'all' ? selectedCategoryId : undefined;
       const nextPageNum = currentPage + 1;
@@ -168,11 +189,12 @@ const Search: React.FC = () => {
       
       fetchProducts({
         category_id: categoryParam,
+        q: debouncedSearchQuery || undefined,
         page: nextPageNum,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nextPage, isLoading, isLoadingMore, selectedCategoryId, currentPage, lastLoadedPage]); // fetchProducts is stable
+  }, [storeNextPage, isLoading, isLoadingMore, selectedCategoryId, debouncedSearchQuery, currentPage, lastLoadedPage]); // fetchProducts is stable
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -199,17 +221,8 @@ const Search: React.FC = () => {
   const filteredProducts = useMemo(() => {
     let filtered = [...allProducts];
 
-    // Filter by search query (Client-side)
-    if (searchQuery) {
-      filtered = filtered.filter(
-        (product) =>
-          product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          product.tags?.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-      );
-    }
-
-    // Sort products (Client-side)
+    // Search is now handled server-side via API
+    // Only client-side sorting remains
     switch (sortBy) {
       case 'price-low':
         filtered = [...filtered].sort((a, b) => a.price - b.price);
@@ -225,7 +238,7 @@ const Search: React.FC = () => {
     }
 
     return filtered;
-  }, [allProducts, searchQuery, sortBy]);
+  }, [allProducts, sortBy]);
 
   return (
     <div className="pb-20 lg:pb-0 bg-neutral-50 min-h-screen">
