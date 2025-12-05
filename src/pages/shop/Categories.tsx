@@ -3,6 +3,14 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
 import { useCategoriesStore } from '../../store/useCategoriesStore';
 
+// Get base URL for images
+const getImageUrl = (imagePath: string) => {
+  if (!imagePath) return '';
+  if (imagePath.startsWith('http')) return imagePath;
+  const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  return `${baseURL}${imagePath}`;
+};
+
 const Categories: React.FC = () => {
   const { categories, loading, error, fetchCategories } = useCategoriesStore();
 
@@ -70,7 +78,7 @@ const Categories: React.FC = () => {
           {categories.map((category, index) => (
             <Link
               key={category.id}
-              to={`/category/${category.slug}`}
+              to={`/search/${category.slug || category.id}`}
               className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer"
             >
               {/* Background Gradient */}
@@ -89,8 +97,16 @@ const Categories: React.FC = () => {
               {/* Content Container */}
               <div className="absolute inset-0 p-8 flex flex-col justify-between">
                 <div className="flex justify-between items-start">
-                  <div className="w-16 h-16 bg-white/80 backdrop-blur-md rounded-2xl flex items-center justify-center text-4xl shadow-sm group-hover:scale-110 transition-transform duration-300">
-                    {category.icon}
+                  <div className="w-16 h-16 bg-white/80 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    {category.icon ? (
+                      <img 
+                        src={getImageUrl(category.icon)} 
+                        alt="" 
+                        className="w-8 h-8 object-contain"
+                      />
+                    ) : (
+                      <span className="text-4xl">🌿</span>
+                    )}
                   </div>
                   <div className="w-10 h-10 rounded-full border border-gray-900/10 flex items-center justify-center opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300 bg-white">
                     <ArrowRight size={16} className="text-[#2d5016]" />

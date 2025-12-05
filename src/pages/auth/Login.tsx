@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
+import { useGoogleLogin } from '@react-oauth/google';
 import { useAuthStore } from '../../store/useAuthStore';
 
 const Login: React.FC = () => {
@@ -8,6 +9,7 @@ const Login: React.FC = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
   const login = useAuthStore((state) => state.login);
+  const googleLogin = useAuthStore((state) => state.googleLogin);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -28,6 +30,26 @@ const Login: React.FC = () => {
       setLoading(false);
     }
   };
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setLoading(true);
+      setError('');
+      try {
+        // Send the access token to your Django backend
+        await googleLogin(tokenResponse.access_token);
+        navigate(from, { replace: true });
+      } catch (err: any) {
+        console.error('Google login error:', err);
+        setError(err.response?.data?.message || 'Google sign-in failed. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    },
+    onError: () => {
+      setError('Google sign-in failed. Please try again.');
+    },
+  });
 
   return (
     <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-6">
@@ -125,16 +147,14 @@ const Login: React.FC = () => {
 
           <div className="mt-8 pt-8 border-t border-gray-100">
             <p className="text-xs text-center text-gray-400 mb-4 uppercase tracking-wider font-bold">Or continue with</p>
-            <div className="grid grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-2 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors font-semibold text-gray-700">
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
-                Google
-              </button>
-              <button className="flex items-center justify-center gap-2 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors font-semibold text-gray-700">
-                <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" className="w-5 h-5" />
-                Facebook
-              </button>
-            </div>
+            <button 
+              onClick={() => handleGoogleLogin()}
+              type="button"
+              className="w-full flex items-center justify-center gap-3 p-3.5 border-2 border-gray-200 rounded-xl hover:bg-gray-50 hover:border-[#2d5016]/30 transition-all font-semibold text-gray-700 shadow-sm hover:shadow-md"
+            >
+              <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
+              Continue with Google
+            </button>
           </div>
         </div>
       </div>

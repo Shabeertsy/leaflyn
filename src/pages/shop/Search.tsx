@@ -7,7 +7,13 @@ import { useProductStore } from '../../store/useProductStore';
 import { mapVariantToProduct } from '../../lib/mappers';
 import { useSearchUIStore } from '../../store/useSearchUIStore';
 
-
+// Get base URL for images
+const getImageUrl = (imagePath: string) => {
+  if (!imagePath) return '';
+  if (imagePath.startsWith('http')) return imagePath;
+  const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  return `${baseURL}${imagePath}`;
+};
 
 const Search: React.FC = () => {
   const { slug } = useParams<{ slug?: string }>();
@@ -52,11 +58,11 @@ const Search: React.FC = () => {
         
         // If not found by slug, try by ID (in case slug is actually an ID)
         if (!category) {
-          category = categories.find(cat => cat.id === slug);
+          category = categories.find(cat => String(cat.id) === String(slug));
         }
         
         if (category) {
-          targetCategoryId = category.id;
+          targetCategoryId = String(category.id);
         }
       }
 
@@ -86,7 +92,7 @@ const Search: React.FC = () => {
         activeCategoryRef.current = 'all';
       }
     }
-  }, [location.pathname, slug, isInitialized, selectedCategoryId, resetSearchState, setSelectedCategoryId]);
+  }, [location.pathname, slug, isInitialized, resetSearchState, setSelectedCategoryId]);
 
   // Debounce search query (500ms delay)
   useEffect(() => {
@@ -111,15 +117,18 @@ const Search: React.FC = () => {
   useEffect(() => {
     if (!isInitialized) return;
     
-    // Check if we are restoring state
-    // If activeCategoryRef matches selectedCategoryId AND we have products AND search query matches
-    // Then we skip the initial fetch (page 1)
-    if (activeCategoryRef.current === selectedCategoryId && allProducts.length > 0 && debouncedSearchQuery === searchQuery && currentPage > 0) {
-       console.log('Skipping fetch - State restored');
+    // Check if category has actually changed
+    const categoryChanged = activeCategoryRef.current !== selectedCategoryId;
+    
+    // Always fetch if category changed or if we don't have products yet
+    const shouldFetch = categoryChanged || allProducts.length === 0;
+    
+    if (!shouldFetch) {
+       console.log('Skipping fetch - No changes detected');
        return;
     }
 
-    console.log('Filters changed - Category:', selectedCategoryId, 'Search:', debouncedSearchQuery);
+    console.log('Fetching products - Category:', selectedCategoryId, 'Search:', debouncedSearchQuery);
     const categoryParam = selectedCategoryId !== 'all' ? selectedCategoryId : undefined;
     
     // Update the active category ref
@@ -284,33 +293,53 @@ const Search: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 md:px-6 -mt-5 md:-mt-6 relative z-10">
-        {/* Categories Scroll */}
-        <div className="flex gap-2 md:gap-3 overflow-x-auto pb-4 no-scrollbar">
+        {/* Categories Scroll - Redesigned */}
+        <div className="flex gap-2 md:gap-3 overflow-x-auto pb-4 no-scrollbar scrollbar-hide">
           <button
             onClick={() => setSelectedCategoryId('all')}
-            className={`flex-shrink-0 px-4 py-2 md:px-6 md:py-3 rounded-lg md:rounded-xl font-semibold text-xs md:text-sm transition-all shadow-sm ${
+            className={`group flex-shrink-0 px-5 py-2.5 md:px-6 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 ${
               selectedCategoryId === 'all'
-                ? 'bg-[#d4af37] text-white shadow-md scale-105'
-                : 'bg-white text-gray-700 hover:bg-gray-50'
+                ? 'bg-gradient-to-r from-[#2d5016] to-[#3d6622] text-white shadow-lg scale-105'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 hover:border-[#2d5016]/30 hover:shadow-md'
             }`}
           >
-            All Items
+            <span className="flex items-center gap-2">
+              <span className={`text-base ${selectedCategoryId === 'all' ? 'animate-pulse' : ''}`}>🌿</span>
+              <span>All Items</span>
+            </span>
           </button>
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              data-category-id={category.id}
-              onClick={() => setSelectedCategoryId(category.id)}
-              className={`flex-shrink-0 px-4 py-2 md:px-6 md:py-3 rounded-lg md:rounded-xl font-semibold text-xs md:text-sm transition-all shadow-sm flex items-center gap-1.5 md:gap-2 ${
-                selectedCategoryId === category.id
-                  ? 'bg-[#d4af37] text-white shadow-md scale-105'
-                  : 'bg-white text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              {category.icon && <span className="text-xs md:text-sm">{category.icon}</span>}
-              <span>{category.category_name}</span>
-            </button>
-          ))}
+          {categories.map((category) => {
+            // Ensure we compare as strings to handle potential number/string mismatches
+            const isSelected = String(selectedCategoryId) === String(category.id);
+            
+            return (
+              <button
+                key={category.id}
+                data-category-id={category.id}
+                onClick={() => setSelectedCategoryId(String(category.id))}
+                className={`group flex-shrink-0 px-5 py-2.5 md:px-6 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 flex items-center gap-2 ${
+                  isSelected
+                    ? 'bg-gradient-to-r from-[#2d5016] to-[#3d6622] text-white shadow-lg scale-105 ring-2 ring-[#2d5016]/50'
+                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 hover:border-[#2d5016]/30 hover:shadow-md'
+                }`}
+              >
+                {category.icon && (
+                  <div className={`w-5 h-5 md:w-6 md:h-6 rounded-lg flex items-center justify-center transition-transform duration-300 ${
+                    isSelected
+                      ? 'bg-white/20 scale-110' 
+                      : 'bg-gray-100 group-hover:bg-[#2d5016]/10'
+                  }`}>
+                    <img 
+                      src={getImageUrl(category.icon)} 
+                      alt="" 
+                      className={`w-3 h-3 md:w-4 md:h-4 object-contain ${isSelected ? 'brightness-0 invert' : ''}`}
+                    />
+                  </div>
+                )}
+                <span className="whitespace-nowrap">{category.category_name}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 

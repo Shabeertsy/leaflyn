@@ -9,6 +9,14 @@ import { mapVariantToProduct } from '../lib/mappers';
 
 const MOBILE_HERO_HEIGHT = 200; 
 
+// Get base URL for images
+const getImageUrl = (imagePath: string) => {
+  if (!imagePath) return '';
+  if (imagePath.startsWith('http')) return imagePath;
+  const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  return `${baseURL}${imagePath}`;
+}; 
+
 const Home: React.FC = () => {
   const { categories, fetchCategories } = useCategoriesStore();
   const { featuredProducts, bestsellerProducts, fetchProductCollections } = useProductCollectionStore();
@@ -366,28 +374,36 @@ const Home: React.FC = () => {
             </Link>
           </div>
 
-          {/* Mobile: smaller grid and smaller cards */}
-          <div className="md:hidden grid grid-cols-3 gap-2">
+          {/* Mobile: Compact modern cards */}
+          <div className="md:hidden grid grid-cols-3 gap-3">
             {categories.slice(0, 6).map((category, index) => (
               <Link
                 key={category.id}
-                to={`/category/${category.slug}`}
-                className="group flex flex-col items-center gap-1 p-2 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 hover:border-[#2d5016]/20 hover:shadow-md transition-all active:scale-95"
+                to={`/search/${category.slug || category.id}`}
+                className="group flex flex-col items-center gap-2 p-3 bg-white rounded-2xl hover:shadow-lg transition-all duration-300 active:scale-95"
               >
-                <div className={`w-9 h-9 rounded-md flex items-center justify-center text-xl shadow-sm transition-all group-hover:scale-110 ${
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 group-hover:scale-110 group-hover:shadow-md ${
                   index % 3 === 0 ? 'bg-gradient-to-br from-green-50 to-emerald-100' :
                   index % 3 === 1 ? 'bg-gradient-to-br from-teal-50 to-cyan-100' :
                   'bg-gradient-to-br from-amber-50 to-orange-100'
                 }`}>
-                  {category.icon}
+                  {category.icon ? (
+                    <img 
+                      src={getImageUrl(category.icon)} 
+                      alt="" 
+                      className="w-6 h-6 object-contain transition-transform duration-300 group-hover:scale-110"
+                    />
+                  ) : (
+                    <span className="text-2xl">🌿</span>
+                  )}
                 </div>
-                <div className="text-center">
-                  <span className="text-xs font-bold text-gray-700 leading-tight max-w-[60px] truncate block">
+                <div className="text-center w-full">
+                  <span className="text-xs font-bold text-gray-800 leading-tight line-clamp-2 block group-hover:text-[#2d5016] transition-colors">
                     {category.category_name}
                   </span>
                   {category.productCount !== undefined && (
-                    <span className="text-[10px] text-gray-400 block">
-                      {category.productCount}
+                    <span className="text-[10px] text-gray-400 block mt-0.5">
+                      {category.productCount} items
                     </span>
                   )}
                 </div>
@@ -395,52 +411,47 @@ const Home: React.FC = () => {
             ))}
           </div>
 
-          {/* Desktop: original */}
-          <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5">
+          {/* Desktop: Horizontal card design */}
+          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
             {categories.map((category, index) => (
               <Link
                 key={category.id}
-                to={`/category/${category.slug}`}
-                className="group relative h-48 lg:h-52 rounded-2xl overflow-hidden cursor-pointer border border-gray-100 hover:border-transparent transition-all duration-300 hover:shadow-xl"
+                to={`/search/${category.slug || category.id}`}
+                className="group relative h-32 rounded-2xl overflow-hidden cursor-pointer border border-gray-200 hover:border-[#2d5016]/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
               >
-                <div className="absolute inset-0 bg-gradient-to-br transition-transform duration-700 group-hover:scale-110" style={{
+                <div className="absolute inset-0 transition-all duration-300" style={{
                   background: index % 4 === 0 ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)' :
                               index % 4 === 1 ? 'linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%)' :
                               index % 4 === 2 ? 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)' :
                               'linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%)'
                 }}>
-                  <div className="absolute inset-0 opacity-5" style={{
-                    backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)',
-                    backgroundSize: '24px 24px'
-                  }} />
                 </div>
                 <div className="absolute inset-0 p-5 flex flex-col justify-between">
-                  <div className="flex justify-between items-start">
-                    <div className="w-12 h-12 bg-white/80 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl shadow-sm group-hover:scale-110 transition-transform duration-300">
-                      {category.icon}
-                    </div>
-                    <div className="w-8 h-8 rounded-full border border-gray-900/10 flex items-center justify-center opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 bg-white/90 backdrop-blur-sm">
-                      <ArrowRight size={14} className="text-[#2d5016]" />
-                    </div>
+                  {/* Icon at top left */}
+                  <div className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    {category.icon ? (
+                      <img 
+                        src={getImageUrl(category.icon)} 
+                        alt="" 
+                        className="w-6 h-6 object-contain"
+                      />
+                    ) : (
+                      <span className="text-2xl">🌿</span>
+                    )}
                   </div>
+                  
+                  {/* Text at bottom */}
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900 font-['Playfair_Display'] mb-1 group-hover:text-[#2d5016] transition-colors line-clamp-1">
+                    <h3 className="text-base font-bold text-gray-900 uppercase tracking-wide mb-1 group-hover:text-[#2d5016] transition-colors line-clamp-1">
                       {category.category_name}
                     </h3>
-                    {category.description && (
-                      <p className="text-gray-600 text-xs opacity-80 line-clamp-2 mb-2 group-hover:opacity-100 transition-opacity">
-                        {category.description}
-                      </p>
-                    )}
                     {category.productCount !== undefined && (
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                        <span className="w-6 h-[1px] bg-gray-400 group-hover:w-8 group-hover:bg-[#2d5016] transition-all duration-300" />
-                        {category.productCount} Items
-                      </div>
+                      <p className="text-xs text-gray-500">
+                        {category.productCount} items
+                      </p>
                     )}
                   </div>
                 </div>
-                <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#2d5016]/10 rounded-2xl transition-colors duration-300 pointer-events-none" />
               </Link>
             ))}
           </div>

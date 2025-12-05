@@ -12,6 +12,7 @@ interface AuthState {
   verifyOtp: (email: string, otp: string) => Promise<void>;
   resendOtp: (email: string) => Promise<void>;
   sendOtp: (email: string) => Promise<void>;
+  googleLogin: (token: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -44,6 +45,13 @@ export const useAuthStore = create<AuthState>()(
       },
       sendOtp: async (email) => {
         await api.post('/api/send-otp/', { contact: email });
+      },
+      googleLogin: async (token) => {
+        const response = await api.post('/api/auth/google/', { auth_token:token });
+        const { user, access, refresh } = response.data;
+        localStorage.setItem('token', access);
+        localStorage.setItem('refreshToken', refresh);
+        set({ user, isAuthenticated: true });
       },
       logout: () => {
         localStorage.removeItem('token');

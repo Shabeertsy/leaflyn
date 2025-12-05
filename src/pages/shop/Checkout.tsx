@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, CheckCircle, CreditCard, MapPin, Plus, ShieldCheck, Truck, ChevronRight, Phone, Lock, Eye, EyeOff, Mail, X, ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon } from 'lucide-react';
 import { useCartStore } from '../../store/useCartStore';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -74,6 +74,9 @@ const Checkout: React.FC = () => {
   // Track if user started as guest to prevent UI flash
   const [isGuestFlow, setIsGuestFlow] = useState(false);
 
+  // Terms and Conditions acceptance
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+
   // New address form state
   const [newAddress, setNewAddress] = useState<Partial<Address>>({
     label: 'Home',
@@ -88,8 +91,8 @@ const Checkout: React.FC = () => {
   });
 
   const shipping = cartTotal >= 499 ? 0 : 50;
-  const tax = Math.round(cartTotal * 0.05);
-  const total = cartTotal + shipping + tax;
+  const tax = 0; // No tax applied
+  const total = Number((cartTotal + shipping + tax).toFixed(2));
 
   // Fetch addresses for authenticated users
   useEffect(() => {
@@ -120,6 +123,12 @@ const Checkout: React.FC = () => {
   }, [step]);
 
   const handlePlaceOrder = async () => {
+    // Check if terms are accepted
+    if (!acceptedTerms) {
+      alert('Please accept the Terms and Conditions to proceed');
+      return;
+    }
+
     if (paymentMethod === 'cod') {
       // Handle COD - Create order via API
       setLoading(true);
@@ -313,6 +322,38 @@ const Checkout: React.FC = () => {
     }
   };
 
+
+  // Touch/Swipe handling for address slider
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  // Minimum swipe distance (in px) to trigger navigation
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && selectedAddressIndex < addresses.length - 1) {
+      setSelectedAddressIndex(selectedAddressIndex + 1);
+    }
+    if (isRightSwipe && selectedAddressIndex > 0) {
+      setSelectedAddressIndex(selectedAddressIndex - 1);
+    }
+  };
+
   const scrollAddresses = (direction: 'left' | 'right') => {
     if (direction === 'left' && selectedAddressIndex > 0) {
       setSelectedAddressIndex(selectedAddressIndex - 1);
@@ -472,8 +513,14 @@ const Checkout: React.FC = () => {
                         <div className="h-40 bg-gray-200 rounded-2xl"></div>
                       </div>
                     ) : addresses.length > 0 ? (
-                      <div className="relative px-2 sm:px-0">
-                        <div className="overflow-hidden rounded-2xl">
+                      <div className="relative">
+                        <div 
+                          className="overflow-hidden rounded-2xl select-none"
+                          style={{ touchAction: 'pan-y pinch-zoom' }}
+                          onTouchStart={onTouchStart}
+                          onTouchMove={onTouchMove}
+                          onTouchEnd={onTouchEnd}
+                        >
                           <div 
                             className="flex transition-transform duration-300 ease-out"
                             style={{ transform: `translateX(-${selectedAddressIndex * 100}%)` }}
@@ -481,18 +528,19 @@ const Checkout: React.FC = () => {
                             {addresses.map((address, index) => (
                               <div
                                 key={address.uuid}
-                                className={`min-w-full flex-shrink-0 px-2 sm:px-0 ${index > 0 ? 'pl-4' : ''}`}
+                                className="min-w-full flex-shrink-0 px-1"
                               >
                                 <div
-                                  className={`border-2 p-5 rounded-2xl cursor-pointer transition-all ${
+                                  className={`border-2 p-4 sm:p-5 rounded-2xl cursor-pointer transition-all ${
                                     index === selectedAddressIndex
-                                      ? 'border-[#2d5016] bg-[#2d5016]/5'
+                                      ? 'border-[#2d5016] bg-[#2d5016]/5 shadow-md'
                                       : 'border-gray-200 bg-white'
                                   }`}
                                   onClick={() => setSelectedAddressIndex(index)}
                                 >
-                                  <div className="flex items-center justify-between mb-3">
-                                    <span className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide ${
+                                  {/* Header */}
+                                  <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-100">
+                                    <span className={`text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide ${
                                       address.isDefault
                                         ? 'bg-[#2d5016] text-white'
                                         : 'bg-gray-100 text-gray-600'
@@ -500,54 +548,70 @@ const Checkout: React.FC = () => {
                                       {address.isDefault ? 'Default' : 'Address'}
                                     </span>
                                     {index === selectedAddressIndex && (
-                                      <CheckCircle size={20} className="text-[#2d5016]" fill="currentColor" />
+                                      <div className="flex items-center gap-1.5 text-[#2d5016]">
+                                        <div className="w-5 h-5 rounded-full bg-[#2d5016] flex items-center justify-center">
+                                          <CheckCircle size={14} className="text-white" fill="currentColor" />
+                                        </div>
+                                        <span className="text-xs font-semibold hidden sm:inline">Selected</span>
+                                      </div>
                                     )}
                                   </div>
-                                  <h3 className="font-bold text-gray-900 mb-1">{address.name}</h3>
-                                  <p className="text-sm text-gray-600 leading-relaxed">
-                                    {address.addressLine1}
-                                    {address.addressLine2 && `, ${address.addressLine2}`}
-                                    <br />
-                                    {address.city}, {address.state} - {address.pincode}
-                                    {address.country && `, ${address.country}`}
-                                  </p>
-                                  <p className="text-sm text-gray-600 mt-2">{address.phone}</p>
+
+                                  {/* Address Content */}
+                                  <div className="space-y-2">
+                                    <h3 className="font-bold text-gray-900 text-base sm:text-lg">{address.name}</h3>
+                                    <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                                      {address.addressLine1}
+                                      {address.addressLine2 && `, ${address.addressLine2}`}
+                                      <br />
+                                      {address.city}, {address.state} - {address.pincode}
+                                      {address.country && `, ${address.country}`}
+                                    </p>
+                                    <p className="text-xs sm:text-sm text-gray-500 font-medium pt-1">
+                                      📞 {address.phone}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
                             ))}
                           </div>
                         </div>
 
-                        {/* Navigation */}
+                        {/* Navigation Dots - Always visible for better UX */}
+                        {addresses.length > 1 && (
+                          <div className="flex justify-center gap-2 mt-4">
+                            {addresses.map((_, index) => (
+                              <button
+                                key={index}
+                                onClick={() => setSelectedAddressIndex(index)}
+                                className={`transition-all duration-300 rounded-full ${
+                                  index === selectedAddressIndex
+                                    ? 'w-8 h-2 bg-[#2d5016]'
+                                    : 'w-2 h-2 bg-gray-300 hover:bg-gray-400'
+                                }`}
+                                aria-label={`Select address ${index + 1}`}
+                              />
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Arrow Navigation - Hidden on mobile, visible on desktop */}
                         {addresses.length > 1 && (
                           <>
                             <button
                               onClick={() => scrollAddresses('left')}
                               disabled={selectedAddressIndex === 0}
-                              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 w-8 h-8 sm:w-10 sm:h-10 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center hover:border-[#2d5016] hover:bg-[#2d5016] hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg z-10"
+                              className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 bg-white border-2 border-gray-200 rounded-full items-center justify-center hover:border-[#2d5016] hover:bg-[#2d5016] hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg z-10"
                             >
-                              <ChevronLeftIcon size={18} className="sm:w-5 sm:h-5" />
+                              <ChevronLeftIcon size={20} />
                             </button>
                             <button
                               onClick={() => scrollAddresses('right')}
                               disabled={selectedAddressIndex === addresses.length - 1}
-                              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-4 w-8 h-8 sm:w-10 sm:h-10 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center hover:border-[#2d5016] hover:bg-[#2d5016] hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg z-10"
+                              className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 bg-white border-2 border-gray-200 rounded-full items-center justify-center hover:border-[#2d5016] hover:bg-[#2d5016] hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg z-10"
                             >
-                              <ChevronRightIcon size={18} className="sm:w-5 sm:h-5" />
+                              <ChevronRightIcon size={20} />
                             </button>
-                            <div className="flex justify-center gap-2 mt-4">
-                              {addresses.map((_, index) => (
-                                <button
-                                  key={index}
-                                  onClick={() => setSelectedAddressIndex(index)}
-                                  className={`transition-all duration-300 rounded-full ${
-                                    index === selectedAddressIndex
-                                      ? 'w-6 h-2 bg-[#2d5016]'
-                                      : 'w-2 h-2 bg-gray-300'
-                                  }`}
-                                />
-                              ))}
-                            </div>
                           </>
                         )}
                       </div>
@@ -807,10 +871,45 @@ const Checkout: React.FC = () => {
                   </label>
                 </div>
 
+                {/* Terms and Conditions Checkbox */}
+                <div className="mt-6 mb-4">
+                  <label className="flex items-start gap-3 cursor-pointer group">
+                    <div className="relative flex items-center justify-center mt-0.5">
+                      <input 
+                        type="checkbox" 
+                        checked={acceptedTerms}
+                        onChange={(e) => setAcceptedTerms(e.target.checked)}
+                        className="peer sr-only" 
+                      />
+                      <div className="w-5 h-5 border-2 border-gray-300 rounded peer-checked:border-[#2d5016] peer-checked:bg-[#2d5016] transition-all flex items-center justify-center">
+                        {acceptedTerms && (
+                          <CheckCircle size={14} className="text-white" fill="currentColor" />
+                        )}
+                      </div>
+                    </div>
+                    <span className="text-sm text-gray-600 leading-relaxed">
+                      I agree to the{' '}
+                      <Link 
+                        to="/terms-conditions" 
+                        target="_blank"
+                        className="text-[#2d5016] font-semibold hover:underline"
+                      >
+                        Terms and Conditions
+                      </Link>
+                      {' '}and understand the order policies
+                    </span>
+                  </label>
+                  {!acceptedTerms && (
+                    <p className="text-xs text-amber-600 mt-2 ml-8">
+                      * Please accept the terms to proceed with your order
+                    </p>
+                  )}
+                </div>
+
                 <button
                   onClick={handlePlaceOrder}
-                  disabled={loading || addressesLoading}
-                  className="w-full py-4 bg-gradient-to-r from-[#d4af37] to-[#bfa040] text-white rounded-xl font-bold text-lg hover:shadow-xl transition-all shadow-lg disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3 mt-8"
+                  disabled={loading || addressesLoading || !acceptedTerms}
+                  className="w-full py-4 bg-gradient-to-r from-[#d4af37] to-[#bfa040] text-white rounded-xl font-bold text-lg hover:shadow-xl transition-all shadow-lg disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                 >
                   {loading ? (
                     <>
@@ -863,7 +962,7 @@ const Checkout: React.FC = () => {
                     <span className="font-semibold text-[#2d5016] font-sans">{shipping === 0 ? 'Free' : `₹${shipping}`}</span>
                   </div>
                   <div className="flex justify-between text-sm text-gray-600">
-                    <span>Tax (5%)</span>
+                    <span>Tax</span>
                     <span className="font-semibold font-sans">₹{tax}</span>
                   </div>
                   <div className="flex justify-between items-end pt-3 border-t border-dashed border-gray-200">

@@ -9,6 +9,10 @@ import PWAInstallBanner from './components/features/PWAInstallBanner';
 import ScrollToTop from './components/layout/ScrollToTop';
 import AppRoutes from './routes/AppRoutes';
 import { useAuthSync } from './hooks/useAuthSync';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+// TODO: Replace with your actual Google Client ID from Google Cloud Console
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'YOUR_GOOGLE_CLIENT_ID_HERE';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -39,9 +43,11 @@ const AppContent: React.FC = () => {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <Router>
+        <AppContent />
+      </Router>
+    </GoogleOAuthProvider>
   );
 }
 

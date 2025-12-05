@@ -12,7 +12,8 @@ const Notifications: React.FC = () => {
     nextPage,
     fetchNotifications, 
     markAsRead, 
-    markAllAsRead 
+    markAllAsRead,
+    clearNotifications
   } = useNotificationStore();
 
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
@@ -20,8 +21,16 @@ const Notifications: React.FC = () => {
   const observerTarget = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Reset page and fetch fresh notifications on mount
+    setCurrentPage(1);
     fetchNotifications(1);
-  }, [fetchNotifications]);
+    
+    // Cleanup on unmount
+    return () => {
+      clearNotifications();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Infinite scroll
   const loadMore = useCallback(() => {

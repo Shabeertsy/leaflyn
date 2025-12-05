@@ -61,7 +61,7 @@ const Addresses: React.FC = () => {
         </button>
       </div>
 
-      <div className="max-w-2xl mx-auto px-6 py-8 space-y-6">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-4 sm:space-y-6">
         {addresses.length === 0 ? (
           <div className="text-center py-12">
             <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -80,66 +80,71 @@ const Addresses: React.FC = () => {
           addresses.map((address) => (
             <div 
               key={address.uuid}
-              className={`bg-white rounded-2xl p-6 shadow-sm border transition-all ${
+              className={`bg-white rounded-2xl p-4 sm:p-6 shadow-sm border transition-all ${
                 address.isDefault ? 'border-[#2d5016] ring-1 ring-[#2d5016]' : 'border-gray-100 hover:border-gray-200'
               }`}
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+              {/* Header with name and default badge */}
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className={`w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center ${
                     address.isDefault ? 'bg-[#2d5016] text-white' : 'bg-gray-100 text-gray-500'
                   }`}>
                     <MapPin size={20} />
                   </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900">{address.name}</h3>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-gray-900 truncate">{address.name}</h3>
                     <p className="text-sm text-gray-500">{address.phone}</p>
                   </div>
                 </div>
                 {address.isDefault && (
-                  <span className="bg-[#2d5016]/10 text-[#2d5016] text-xs font-bold px-3 py-1 rounded-full">
+                  <span className="bg-[#2d5016]/10 text-[#2d5016] text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap ml-2">
                     Default
                   </span>
                 )}
               </div>
 
-              <div className="pl-[52px] space-y-4">
-                <p className="text-gray-600 leading-relaxed">
+              {/* Address Details */}
+              <div className="mb-4">
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   {address.addressLine1}
                   {address.addressLine2 && <>, {address.addressLine2}</>}
                   <br />
                   {address.city}, {address.state} - {address.pincode}
                 </p>
+              </div>
 
-                <div className="flex items-center gap-3 pt-2 border-t border-gray-50">
+              {/* Action Buttons - Responsive Layout */}
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-3 border-t border-gray-100">
+                <div className="flex gap-2 sm:gap-3">
                   <button 
                     onClick={() => navigate(`/addresses/edit/${address.uuid}`)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
                   >
                     <Edit2 size={16} />
-                    Edit
+                    <span>Edit</span>
                   </button>
                   <button 
                     onClick={() => handleDelete(address.uuid)}
                     disabled={deletingId === address.uuid}
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50"
                   >
                     {deletingId === address.uuid ? (
                       <Loader size={16} className="animate-spin" />
                     ) : (
                       <Trash2 size={16} />
                     )}
-                    Delete
+                    <span>Delete</span>
                   </button>
-                  {!address.isDefault && (
-                    <button 
-                      onClick={() => handleSetDefault(address.uuid)}
-                      className="ml-auto text-sm font-medium text-[#2d5016] hover:underline"
-                    >
-                      Set as Default
-                    </button>
-                  )}
                 </div>
+                {!address.isDefault && (
+                  <button 
+                    onClick={() => handleSetDefault(address.uuid)}
+                    className="w-full sm:w-auto sm:ml-auto px-4 py-2.5 text-sm font-semibold text-[#2d5016] bg-[#2d5016]/10 hover:bg-[#2d5016]/20 rounded-lg transition-colors"
+                  >
+                    Set as Default
+                  </button>
+                )}
               </div>
             </div>
           ))

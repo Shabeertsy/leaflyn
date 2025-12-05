@@ -37,15 +37,22 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
       
       const response = await axios.get<PaginatedResponse<APINotification>>(apiUrl);
       
-      const unreadCount = response.data.results.filter(n => !n.is_read).length;
-      
-      set({
-        notifications: response.data.results,
-        totalCount: response.data.count,
-        nextPage: response.data.next,
-        previousPage: response.data.previous,
-        unreadCount,
-        isLoading: false,
+      set((state) => {
+        // Append new notifications if page > 1, otherwise replace
+        const allNotifications = page > 1 
+          ? [...state.notifications, ...response.data.results]
+          : response.data.results;
+        
+        const unreadCount = allNotifications.filter(n => !n.is_read).length;
+        
+        return {
+          notifications: allNotifications,
+          totalCount: response.data.count,
+          nextPage: response.data.next,
+          previousPage: response.data.previous,
+          unreadCount,
+          isLoading: false,
+        };
       });
     } catch (error: any) {
       console.error('Failed to fetch notifications:', error);
@@ -91,20 +98,39 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
     }
   },
 
-  markAllAsRead: () => {
-    // Update all notifications to read locally
-    set(state => ({
-      notifications: state.notifications.map(n => ({ ...n, is_read: true })),
-      unreadCount: 0,
-    }));
-    
-    // Optionally, you can make API calls for each notification
-    const { notifications } = get();
-    notifications.forEach(n => {
-      if (!n.is_read) {
-        get().markAsRead(n.uuid);
-      }
-    });
+  markAllAsRead: async () => {
+    try {
+      // Try to use bulk mark-all-as-read endpoint
+      const apiUrl = '/api/notifications/mark-all-as-read/';
+      console.log('Marking all notifications as read:', apiUrl);
+      
+      await axios.post(apiUrl);
+      
+      // Update local state
+      set(state => ({
+        notifications: state.notifications.map(n => ({ ...n, is_read: true })),
+        unreadCount: 0,
+      }));
+    } catch (error: any) {
+      console.error('Bulk mark-all-as-read failed, falling back to individual calls:', error);
+      
+      // Fallback: Update locally first for immediate UI feedback
+      set(state => ({
+        notifications: state.notifications.map(n => ({ ...n, is_read: true })),
+        unreadCount: 0,
+      }));
+      
+      // Then make individual API calls for unread notifications
+      const { notifications } = get();
+      const unreadNotifications = notifications.filter(n => !n.is_read);
+      
+      // Call API for each unread notification (in background)
+      unreadNotifications.forEach(n => {
+        get().markAsRead(n.uuid).catch(err => 
+          console.error(`Failed to mark ${n.uuid} as read:`, err)
+        );
+      });
+    }
   },
 
   clearNotifications: () => {

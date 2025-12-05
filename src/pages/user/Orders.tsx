@@ -5,13 +5,21 @@ import { useOrderStore } from '../../store/useOrderStore';
 import type { APIOrder } from '../../types';
 
 const Orders: React.FC = () => {
-  const { orders, isLoading, nextPage, fetchOrders } = useOrderStore();
+  const { orders, isLoading, nextPage, fetchOrders, clearOrders } = useOrderStore();
   const [currentPage, setCurrentPage] = useState(1);
   const observerTarget = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Reset page and fetch fresh orders on mount
+    setCurrentPage(1);
     fetchOrders(1);
-  }, [fetchOrders]);
+    
+    // Cleanup on unmount
+    return () => {
+      clearOrders();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Infinite scroll
   const loadMore = useCallback(() => {

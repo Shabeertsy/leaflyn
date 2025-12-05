@@ -33,13 +33,14 @@ export const useOrderStore = create<OrderStore>((set) => ({
       
       const response = await axios.get<PaginatedResponse<APIOrder>>(apiUrl);
       
-      set({
-        orders: response.data.results,
+      set((state) => ({
+        // Append new orders if page > 1, otherwise replace
+        orders: page > 1 ? [...state.orders, ...response.data.results] : response.data.results,
         totalCount: response.data.count,
         nextPage: response.data.next,
         previousPage: response.data.previous,
         isLoading: false,
-      });
+      }));
     } catch (error: any) {
       console.error('Failed to fetch orders:', error);
       

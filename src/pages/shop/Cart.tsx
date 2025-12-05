@@ -9,7 +9,7 @@ const Cart: React.FC = () => {
   const cartCount = getCartCount();
 
   const shipping = cartTotal >= 499 ? 0 : 50;
-  const tax = Math.round(cartTotal * 0.05);
+  const tax = 0; // No tax applied
   const total = cartTotal + shipping + tax;
 
   if (cart.length === 0) {
@@ -138,7 +138,7 @@ const Cart: React.FC = () => {
                 </div>
                 
                 <div className="flex justify-between text-gray-600">
-                  <span>Tax (5%)</span>
+                  <span>Tax</span>
                   <span className="font-semibold text-gray-900 font-sans">₹{tax}</span>
                 </div>
 
