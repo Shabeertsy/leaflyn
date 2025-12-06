@@ -21,6 +21,7 @@ import ContactUs from '../pages/ContactUs';
 import TermsConditions from '../pages/TermsConditions';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
+import CategoryProducts from '../pages/shop/CategoryProducts';
 
 
 const AppRoutes: React.FC = () => {
@@ -58,7 +59,7 @@ const AppRoutes: React.FC = () => {
       </Route>
 
       {/* Placeholder routes */}
-      <Route path="/category/:slug" element={<Search />} />
+      <Route path="/category/:slug" element={<CategoryProducts />} />
       <Route path="/featured" element={<Search />} />
       <Route path="/bestsellers" element={<Search />} />
       <Route path="/new-arrivals" element={<Search />} />

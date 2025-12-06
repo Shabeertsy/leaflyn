@@ -374,7 +374,7 @@ const Home: React.FC = () => {
             {categories.map((category, index) => (
               <Link
                 key={category.id}
-                to={`/search/${category.slug || category.id}`}
+                to={`/category/${category.slug || category.id}`}
                 className="snap-start flex-shrink-0 group relative w-28 h-32 rounded-2xl overflow-hidden shadow-sm transition-all duration-300 active:scale-95"
               >
                 {/* Background Image */}
@@ -409,7 +409,7 @@ const Home: React.FC = () => {
             {categories.map((category, index) => (
               <Link
                 key={category.id}
-                to={`/search/${category.slug || category.id}`}
+                to={`/category/${category.slug || category.id}`}
                 className="group relative h-40 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
               >
                 {/* Background Image */}

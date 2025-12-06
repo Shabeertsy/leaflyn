@@ -51,7 +51,8 @@ const Search: React.FC = () => {
   // Handle category from URL params (when coming from Home page)
   useEffect(() => {
     if (categories.length > 0 && !isInitialized) {
-      let targetCategoryId = 'all';
+      // Default to current store state if no slug provided (preserves "Last Looked")
+      let targetCategoryId = selectedCategoryId;
       
       if (slug) {
         // Try to find category by slug first
@@ -67,10 +68,9 @@ const Search: React.FC = () => {
         }
       }
 
-      // If target category differs from store, OR if we have no products (fresh start), reset.
-      // But if target matches store AND we have products, we preserve state (restore).
+      // If target category differs from store, we update.
       if (targetCategoryId !== selectedCategoryId) {
-        console.log('Resetting search state - category changed');
+        console.log('Updating search state - category changed to:', targetCategoryId);
         resetSearchState();
         setSelectedCategoryId(targetCategoryId);
         activeCategoryRef.current = targetCategoryId;
@@ -84,6 +84,9 @@ const Search: React.FC = () => {
   }, [slug, categories, isInitialized, selectedCategoryId, allProducts.length, resetSearchState, setSelectedCategoryId]);
 
   // Reset when navigating to /search without params
+  // We intentionally REMOVED the auto-reset to 'all' here to support "Last Looked" behavior.
+  // If the user navigates to /search, we show them what they were last looking at.
+  /*
   useEffect(() => {
     if (location.pathname === '/search' && !slug && isInitialized) {
       if (selectedCategoryId !== 'all') {
@@ -94,6 +97,7 @@ const Search: React.FC = () => {
       }
     }
   }, [location.pathname, slug, isInitialized, resetSearchState, setSelectedCategoryId]);
+  */
 
   // Debounce search query (300ms delay)
   useEffect(() => {

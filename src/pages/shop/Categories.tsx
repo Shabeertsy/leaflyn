@@ -78,7 +78,7 @@ const Categories: React.FC = () => {
           {categories.map((category, index) => (
             <Link
               key={category.id}
-              to={`/search/${category.slug || category.id}`}
+              to={`/category/${category.slug || category.id}`}
               className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer"
             >
               {/* Background Image */}
