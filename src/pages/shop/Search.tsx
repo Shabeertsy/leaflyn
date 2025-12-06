@@ -37,8 +37,9 @@ const Search: React.FC = () => {
   const { products, fetchProducts, isLoading, nextPage } = useProductStore();
   const { categories, fetchCategories } = useCategoriesStore();
   
-  // Track the category we're currently fetching to prevent race conditions
+  // Track the category and search query we're currently fetching to prevent race conditions
   const activeCategoryRef = useRef<string>(selectedCategoryId);
+  const activeSearchQueryRef = useRef<string>(debouncedSearchQuery);
   
   const observerTarget = useRef<HTMLDivElement>(null);
 
@@ -94,11 +95,11 @@ const Search: React.FC = () => {
     }
   }, [location.pathname, slug, isInitialized, resetSearchState, setSelectedCategoryId]);
 
-  // Debounce search query (500ms delay)
+  // Debounce search query (300ms delay)
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
-    }, 500);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [searchQuery]);
@@ -117,11 +118,12 @@ const Search: React.FC = () => {
   useEffect(() => {
     if (!isInitialized) return;
     
-    // Check if category has actually changed
+    // Check if category or search query has actually changed
     const categoryChanged = activeCategoryRef.current !== selectedCategoryId;
+    const searchChanged = activeSearchQueryRef.current !== debouncedSearchQuery;
     
-    // Always fetch if category changed or if we don't have products yet
-    const shouldFetch = categoryChanged || allProducts.length === 0;
+    // Always fetch if category/search changed or if we don't have products yet
+    const shouldFetch = categoryChanged || searchChanged || allProducts.length === 0;
     
     if (!shouldFetch) {
        console.log('Skipping fetch - No changes detected');
@@ -131,8 +133,9 @@ const Search: React.FC = () => {
     console.log('Fetching products - Category:', selectedCategoryId, 'Search:', debouncedSearchQuery);
     const categoryParam = selectedCategoryId !== 'all' ? selectedCategoryId : undefined;
     
-    // Update the active category ref
+    // Update the active refs
     activeCategoryRef.current = selectedCategoryId;
+    activeSearchQueryRef.current = debouncedSearchQuery;
     
     // Reset store state for new search
     setCurrentPage(1);
@@ -152,8 +155,8 @@ const Search: React.FC = () => {
 
   // Watch for products changes and accumulate them
   useEffect(() => {
-    // Only process products if they're for the currently selected category
-    if (activeCategoryRef.current !== selectedCategoryId) {
+    // Only process products if they're for the currently selected category and search query
+    if (activeCategoryRef.current !== selectedCategoryId || activeSearchQueryRef.current !== debouncedSearchQuery) {
       return;
     }
     
@@ -317,24 +320,18 @@ const Search: React.FC = () => {
                 key={category.id}
                 data-category-id={category.id}
                 onClick={() => setSelectedCategoryId(String(category.id))}
-                className={`group flex-shrink-0 px-5 py-2.5 md:px-6 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 flex items-center gap-2 ${
+                className={`group flex-shrink-0 px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 flex items-center gap-2 border ${
                   isSelected
-                    ? 'bg-gradient-to-r from-[#2d5016] to-[#3d6622] text-white shadow-lg scale-105 ring-2 ring-[#2d5016]/50'
-                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 hover:border-[#2d5016]/30 hover:shadow-md'
+                    ? 'bg-[#2d5016] text-white border-[#2d5016] shadow-md'
+                    : 'bg-white text-gray-700 border-gray-200 hover:border-[#2d5016]/50 hover:bg-gray-50'
                 }`}
               >
                 {category.icon && (
-                  <div className={`w-5 h-5 md:w-6 md:h-6 rounded-lg flex items-center justify-center transition-transform duration-300 ${
-                    isSelected
-                      ? 'bg-white/20 scale-110' 
-                      : 'bg-gray-100 group-hover:bg-[#2d5016]/10'
-                  }`}>
-                    <img 
-                      src={getImageUrl(category.icon)} 
-                      alt="" 
-                      className={`w-3 h-3 md:w-4 md:h-4 object-contain ${isSelected ? 'brightness-0 invert' : ''}`}
-                    />
-                  </div>
+                  <img 
+                    src={getImageUrl(category.icon)} 
+                    alt="" 
+                    className="w-6 h-6 rounded-full object-cover shadow-sm"
+                  />
                 )}
                 <span className="whitespace-nowrap">{category.category_name}</span>
               </button>

@@ -12,7 +12,7 @@ const TermsConditionsPage: React.FC = () => {
     const fetchTerms = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('/terms-condition/');
+        const response = await axios.get('/api/terms-condition/');
         setTermsData(response.data);
       } catch (err: any) {
         setError(err.response?.data?.message || 'Failed to load terms and conditions');

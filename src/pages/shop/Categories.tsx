@@ -81,54 +81,56 @@ const Categories: React.FC = () => {
               to={`/search/${category.slug || category.id}`}
               className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer"
             >
-              {/* Background Gradient */}
+              {/* Background Image */}
               <div className="absolute inset-0 bg-neutral-100 transition-transform duration-700 group-hover:scale-110">
-                <div className={`absolute inset-0 bg-gradient-to-br ${
-                  index % 3 === 0 ? 'from-green-50 to-emerald-100' :
-                  index % 3 === 1 ? 'from-teal-50 to-cyan-100' :
-                  'from-amber-50 to-orange-100'
-                }`} />
-                
-                {/* Abstract Shapes */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/40 rounded-full blur-2xl transform translate-x-10 -translate-y-10" />
-                <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/40 rounded-full blur-2xl transform -translate-x-10 translate-y-10" />
+                {category.icon ? (
+                  <img 
+                    src={getImageUrl(category.icon)} 
+                    alt={category.category_name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className={`absolute inset-0 bg-gradient-to-br ${
+                    index % 3 === 0 ? 'from-green-50 to-emerald-100' :
+                    index % 3 === 1 ? 'from-teal-50 to-cyan-100' :
+                    'from-amber-50 to-orange-100'
+                  }`}>
+                    {/* Abstract Shapes for fallback */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/40 rounded-full blur-2xl transform translate-x-10 -translate-y-10" />
+                    <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/40 rounded-full blur-2xl transform -translate-x-10 translate-y-10" />
+                  </div>
+                )}
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent group-hover:from-black/90 group-hover:via-black/50 transition-all duration-300" />
               </div>
 
               {/* Content Container */}
-              <div className="absolute inset-0 p-8 flex flex-col justify-between">
+              <div className="absolute inset-0 p-8 flex flex-col justify-between z-10">
                 <div className="flex justify-between items-start">
-                  <div className="w-16 h-16 bg-white/80 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
-                    {category.icon ? (
-                      <img 
-                        src={getImageUrl(category.icon)} 
-                        alt="" 
-                        className="w-8 h-8 object-contain"
-                      />
-                    ) : (
-                      <span className="text-4xl">🌿</span>
-                    )}
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center">
+                    {/* Optional: Keep icon if needed, or remove. User asked to fill image. */}
                   </div>
-                  <div className="w-10 h-10 rounded-full border border-gray-900/10 flex items-center justify-center opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300 bg-white">
-                    <ArrowRight size={16} className="text-[#2d5016]" />
+                  <div className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300 bg-white/20 backdrop-blur-md">
+                    <ArrowRight size={16} className="text-white" />
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 font-['Playfair_Display'] mb-3 group-hover:text-[#2d5016] transition-colors">
+                  <h3 className="text-2xl lg:text-3xl font-bold text-white font-['Playfair_Display'] mb-3 group-hover:text-white/90 transition-colors drop-shadow-md">
                     {category.category_name}
                   </h3>
-                  <p className="text-gray-600 text-sm lg:text-base opacity-80 line-clamp-2 mb-4 group-hover:opacity-100 transition-opacity">
+                  <p className="text-white/80 text-sm lg:text-base opacity-90 line-clamp-2 mb-4 group-hover:opacity-100 transition-opacity drop-shadow-sm">
                     {category.description}
                   </p>
-                  <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    <span className="w-8 h-[1px] bg-gray-400 group-hover:w-12 group-hover:bg-[#2d5016] transition-all duration-300" />
+                  <div className="flex items-center gap-2 text-xs font-bold text-white/70 uppercase tracking-wider">
+                    <span className="w-8 h-[1px] bg-white/70 group-hover:w-12 group-hover:bg-white transition-all duration-300" />
                     {category.productCount} Products
                   </div>
                 </div>
               </div>
 
               {/* Hover Border Effect */}
-              <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#2d5016]/10 rounded-3xl transition-colors duration-300 pointer-events-none" />
+              <div className="absolute inset-0 border-2 border-transparent group-hover:border-white/20 rounded-3xl transition-colors duration-300 pointer-events-none" />
             </Link>
           ))}
         </div>

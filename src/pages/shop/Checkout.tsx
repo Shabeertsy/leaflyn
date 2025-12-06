@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, CheckCircle, CreditCard, MapPin, Plus, ShieldCheck, Truck, ChevronRight, Phone, Lock, Eye, EyeOff, Mail, X, ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon } from 'lucide-react';
 import { useCartStore } from '../../store/useCartStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import api from '../../lib/axios';
 import OTPVerificationModal from '../../components/ui/OTPVerificationModal';
+import TermsModal from '../../components/common/TermsModal';
 import { useAddressStore } from '../../store/useAddressStore';
 
 interface PaymentGateway {
@@ -63,6 +64,7 @@ const Checkout: React.FC = () => {
   // OTP Verification State
   const [showOTPModal, setShowOTPModal] = useState(false);
   const [sendingOTP, setSendingOTP] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
 
   // Payment State
   const [gateways, setGateways] = useState<PaymentGateway[]>([]);
@@ -889,13 +891,13 @@ const Checkout: React.FC = () => {
                     </div>
                     <span className="text-sm text-gray-600 leading-relaxed">
                       I agree to the{' '}
-                      <Link 
-                        to="/terms-conditions" 
-                        target="_blank"
-                        className="text-[#2d5016] font-semibold hover:underline"
+                      <button 
+                        type="button"
+                        onClick={() => setShowTermsModal(true)}
+                        className="text-[#2d5016] font-semibold hover:underline bg-transparent border-none p-0 cursor-pointer inline"
                       >
                         Terms and Conditions
-                      </Link>
+                      </button>
                       {' '}and understand the order policies
                     </span>
                   </label>
@@ -1190,6 +1192,11 @@ const Checkout: React.FC = () => {
           onClose={() => setShowOTPModal(false)}
         />
       )}
+      {/* Terms and Conditions Modal */}
+      <TermsModal 
+        isOpen={showTermsModal} 
+        onClose={() => setShowTermsModal(false)} 
+      />
     </div>
   );
 };

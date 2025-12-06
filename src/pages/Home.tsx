@@ -244,12 +244,7 @@ const Home: React.FC = () => {
                       <ArrowRight size={18} className="relative z-10 group-hover:translate-x-1 transition-transform" />
                       <div className="absolute inset-0 bg-gradient-to-r from-[#d4af37] to-[#f4d03f] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </Link>
-                    <button className="inline-flex items-center gap-2.5 px-7 py-3.5 bg-white/5 backdrop-blur-xl text-white rounded-full font-semibold hover:bg-white/10 transition-all duration-300 border border-white/20 hover:border-white/30">
-                      <span>Watch Video</span>
-                      <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
-                        <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent ml-0.5" />
-                      </div>
-                    </button>
+                   
                   </div>
                   <div className="grid grid-cols-3 gap-6 pt-6 border-t border-white/10">
                     {[
@@ -374,38 +369,36 @@ const Home: React.FC = () => {
             </Link>
           </div>
 
-          {/* Mobile: Compact modern cards */}
-          <div className="md:hidden grid grid-cols-3 gap-3">
-            {categories.slice(0, 6).map((category, index) => (
+          {/* Mobile: Horizontal Scroll Modern UI */}
+          <div className="md:hidden flex gap-3 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
+            {categories.map((category, index) => (
               <Link
                 key={category.id}
                 to={`/search/${category.slug || category.id}`}
-                className="group flex flex-col items-center gap-2 p-3 bg-white rounded-2xl hover:shadow-lg transition-all duration-300 active:scale-95"
+                className="snap-start flex-shrink-0 group relative w-28 h-32 rounded-2xl overflow-hidden shadow-sm transition-all duration-300 active:scale-95"
               >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 group-hover:scale-110 group-hover:shadow-md ${
-                  index % 3 === 0 ? 'bg-gradient-to-br from-green-50 to-emerald-100' :
-                  index % 3 === 1 ? 'bg-gradient-to-br from-teal-50 to-cyan-100' :
-                  'bg-gradient-to-br from-amber-50 to-orange-100'
-                }`}>
-                  {category.icon ? (
-                    <img 
-                      src={getImageUrl(category.icon)} 
-                      alt="" 
-                      className="w-6 h-6 object-contain transition-transform duration-300 group-hover:scale-110"
-                    />
-                  ) : (
-                    <span className="text-2xl">🌿</span>
-                  )}
+                {/* Background Image */}
+                <div className="absolute inset-0">
+                    {category.icon ? (
+                        <img 
+                          src={getImageUrl(category.icon)} 
+                          alt={category.category_name}
+                          className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <div className={`w-full h-full ${
+                          index % 3 === 0 ? 'bg-gradient-to-br from-green-50 to-emerald-100' :
+                          index % 3 === 1 ? 'bg-gradient-to-br from-teal-50 to-cyan-100' :
+                          'bg-gradient-to-br from-amber-50 to-orange-100'
+                        }`} />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                 </div>
-                <div className="text-center w-full">
-                  <span className="text-xs font-bold text-gray-800 leading-tight line-clamp-2 block group-hover:text-[#2d5016] transition-colors">
+
+                <div className="absolute bottom-0 left-0 right-0 p-2.5 text-center z-10">
+                  <span className="text-[11px] font-bold text-white leading-tight line-clamp-2 block drop-shadow-md uppercase tracking-wide">
                     {category.category_name}
                   </span>
-                  {category.productCount !== undefined && (
-                    <span className="text-[10px] text-gray-400 block mt-0.5">
-                      {category.productCount} items
-                    </span>
-                  )}
                 </div>
               </Link>
             ))}
@@ -417,36 +410,35 @@ const Home: React.FC = () => {
               <Link
                 key={category.id}
                 to={`/search/${category.slug || category.id}`}
-                className="group relative h-32 rounded-2xl overflow-hidden cursor-pointer border border-gray-200 hover:border-[#2d5016]/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+                className="group relative h-40 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
               >
-                <div className="absolute inset-0 transition-all duration-300" style={{
-                  background: index % 4 === 0 ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)' :
-                              index % 4 === 1 ? 'linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%)' :
-                              index % 4 === 2 ? 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)' :
-                              'linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%)'
-                }}>
-                </div>
-                <div className="absolute inset-0 p-5 flex flex-col justify-between">
-                  {/* Icon at top left */}
-                  <div className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
+                {/* Background Image */}
+                <div className="absolute inset-0 transition-all duration-500 group-hover:scale-110">
                     {category.icon ? (
-                      <img 
-                        src={getImageUrl(category.icon)} 
-                        alt="" 
-                        className="w-6 h-6 object-contain"
-                      />
+                        <img 
+                          src={getImageUrl(category.icon)} 
+                          alt={category.category_name}
+                          className="w-full h-full object-cover"
+                        />
                     ) : (
-                      <span className="text-2xl">🌿</span>
+                        <div className="w-full h-full" style={{
+                          background: index % 4 === 0 ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)' :
+                                      index % 4 === 1 ? 'linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%)' :
+                                      index % 4 === 2 ? 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)' :
+                                      'linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%)'
+                        }} />
                     )}
-                  </div>
-                  
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/90 group-hover:via-black/40 transition-all duration-300" />
+                </div>
+
+                <div className="absolute inset-0 p-5 flex flex-col justify-end z-10">
                   {/* Text at bottom */}
                   <div>
-                    <h3 className="text-base font-bold text-gray-900 uppercase tracking-wide mb-1 group-hover:text-[#2d5016] transition-colors line-clamp-1">
+                    <h3 className="text-lg font-bold text-white uppercase tracking-wide mb-1 group-hover:text-white/90 transition-colors line-clamp-1 drop-shadow-md">
                       {category.category_name}
                     </h3>
                     {category.productCount !== undefined && (
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-white/80 font-medium">
                         {category.productCount} items
                       </p>
                     )}

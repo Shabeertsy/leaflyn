@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
-import { useGoogleLogin } from '@react-oauth/google';
+import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
 import { useAuthStore } from '../../store/useAuthStore';
 
 const Login: React.FC = () => {
@@ -31,25 +31,29 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleGoogleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      setLoading(true);
-      setError('');
-      try {
-        // Send the access token to your Django backend
-        await googleLogin(tokenResponse.access_token);
-        navigate(from, { replace: true });
-      } catch (err: any) {
-        console.error('Google login error:', err);
-        setError(err.response?.data?.message || 'Google sign-in failed. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    },
-    onError: () => {
+  const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
+    if (!credentialResponse.credential) {
       setError('Google sign-in failed. Please try again.');
-    },
-  });
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    try {
+      // Send the ID token (credential) to your Django backend
+      await googleLogin(credentialResponse.credential);
+      navigate(from, { replace: true });
+    } catch (err: any) {
+      console.error('Google login error:', err);
+      setError(err.response?.data?.error || err.response?.data?.message || 'Google sign-in failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    setError('Google sign-in failed. Please try again.');
+  };
 
   return (
     <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-6">
@@ -146,15 +150,17 @@ const Login: React.FC = () => {
           </div>
 
           <div className="mt-8 pt-8 border-t border-gray-100">
-            <p className="text-xs text-center text-gray-400 mb-4 uppercase tracking-wider font-bold">Or continue with</p>
-            <button 
-              onClick={() => handleGoogleLogin()}
-              type="button"
-              className="w-full flex items-center justify-center gap-3 p-3.5 border-2 border-gray-200 rounded-xl hover:bg-gray-50 hover:border-[#2d5016]/30 transition-all font-semibold text-gray-700 shadow-sm hover:shadow-md"
-            >
-              <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
-              Continue with Google
-            </button>
+            <p className="text-xs text-center text-gray-400 mb-4 uppercase tracking-wider font-bold">Or</p>
+            <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                theme="outline"
+                size="large"
+                text="continue_with"
+                width="100%"
+              />
+            </div>
           </div>
         </div>
       </div>

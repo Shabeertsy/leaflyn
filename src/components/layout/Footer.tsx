@@ -47,9 +47,7 @@ const Footer: React.FC = () => {
           {/* Brand Section */}
           <div className="space-y-6">
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                <span className="text-[#1a3a0f] text-xl font-bold">L</span>
-              </div>
+              <img src="/apple-touch-icon.png" alt="Leaflyn Logo" className="w-10 h-10 rounded-xl shadow-sm" />
               <span className="text-2xl font-bold font-['Playfair_Display']">{companyContact?.company_name || 'Leaflyn'}</span>
             </Link>
             <p className="text-white/60 leading-relaxed text-sm max-w-xs">
@@ -82,11 +80,6 @@ const Footer: React.FC = () => {
               <li>
                 <Link to="/bestsellers" className="text-white/60 hover:text-[#d4af37] transition-colors text-sm">
                   Bestsellers
-                </Link>
-              </li>
-              <li>
-                <Link to="/care-guide" className="text-white/60 hover:text-[#d4af37] transition-colors text-sm">
-                  Plant Care Guide
                 </Link>
               </li>
               <li>

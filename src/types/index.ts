@@ -151,13 +151,15 @@ export interface Notification {
 }
 
 export interface Category {
-  id: string;
+  id: number | string;
   category_name: string;
   slug: string;
   icon: string;
-  image: string;
+  image?: string;
   description?: string;
   productCount?: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface Review {

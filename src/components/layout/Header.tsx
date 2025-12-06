@@ -27,9 +27,7 @@ const Header: React.FC = () => {
       <div className="px-6 h-16 flex items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#2d5016] to-[#3d6622] rounded-full flex items-center justify-center">
-            <span className="text-white text-xl font-bold">L</span>
-          </div>
+          <img src="/apple-touch-icon.png" alt="Leaflyn Logo" className="w-10 h-10 rounded-xl shadow-md" />
           <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">Leaflyn</span>
         </Link>
 
