@@ -120,7 +120,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <button
           onClick={handleAddToCart}
           disabled={cartLoading}
-          className={`absolute bottom-0 left-0 right-0 py-3.5 font-semibold text-sm transition-all duration-500 disabled:cursor-not-allowed ${
+          className={`hidden md:block absolute bottom-0 left-0 right-0 py-3.5 font-semibold text-sm transition-all duration-500 disabled:cursor-not-allowed ${
             addedToCart
               ? 'bg-[#2d5016] text-white translate-y-0'
               : 'bg-white/95 text-gray-900 translate-y-full group-hover:translate-y-0'
@@ -166,15 +166,29 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         {/* Price */}
-        <div className="flex items-baseline gap-2">
-          <span className="text-base md:text-lg font-bold text-[#2d5016] font-sans tracking-wide">
-            ₹{product.price}
-          </span>
-          {product.originalPrice && (
-            <span className="text-xs text-gray-400 line-through font-sans">
-              ₹{product.originalPrice}
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex items-baseline gap-2">
+            <span className="text-base md:text-lg font-bold text-[#2d5016] font-sans tracking-wide">
+              ₹{product.price}
             </span>
-          )}
+            {product.originalPrice && (
+              <span className="text-xs text-gray-400 line-through font-sans">
+                ₹{product.originalPrice}
+              </span>
+            )}
+          </div>
+          
+          <button
+            onClick={handleAddToCart}
+            disabled={cartLoading}
+            className={`md:hidden px-3 py-1.5 text-xs font-bold rounded-full transition-all duration-300 ${
+              addedToCart
+                ? 'bg-[#2d5016] text-white'
+                : 'bg-green-100/80 text-[#2d5016] hover:bg-[#2d5016] hover:text-white'
+            }`}
+          >
+            {addedToCart ? 'Added' : 'Add'}
+          </button>
         </div>
       </div>
     </Link>

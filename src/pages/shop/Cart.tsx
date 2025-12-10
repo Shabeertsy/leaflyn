@@ -34,7 +34,7 @@ const Cart: React.FC = () => {
   }
 
   return (
-    <div className="pb-24 lg:pb-12 bg-neutral-50 min-h-screen">
+    <div className="pb-40 lg:pb-12 bg-neutral-50 min-h-screen">
       {/* Header */}
       <div className="bg-white border-b border-gray-100 sticky top-0 z-30 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-6">
@@ -160,7 +160,7 @@ const Cart: React.FC = () => {
 
               <Link
                 to="/checkout"
-                className="group flex items-center justify-center gap-2 w-full py-4 bg-[#2d5016] text-white rounded-xl font-bold hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                className="hidden lg:flex group items-center justify-center gap-2 w-full py-4 bg-[#2d5016] text-white rounded-xl font-bold hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
               >
                 Proceed to Checkout
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
@@ -172,6 +172,25 @@ const Cart: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      {/* Mobile Fixed Checkout Bar */}
+      <div className="fixed bottom-[64px] left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] lg:hidden z-30">
+        <div className="flex items-center gap-4 max-w-7xl mx-auto">
+          <div className="flex-1">
+            <p className="text-xs text-gray-500 font-medium mb-0.5">Total Amount</p>
+            <div className="flex items-baseline gap-1">
+              <span className="text-xl font-bold text-[#2d5016] font-sans">₹{total}</span>
+              <span className="text-[10px] text-gray-400 font-medium">inc. taxes</span>
+            </div>
+          </div>
+          <Link
+            to="/checkout"
+            className="flex-1 flex items-center justify-center gap-2 bg-[#2d5016] text-white py-2.5 px-6 rounded-full text-sm font-bold shadow-lg shadow-[#2d5016]/20 active:scale-95 transition-transform"
+          >
+            Checkout
+            <ArrowRight size={18} />
+          </Link>
         </div>
       </div>
     </div>

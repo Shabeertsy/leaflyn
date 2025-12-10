@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, ArrowRight } from 'lucide-react';
 import ProductCard from '../components/features/ProductCard';
+import ProductCardCompact from '../components/features/ProductCardCompact';
 import AdBanner from '../components/features/AdBanner';
+import StatsBar from '../components/features/StatsBar';
 import { useCategoriesStore } from '../store/useCategoriesStore';
 import { useProductCollectionStore } from '../store/useProductCollectionStore';
 import { mapVariantToProduct } from '../lib/mappers';
 
 
 
-const MOBILE_HERO_HEIGHT = 200; 
 
 
 // Get base URL for images
@@ -64,105 +65,13 @@ const Home: React.FC = () => {
   return (
     <div className="pb-20 lg:pb-0 bg-neutral-50 min-h-[100vh]">
       {/* HERO SECTION */}
-      {/* MOBILE */}
-      <section className="relative w-full mx-auto overflow-hidden">
-        <div className="block md:hidden">
-          {/* Outer app-like container */}
-          <div className="relative w-full shadow bg-white/95 overflow-hidden">
-            {/* Banner + text */}
-            <div className="flex flex-col w-full">
-              <div
-                className="relative w-full flex items-center justify-center"
-                style={{
-                  height: MOBILE_HERO_HEIGHT,
-                  minHeight: MOBILE_HERO_HEIGHT,
-                }}
-              >
-                {/* Slide images with animations */}
-                {heroImages.map((slide, i) => (
-                  <div
-                    key={i}
-                    className={`absolute inset-0 w-full h-full transition-opacity duration-700
-                      ${i === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}
-                    `}
-                  >
-                    <img
-                      className="object-cover w-full h-full pointer-events-none select-none"
-                      src={slide.image}
-                      alt={slide.heading}
-                      draggable={false}
-                      style={{
-                        minHeight: MOBILE_HERO_HEIGHT,
-                        maxHeight: MOBILE_HERO_HEIGHT,
-                        height: MOBILE_HERO_HEIGHT,
-                        width: '100%',
-                        objectFit: 'cover',
-                        display: 'block',
-                        border: 'none', 
-                        boxShadow: 'none', 
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/0 to-transparent" />
-                  </div>
-                ))}
-
-                {/* Carousel dots */}
-                <div className="absolute bottom-3 w-full flex justify-center items-center z-20 pointer-events-auto">
-                  <div className="flex gap-1.5">
-                    {heroImages.map((_, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        aria-label={`Go to slide ${idx + 1}`}
-                        onClick={() => setCurrentImageIndex(idx)}
-                        className={`
-                          h-2 transition-all duration-200 rounded-full
-                          ${idx === currentImageIndex ? 'bg-white w-6' : 'bg-white/50 w-2'}
-                        `}
-                        tabIndex={0}
-                        style={{
-                          outline: 'none',
-                          border: 'none',
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Banner text OVER image (centered, down, without pointer events) */}
-                <div className="absolute left-0 right-0 bottom-7 flex flex-col items-center px-3 pointer-events-none z-20">
-                  <h1 className="text-white text-lg font-bold font-['Playfair_Display'] drop-shadow-md text-center leading-tight max-w-[260px]">
-                    {heroImages[currentImageIndex].heading}
-                  </h1>
-                  <span className="mt-1 text-sm text-white/90 drop-shadow font-normal text-center leading-snug max-w-[225px]">
-                    {heroImages[currentImageIndex].subline}
-                  </span>
-                </div>
-              </div>
-              {/* App-like CTA & stats row, separate and visually bold */}
-              <div className="flex items-center justify-between px-4 py-2.5 bg-white/99 border-t border-neutral-200 z-20" style={{ minHeight: 44 }}>
-                <Link
-                  to="/search"
-                  className="inline-flex items-center px-5 py-2.5 rounded-[999px] bg-[#2d5016] text-white font-bold text-[15px] shadow hover:bg-[#263c11] active:scale-95 transition-all"
-                >
-                  Shop Now
-                  <ArrowRight size={16} className="ml-1" />
-                </Link>
-                <div className="flex gap-4 items-center text-sm text-[#2d5016] font-semibold ml-2">
-                  <div className="flex items-center gap-0.5">
-                    <span className="font-bold text-[#d4af37] text-lg">500+</span>
-                    <span className="ml-0.5">Plants</span>
-                  </div>
-                  <span className="w-1.5 h-1.5 rounded-full bg-neutral-300 inline-block mx-1" />
-                  <div className="flex items-center gap-0.5">
-                    <span className="font-bold text-[#d4af37] text-lg">4.9</span>
-                    <span className="ml-0.5">★</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* HERO SECTION */}
+      {/* MOBILE - Using updated AdBanner with Hero variant */}
+      {/* MOBILE - Using updated AdBanner with Hero variant */}
+      <AdBanner variant="hero" className="md:hidden" />
+      <div className="md:hidden">
+        <StatsBar />
+      </div>
 
 
         {/* DESKTOP */}
@@ -346,19 +255,19 @@ const Home: React.FC = () => {
             </div>
           </section>
         </div>
-      </section>
+
 
       {/* Ad Banner Section */}
-      <div className="py-4 md:py-8 bg-white">
+      {/* <div className="py-4 md:py-8 bg-white">
         <AdBanner />
-      </div>
+      </div> */}
 
       {/* Categories Section */}
       <section className="py-6 md:py-16 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
           <div className="flex flex-row items-end justify-between mb-4 md:mb-8 gap-3">
             <div className="max-w-2xl">
-              <span className="text-[#d4af37] font-bold tracking-widest uppercase text-xs mb-1 block">Collections</span>
+              {/* <span className="text-[#d4af37] font-bold tracking-widest uppercase text-xs mb-1 block">Collections</span> */}
               <h2 className="text-xl md:text-3xl lg:text-4xl font-bold text-[#2d5016] font-['Playfair_Display'] mb-2">
                 Explore Our <span className="italic text-gray-400 font-light">Categories</span>
               </h2>
@@ -375,39 +284,34 @@ const Home: React.FC = () => {
             </Link>
           </div>
 
-          {/* Mobile: Horizontal Scroll Modern UI */}
-          <div className="md:hidden flex gap-3 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
-            {categories.map((category, index) => (
-              <Link
-                key={category.id}
-                to={`/category/${category.slug || category.id}`}
-                className="snap-start flex-shrink-0 group relative w-28 h-32 rounded-2xl overflow-hidden shadow-sm transition-all duration-300 active:scale-95"
-              >
-                {/* Background Image */}
-                <div className="absolute inset-0">
-                    {category.icon ? (
-                        <img 
-                          src={getImageUrl(category.icon)} 
-                          alt={category.category_name}
-                          className="w-full h-full object-cover"
-                        />
-                    ) : (
-                        <div className={`w-full h-full ${
-                          index % 3 === 0 ? 'bg-gradient-to-br from-green-50 to-emerald-100' :
-                          index % 3 === 1 ? 'bg-gradient-to-br from-teal-50 to-cyan-100' :
-                          'bg-gradient-to-br from-amber-50 to-orange-100'
-                        }`} />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-                </div>
-
-                <div className="absolute bottom-0 left-0 right-0 p-2.5 text-center z-10">
-                  <span className="text-[11px] font-bold text-white leading-tight line-clamp-2 block drop-shadow-md uppercase tracking-wide">
+          {/* Mobile: Horizontal Scroll Circular Categories */}
+          <div className="md:hidden">
+       
+         
+             <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
+              {categories.map((category) => (
+                <Link
+                  key={category.id}
+                  to={`/category/${category.slug || category.id}`}
+                  className="snap-start flex flex-col items-center flex-shrink-0 group"
+                >
+                  <div className="w-16 h-16 rounded-full bg-[#f3f4f6] flex items-center justify-center mb-2 border border-[#e5e7eb] group-hover:border-[#2d5016] transition-colors">
+                     {category.icon ? (
+                          <img 
+                            src={getImageUrl(category.icon)} 
+                            alt={category.category_name}
+                            className="w-full h-full object-cover rounded-full opacity-90 group-hover:opacity-100 transition-opacity"
+                          />
+                      ) : (
+                         <div className="w-8 h-8 rounded-full bg-[#d1d5db]" />
+                      )}
+                  </div>
+                  <span className="text-xs font-medium text-[#4b5563] text-center w-20 leading-tight">
                     {category.category_name}
                   </span>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
+            </div>
           </div>
 
           {/* Desktop: Horizontal card design */}
@@ -461,21 +365,33 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-end justify-between mb-4 md:mb-8">
             <div>
-              <h2 className="text-lg md:text-4xl font-bold text-gray-900 mb-1 md:mb-2 font-['Playfair_Display']">Featured Collection</h2>
-              <p className="text-gray-600 text-xs md:text-base">Handpicked premium selections</p>
+              <h2 className="text-xl md:text-4xl font-bold text-[#1f2937] mb-1 md:mb-2 font-['Playfair_Display']">New Arrivals</h2>
             </div>
-            <Link to="/featured" className="text-[#2d5016] font-semibold flex items-center gap-1 text-xs md:text-base hover:gap-2 transition-all">
-              View All <ChevronRight size={18} />
-            </Link>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-5">
+          
+          {/* Mobile Horizontal Scroll for Products */}
+          <div className="md:hidden flex gap-3 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
+            {featuredProducts.length > 0 ? (
+              featuredProducts.slice(0, 8).map((variant) => (
+                <div key={variant.uuid} className="snap-start">
+                   <ProductCardCompact product={mapVariantToProduct(variant)} />
+                </div>
+              ))
+            ) : (
+              <div className="w-full text-center py-8 text-gray-500 text-sm">
+                No new arrivals available.
+              </div>
+            )}
+          </div>
+
+          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
             {featuredProducts.length > 0 ? (
               featuredProducts.slice(0, 8).map((variant) => (
                 <ProductCard key={variant.uuid} product={mapVariantToProduct(variant)} />
               ))
             ) : (
-              <div className="col-span-full text-center py-8 text-gray-500 text-sm">
-                No featured products available at the moment.
+                <div className="col-span-full text-center py-8 text-gray-500 text-sm">
+                No new arrivals available.
               </div>
             )}
           </div>

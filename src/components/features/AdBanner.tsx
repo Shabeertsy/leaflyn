@@ -26,11 +26,12 @@ interface BannerSlide {
 interface AdBannerProps {
   fixedIndex?: number;
   className?: string;
+  variant?: 'hero' | 'banner';
 }
 
 
 
-const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '' }) => {
+const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '', variant = 'banner' }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState<BannerSlide[]>([]);
   const [loading, setLoading] = useState(true);
@@ -75,11 +76,19 @@ const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '' }) => {
           setSlides([
             {
               id: 1,
-              title: 'New Arrivals',
-              subtitle: 'Fresh plants just for you',
+              title: variant === 'hero' ? 'Bring Nature Home' : 'New Arrivals',
+              subtitle: variant === 'hero' ? 'Curated for style & wellness' : 'Fresh plants just for you',
               image: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&q=80&w=800',
-              color: 'from-emerald-500 to-teal-600'
+              color: 'from-emerald-900 to-teal-900', // Darker for hero text readability
+              link: '/search'
             },
+            {
+              id: 2,
+              title: 'Urban Jungle',
+              subtitle: 'Transform your space',
+              image: 'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&q=80&w=800',
+              color: 'from-green-900 to-emerald-900'
+            }
           ]);
         }
       } catch (error) {
@@ -87,10 +96,11 @@ const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '' }) => {
         setSlides([
           {
             id: 1,
-            title: '🌿 New Arrivals',
-            subtitle: 'Fresh plants just for you',
+            title: variant === 'hero' ? 'Bring Nature Home' : 'New Arrivals',
+            subtitle: variant === 'hero' ? 'Curated for style & wellness' : 'Fresh plants just for you',
             image: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&q=80&w=800',
-            color: 'from-emerald-500 to-teal-600'
+            color: 'from-emerald-900 to-teal-900',
+            link: '/search'
           },
         ]);
       } finally {
@@ -153,10 +163,6 @@ const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '' }) => {
     : slides;
     
   
-  // For now, if fixedIndex is valid, displaySlides has length 1.
-  // We need to make sure we access displaySlides[currentSlide] correctly.
-  // If fixedIndex is set, currentSlide should effectively be 0 relative to displaySlides, 
-  // OR we just use displaySlides[0] and ignore currentSlide.
 
   return (
     <section className={`relative overflow-hidden ${className}`}>
@@ -259,7 +265,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '' }) => {
           {/* Mobile Banner - App-like compact design */}
           <div className="md:hidden">
             <div
-              className="relative h-32 overflow-hidden"
+              className={`relative overflow-hidden ${variant === 'hero' ? 'h-[220px]' : 'h-40'}`}
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -271,38 +277,53 @@ const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '' }) => {
                     index === currentSlide ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
                   }`}
                 >
-                  <div className={`relative h-full bg-gradient-to-r ${slide.color} rounded-2xl mx-4 overflow-hidden shadow-lg`}>
+                  <div className={`relative h-full w-full bg-gray-900`}>
                     {/* Background Image */}
                     <div className="absolute inset-0">
                       <img 
                         src={slide.image} 
                         alt={slide.title}
-                        className="w-full h-full object-cover opacity-25"
+                        className="w-full h-full object-cover opacity-80"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent" />
+                      {/* Gradient overlay for text readability */}
+                      <div className={`absolute inset-0 bg-gradient-to-t ${variant === 'hero' ? 'from-black/80 via-black/20 to-transparent' : 'from-black/60 to-transparent'}`} />
                     </div>
 
-                    {/* Compact Content */}
-                    <div className="relative h-full px-5 flex items-center justify-between">
-                      <div className="text-white flex-1">
-                        <h3 className="text-lg font-bold mb-1 font-['Playfair_Display']">
+                    {/* Content */}
+                    <div className={`relative h-full px-6 flex flex-col ${variant === 'hero' ? 'justify-end pb-12' : 'justify-center items-start'}`}>
+                      <div className="text-white w-full">
+                        <h3 className={`${variant === 'hero' ? 'text-4xl leading-tight mb-2' : 'text-xl'} font-bold font-['Playfair_Display'] drop-shadow-lg`}>
                           {slide.title}
                         </h3>
-                        <p className="text-xs font-light opacity-90">
+                        <p className={`${variant === 'hero' ? 'text-base mb-6 opacity-90' : 'text-xs opacity-90'}`}>
                           {slide.subtitle}
                         </p>
+                        
+                        {variant === 'hero' && (
+                          slide.link ? (
+                            <a 
+                              href={slide.link}
+                              className="inline-block px-8 py-3 bg-[#2d5016] text-white rounded-full text-base font-bold shadow-lg hover:bg-[#3d6622] transition-colors"
+                            >
+                              Shop Collection
+                            </a>
+                          ) : (
+                            <button className="px-8 py-3 bg-[#2d5016] text-white rounded-full text-base font-bold shadow-lg hover:bg-[#3d6622] transition-colors">
+                              Shop Collection
+                            </button>
+                          )
+                        )}
                       </div>
-                      {slide.link ? (
-                        <a 
-                          href={slide.link}
-                          className="px-4 py-2 bg-white text-gray-900 rounded-full text-sm font-bold hover:bg-gray-100 transition-all shadow-md shrink-0"
-                        >
-                          Shop
-                        </a>
-                      ) : (
-                        <button className="px-4 py-2 bg-white text-gray-900 rounded-full text-sm font-bold hover:bg-gray-100 transition-all shadow-md shrink-0">
-                          Shop
-                        </button>
+                      
+                      {/* Small button for non-hero banner */}
+                      {variant !== 'hero' && (
+                        <div className="mt-2">
+                           {slide.link ? (
+                            <a href={slide.link} className="px-4 py-1.5 bg-white/20 backdrop-blur-md text-white border border-white/40 rounded-full text-xs font-semibold hover:bg-white/30 transition-colors">Shop Now</a>
+                           ) : (
+                            <button className="px-4 py-1.5 bg-white/20 backdrop-blur-md text-white border border-white/40 rounded-full text-xs font-semibold hover:bg-white/30 transition-colors">Shop Now</button>
+                           )}
+                        </div>
                       )}
                     </div>
                   </div>
