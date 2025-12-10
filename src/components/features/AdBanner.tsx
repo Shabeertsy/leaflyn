@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import api from '../../lib/axios';
 
-
-
 interface CustomAd {
   id: number;
   title: string;
@@ -11,6 +9,7 @@ interface CustomAd {
   image: string;
   link?: string;
   is_active: boolean;
+  ad_type: string; 
   created_at: string;
 }
 
@@ -21,6 +20,7 @@ interface BannerSlide {
   image: string;
   color: string;
   link?: string;
+  ad_type: string; // 'banner' | 'hero'
 }
 
 interface AdBannerProps {
@@ -29,14 +29,52 @@ interface AdBannerProps {
   variant?: 'hero' | 'banner';
 }
 
-
-
-const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '', variant = 'banner' }) => {
+const AdBanner: React.FC<AdBannerProps> = ({
+  fixedIndex,
+  className = '',
+  variant = 'banner',
+}) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState<BannerSlide[]>([]);
   const [loading, setLoading] = useState(true);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
+
+  // Updated some "hero" defaults to only be shown if variant is "hero" mode (below)
+  const defaultBannerSlides: BannerSlide[] = [
+    {
+      id: 1,
+      title: 'New Arrivals',
+      subtitle: 'Fresh plants just for you',
+      image:
+        'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&q=80&w=800',
+      color: 'from-emerald-900 to-teal-900',
+      link: '/search',
+      ad_type: 'banner',
+    },
+    {
+      id: 2,
+      title: 'Urban Jungle',
+      subtitle: 'Transform your space',
+      image:
+        'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&q=80&w=800',
+      color: 'from-green-900 to-emerald-900',
+      link: '/search',
+      ad_type: 'banner',
+    },
+  ];
+  const defaultHeroSlides: BannerSlide[] = [
+    {
+      id: 1,
+      title: 'Bring Nature Home',
+      subtitle: 'Curated for style & wellness',
+      image:
+        'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&q=80&w=800',
+      color: 'from-emerald-900 to-teal-900',
+      link: '/search',
+      ad_type: 'hero',
+    },
+  ];
 
   const gradientColors = [
     'from-emerald-500 to-teal-600',
@@ -51,15 +89,12 @@ const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '', variant
       try {
         const response = await api.get<CustomAd[]>('/api/custom-ads/');
         const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-        
-        const transformedSlides: BannerSlide[] = response.data
-          .filter(ad => ad.is_active)
+        const allSlides: BannerSlide[] = response.data
+          .filter((ad) => ad.is_active && (ad.ad_type === 'banner' || ad.ad_type === 'hero'))
           .map((ad, index) => {
-            // Check if image URL is relative and prepend base URL
-            const imageUrl = ad.image.startsWith('http') 
-              ? ad.image 
+            const imageUrl = ad.image.startsWith('http')
+              ? ad.image
               : `${baseURL}${ad.image.startsWith('/') ? ad.image : '/' + ad.image}`;
-            
             return {
               id: ad.id,
               title: ad.title,
@@ -67,54 +102,35 @@ const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '', variant
               image: imageUrl,
               color: gradientColors[index % gradientColors.length],
               link: ad.link,
+              ad_type: ad.ad_type, // Use ad_type from API here
             };
           });
 
-        if (transformedSlides.length > 0) {
-          setSlides(transformedSlides);
+        const filteredSlides =
+          allSlides.filter((slide) => slide.ad_type === variant);
+
+        // Fallback to hardcoded if empty
+        if (filteredSlides.length === 0) {
+          setSlides(variant === 'hero' ? defaultHeroSlides : defaultBannerSlides);
         } else {
-          setSlides([
-            {
-              id: 1,
-              title: variant === 'hero' ? 'Bring Nature Home' : 'New Arrivals',
-              subtitle: variant === 'hero' ? 'Curated for style & wellness' : 'Fresh plants just for you',
-              image: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&q=80&w=800',
-              color: 'from-emerald-900 to-teal-900', // Darker for hero text readability
-              link: '/search'
-            },
-            {
-              id: 2,
-              title: 'Urban Jungle',
-              subtitle: 'Transform your space',
-              image: 'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&q=80&w=800',
-              color: 'from-green-900 to-emerald-900'
-            }
-          ]);
+          // If hero, only use one (the first), banner can use all
+          setSlides(variant === 'hero' ? [filteredSlides[0]] : filteredSlides);
         }
       } catch (error) {
         console.error('Error fetching custom ads:', error);
-        setSlides([
-          {
-            id: 1,
-            title: variant === 'hero' ? 'Bring Nature Home' : 'New Arrivals',
-            subtitle: variant === 'hero' ? 'Curated for style & wellness' : 'Fresh plants just for you',
-            image: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&q=80&w=800',
-            color: 'from-emerald-900 to-teal-900',
-            link: '/search'
-          },
-        ]);
+        setSlides(variant === 'hero' ? defaultHeroSlides : defaultBannerSlides);
       } finally {
         setLoading(false);
       }
     };
 
     fetchCustomAds();
-  }, []);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [variant]);
 
   useEffect(() => {
     if (fixedIndex !== undefined) return;
-    
+    if (!slides.length) return;
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
@@ -158,11 +174,10 @@ const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '', variant
     touchEndX.current = null;
   };
 
-  const displaySlides = fixedIndex !== undefined && slides[fixedIndex] 
-    ? [slides[fixedIndex]] 
-    : slides;
-    
-  
+  const displaySlides =
+    fixedIndex !== undefined && slides[fixedIndex]
+      ? [slides[fixedIndex]]
+      : slides;
 
   return (
     <section className={`relative overflow-hidden ${className}`}>
@@ -190,8 +205,8 @@ const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '', variant
                   <div className={`relative h-full bg-gradient-to-r ${slide.color} overflow-hidden`}>
                     {/* Background Image with Overlay */}
                     <div className="absolute inset-0">
-                      <img 
-                        src={slide.image} 
+                      <img
+                        src={slide.image}
                         alt={slide.title}
                         className="w-full h-full object-cover opacity-30"
                       />
@@ -204,19 +219,25 @@ const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '', variant
                         <h2 className="text-4xl lg:text-5xl font-bold mb-3 font-['Playfair_Display'] animate-slide-up">
                           {slide.title}
                         </h2>
-                        <p className="text-xl lg:text-2xl font-light mb-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+                        <p
+                          className="text-xl lg:text-2xl font-light mb-6 animate-slide-up"
+                          style={{ animationDelay: '0.1s' }}
+                        >
                           {slide.subtitle}
                         </p>
                         {slide.link ? (
-                          <a 
+                          <a
                             href={slide.link}
-                            className="inline-block px-8 py-3 bg-white text-gray-900 rounded-full font-bold hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 animate-slide-up" 
+                            className="inline-block px-8 py-3 bg-white text-gray-900 rounded-full font-bold hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 animate-slide-up"
                             style={{ animationDelay: '0.2s' }}
                           >
                             Shop Now
                           </a>
                         ) : (
-                          <button className="px-8 py-3 bg-white text-gray-900 rounded-full font-bold hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+                          <button
+                            className="px-8 py-3 bg-white text-gray-900 rounded-full font-bold hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 animate-slide-up"
+                            style={{ animationDelay: '0.2s' }}
+                          >
                             Shop Now
                           </button>
                         )}
@@ -250,8 +271,8 @@ const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '', variant
                       key={index}
                       onClick={() => setCurrentSlide(index)}
                       className={`transition-all duration-300 rounded-full ${
-                        index === currentSlide 
-                          ? 'w-8 h-2 bg-white' 
+                        index === currentSlide
+                          ? 'w-8 h-2 bg-white'
                           : 'w-2 h-2 bg-white/50 hover:bg-white/75'
                       }`}
                       aria-label={`Go to slide ${index + 1}`}
@@ -280,28 +301,52 @@ const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '', variant
                   <div className={`relative h-full w-full bg-gray-900`}>
                     {/* Background Image */}
                     <div className="absolute inset-0">
-                      <img 
-                        src={slide.image} 
+                      <img
+                        src={slide.image}
                         alt={slide.title}
                         className="w-full h-full object-cover opacity-80"
                       />
                       {/* Gradient overlay for text readability */}
-                      <div className={`absolute inset-0 bg-gradient-to-t ${variant === 'hero' ? 'from-black/80 via-black/20 to-transparent' : 'from-black/60 to-transparent'}`} />
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-t ${
+                          variant === 'hero'
+                            ? 'from-black/80 via-black/20 to-transparent'
+                            : 'from-black/60 to-transparent'
+                        }`}
+                      />
                     </div>
 
                     {/* Content */}
-                    <div className={`relative h-full px-6 flex flex-col ${variant === 'hero' ? 'justify-end pb-12' : 'justify-center items-start'}`}>
+                    <div
+                      className={`relative h-full px-6 flex flex-col ${
+                        variant === 'hero'
+                          ? 'justify-end pb-12'
+                          : 'justify-center items-start'
+                      }`}
+                    >
                       <div className="text-white w-full">
-                        <h3 className={`${variant === 'hero' ? 'text-4xl leading-tight mb-2' : 'text-xl'} font-bold font-['Playfair_Display'] drop-shadow-lg`}>
+                        <h3
+                          className={`${
+                            variant === 'hero'
+                              ? 'text-4xl leading-tight mb-2'
+                              : 'text-xl'
+                          } font-bold font-['Playfair_Display'] drop-shadow-lg`}
+                        >
                           {slide.title}
                         </h3>
-                        <p className={`${variant === 'hero' ? 'text-base mb-6 opacity-90' : 'text-xs opacity-90'}`}>
+                        <p
+                          className={`${
+                            variant === 'hero'
+                              ? 'text-base mb-6 opacity-90'
+                              : 'text-xs opacity-90'
+                          }`}
+                        >
                           {slide.subtitle}
                         </p>
-                        
-                        {variant === 'hero' && (
-                          slide.link ? (
-                            <a 
+
+                        {variant === 'hero' &&
+                          (slide.link ? (
+                            <a
                               href={slide.link}
                               className="inline-block px-8 py-3 bg-[#2d5016] text-white rounded-full text-base font-bold shadow-lg hover:bg-[#3d6622] transition-colors"
                             >
@@ -311,18 +356,24 @@ const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '', variant
                             <button className="px-8 py-3 bg-[#2d5016] text-white rounded-full text-base font-bold shadow-lg hover:bg-[#3d6622] transition-colors">
                               Shop Collection
                             </button>
-                          )
-                        )}
+                          ))}
                       </div>
-                      
+
                       {/* Small button for non-hero banner */}
                       {variant !== 'hero' && (
                         <div className="mt-2">
-                           {slide.link ? (
-                            <a href={slide.link} className="px-4 py-1.5 bg-white/20 backdrop-blur-md text-white border border-white/40 rounded-full text-xs font-semibold hover:bg-white/30 transition-colors">Shop Now</a>
-                           ) : (
-                            <button className="px-4 py-1.5 bg-white/20 backdrop-blur-md text-white border border-white/40 rounded-full text-xs font-semibold hover:bg-white/30 transition-colors">Shop Now</button>
-                           )}
+                          {slide.link ? (
+                            <a
+                              href={slide.link}
+                              className="px-4 py-1.5 bg-white/20 backdrop-blur-md text-white border border-white/40 rounded-full text-xs font-semibold hover:bg-white/30 transition-colors"
+                            >
+                              Shop Now
+                            </a>
+                          ) : (
+                            <button className="px-4 py-1.5 bg-white/20 backdrop-blur-md text-white border border-white/40 rounded-full text-xs font-semibold hover:bg-white/30 transition-colors">
+                              Shop Now
+                            </button>
+                          )}
                         </div>
                       )}
                     </div>
@@ -332,15 +383,15 @@ const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '', variant
             </div>
 
             {/* Mobile Dots - Smaller and positioned inside */}
-            {fixedIndex === undefined && (
+            {fixedIndex === undefined && variant === 'banner' && (
               <div className="flex justify-center gap-1.5 mt-3">
                 {slides.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentSlide(index)}
                     className={`transition-all duration-300 rounded-full ${
-                      index === currentSlide 
-                        ? 'w-6 h-1.5 bg-[#2d5016]' 
+                      index === currentSlide
+                        ? 'w-6 h-1.5 bg-[#2d5016]'
                         : 'w-1.5 h-1.5 bg-gray-300'
                     }`}
                     aria-label={`Go to slide ${index + 1}`}

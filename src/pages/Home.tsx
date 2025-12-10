@@ -64,10 +64,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="pb-20 lg:pb-0 bg-neutral-50 min-h-[100vh]">
-      {/* HERO SECTION */}
-      {/* HERO SECTION */}
-      {/* MOBILE - Using updated AdBanner with Hero variant */}
-      {/* MOBILE - Using updated AdBanner with Hero variant */}
+      {/* HERO SECTION  Mobile */}
       <AdBanner variant="hero" className="md:hidden" />
       <div className="md:hidden">
         <StatsBar />
@@ -400,7 +397,7 @@ const Home: React.FC = () => {
 
       {/* Ad Banner 2 */}
       <div className="py-4 md:py-8 bg-white">
-        <AdBanner fixedIndex={1} />
+        <AdBanner variant='banner' fixedIndex={1} />
       </div>
 
       {/* Bestsellers */}
