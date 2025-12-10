@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Search as SearchIcon, X, SlidersHorizontal } from 'lucide-react';
 import ProductCard from '../../components/features/ProductCard';
 import { useCategoriesStore } from '../../store/useCategoriesStore';
@@ -17,7 +17,7 @@ const getImageUrl = (imagePath: string) => {
 
 const Search: React.FC = () => {
   const { slug } = useParams<{ slug?: string }>();
-  const location = useLocation();
+  // const location = useLocation();
   
   const {
     searchQuery, setSearchQuery,

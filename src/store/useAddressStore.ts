@@ -76,7 +76,7 @@ export const useAddressStore = create<AddressState>()((set) => ({
       set({
         error: error.response?.data?.error || 'Failed to fetch addresses',
         isLoading: false,
-        addresses: [] // Set empty array on error
+        addresses: [] 
       });
     }
   },

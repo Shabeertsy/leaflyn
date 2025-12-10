@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import api from '../../lib/axios';
 
+
+
 interface CustomAd {
   id: number;
   title: string;
@@ -21,14 +23,20 @@ interface BannerSlide {
   link?: string;
 }
 
-const AdBanner: React.FC = () => {
+interface AdBannerProps {
+  fixedIndex?: number;
+  className?: string;
+}
+
+
+
+const AdBanner: React.FC<AdBannerProps> = ({ fixedIndex, className = '' }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState<BannerSlide[]>([]);
   const [loading, setLoading] = useState(true);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
-  // Gradient colors for slides
   const gradientColors = [
     'from-emerald-500 to-teal-600',
     'from-blue-500 to-cyan-600',
@@ -37,16 +45,12 @@ const AdBanner: React.FC = () => {
     'from-rose-500 to-red-600',
   ];
 
-  // Fetch custom ads from API
   useEffect(() => {
     const fetchCustomAds = async () => {
       try {
         const response = await api.get<CustomAd[]>('/api/custom-ads/');
-        
-        // Get base URL for images
         const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
         
-        // Transform API data to BannerSlide format
         const transformedSlides: BannerSlide[] = response.data
           .filter(ad => ad.is_active)
           .map((ad, index) => {
@@ -68,7 +72,6 @@ const AdBanner: React.FC = () => {
         if (transformedSlides.length > 0) {
           setSlides(transformedSlides);
         } else {
-          // Fallback to default slides if no custom ads
           setSlides([
             {
               id: 1,
@@ -89,7 +92,6 @@ const AdBanner: React.FC = () => {
             image: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&q=80&w=800',
             color: 'from-emerald-500 to-teal-600'
           },
-         
         ]);
       } finally {
         setLoading(false);
@@ -99,50 +101,65 @@ const AdBanner: React.FC = () => {
     fetchCustomAds();
   }, []);
 
-  // Auto-slide every 5 seconds
+
   useEffect(() => {
+    if (fixedIndex !== undefined) return;
+    
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [slides.length]);
+  }, [slides.length, fixedIndex]);
 
   const nextSlide = () => {
+    if (fixedIndex !== undefined) return;
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
 
   const prevSlide = () => {
+    if (fixedIndex !== undefined) return;
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
   // Touch handling for mobile slide swipe
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (fixedIndex !== undefined) return;
     touchStartX.current = e.touches[0].clientX;
     touchEndX.current = null;
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (fixedIndex !== undefined) return;
     touchEndX.current = e.touches[0].clientX;
   };
 
   const handleTouchEnd = () => {
+    if (fixedIndex !== undefined) return;
     if (touchStartX.current === null || touchEndX.current === null) return;
     const difference = touchStartX.current - touchEndX.current;
     const minSwipeDistance = 50; // px
 
     if (difference > minSwipeDistance) {
-      // Swiped left (next)
       nextSlide();
     } else if (difference < -minSwipeDistance) {
-      // Swiped right (prev)
       prevSlide();
     }
     touchStartX.current = null;
     touchEndX.current = null;
   };
 
+  const displaySlides = fixedIndex !== undefined && slides[fixedIndex] 
+    ? [slides[fixedIndex]] 
+    : slides;
+    
+  
+  // For now, if fixedIndex is valid, displaySlides has length 1.
+  // We need to make sure we access displaySlides[currentSlide] correctly.
+  // If fixedIndex is set, currentSlide should effectively be 0 relative to displaySlides, 
+  // OR we just use displaySlides[0] and ignore currentSlide.
+
   return (
-    <section className="relative overflow-hidden">
+    <section className={`relative overflow-hidden ${className}`}>
       {/* Loading State */}
       {loading && (
         <div className="animate-pulse">
@@ -157,7 +174,7 @@ const AdBanner: React.FC = () => {
           {/* Desktop Banner */}
           <div className="hidden md:block relative h-64 lg:h-80">
             <div className="relative h-full">
-              {slides.map((slide, index) => (
+              {displaySlides.map((slide, index) => (
                 <div
                   key={slide.id}
                   className={`absolute inset-0 transition-all duration-700 ease-in-out ${
@@ -204,35 +221,39 @@ const AdBanner: React.FC = () => {
               ))}
             </div>
 
-            {/* Navigation Arrows */}
-            <button
-              onClick={prevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 backdrop-blur-md hover:bg-white/30 rounded-full flex items-center justify-center transition-all group"
-            >
-              <ChevronLeft size={24} className="text-white group-hover:scale-110 transition-transform" />
-            </button>
-            <button
-              onClick={nextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 backdrop-blur-md hover:bg-white/30 rounded-full flex items-center justify-center transition-all group"
-            >
-              <ChevronRight size={24} className="text-white group-hover:scale-110 transition-transform" />
-            </button>
-
-            {/* Dots Indicator */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-              {slides.map((_, index) => (
+            {/* Navigation Arrows - Hide if fixedIndex is set */}
+            {fixedIndex === undefined && (
+              <>
                 <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`transition-all duration-300 rounded-full ${
-                    index === currentSlide 
-                      ? 'w-8 h-2 bg-white' 
-                      : 'w-2 h-2 bg-white/50 hover:bg-white/75'
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
-            </div>
+                  onClick={prevSlide}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 backdrop-blur-md hover:bg-white/30 rounded-full flex items-center justify-center transition-all group"
+                >
+                  <ChevronLeft size={24} className="text-white group-hover:scale-110 transition-transform" />
+                </button>
+                <button
+                  onClick={nextSlide}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 backdrop-blur-md hover:bg-white/30 rounded-full flex items-center justify-center transition-all group"
+                >
+                  <ChevronRight size={24} className="text-white group-hover:scale-110 transition-transform" />
+                </button>
+
+                {/* Dots Indicator */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                  {slides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`transition-all duration-300 rounded-full ${
+                        index === currentSlide 
+                          ? 'w-8 h-2 bg-white' 
+                          : 'w-2 h-2 bg-white/50 hover:bg-white/75'
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
 
           {/* Mobile Banner - App-like compact design */}
@@ -243,7 +264,7 @@ const AdBanner: React.FC = () => {
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
             >
-              {slides.map((slide, index) => (
+              {displaySlides.map((slide, index) => (
                 <div
                   key={slide.id}
                   className={`absolute inset-0 transition-all duration-700 ease-in-out ${
@@ -290,20 +311,22 @@ const AdBanner: React.FC = () => {
             </div>
 
             {/* Mobile Dots - Smaller and positioned inside */}
-            <div className="flex justify-center gap-1.5 mt-3">
-              {slides.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`transition-all duration-300 rounded-full ${
-                    index === currentSlide 
-                      ? 'w-6 h-1.5 bg-[#2d5016]' 
-                      : 'w-1.5 h-1.5 bg-gray-300'
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
-            </div>
+            {fixedIndex === undefined && (
+              <div className="flex justify-center gap-1.5 mt-3">
+                {slides.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`transition-all duration-300 rounded-full ${
+                      index === currentSlide 
+                        ? 'w-6 h-1.5 bg-[#2d5016]' 
+                        : 'w-1.5 h-1.5 bg-gray-300'
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </>
       )}

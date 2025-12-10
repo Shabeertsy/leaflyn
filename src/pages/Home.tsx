@@ -7,7 +7,10 @@ import { useCategoriesStore } from '../store/useCategoriesStore';
 import { useProductCollectionStore } from '../store/useProductCollectionStore';
 import { mapVariantToProduct } from '../lib/mappers';
 
+
+
 const MOBILE_HERO_HEIGHT = 200; 
+
 
 // Get base URL for images
 const getImageUrl = (imagePath: string) => {
@@ -16,6 +19,7 @@ const getImageUrl = (imagePath: string) => {
   const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
   return `${baseURL}${imagePath}`;
 }; 
+
 
 const Home: React.FC = () => {
   const { categories, fetchCategories } = useCategoriesStore();
@@ -60,12 +64,11 @@ const Home: React.FC = () => {
   return (
     <div className="pb-20 lg:pb-0 bg-neutral-50 min-h-[100vh]">
       {/* HERO SECTION */}
-      {/* MOBILE: App-like hero with more height and image filled exactly like pro-app */}
+      {/* MOBILE */}
       <section className="relative w-full mx-auto overflow-hidden">
         <div className="block md:hidden">
           {/* Outer app-like container */}
-          {/* Add pt-X here to maintain spacing below navbar */}
-          <div className="relative w-full shadow bg-white/95 overflow-hidden pt-3">
+          <div className="relative w-full shadow bg-white/95 overflow-hidden">
             {/* Banner + text */}
             <div className="flex flex-col w-full">
               <div
@@ -95,8 +98,8 @@ const Home: React.FC = () => {
                         width: '100%',
                         objectFit: 'cover',
                         display: 'block',
-                        border: 'none', // Remove any border visually
-                        boxShadow: 'none', // Remove box-shadow if any
+                        border: 'none', 
+                        boxShadow: 'none', 
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/0 to-transparent" />
@@ -160,7 +163,9 @@ const Home: React.FC = () => {
             </div>
           </div>
         </div>
-        {/* DESKTOP: Keep original hero section */}
+
+
+        {/* DESKTOP */}
         <div className="hidden md:block">
           <section className="relative min-h-[500px] lg:min-h-[550px] bg-gradient-to-br from-[#1a3a0f] via-[#2d5016] to-[#1f4412] text-white overflow-hidden">
             <div className="absolute inset-0">
@@ -212,7 +217,7 @@ const Home: React.FC = () => {
                   {/* Premium Badge */}
                   <div className="inline-flex items-center gap-2.5 bg-gradient-to-r from-white/15 to-white/5 backdrop-blur-xl px-5 py-2.5 rounded-full border border-white/30 shadow-lg">
                     <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full animate-pulse shadow-lg shadow-[#d4af37]/50" />
-                    <span className="text-white/90 font-semibold tracking-[0.2em] uppercase text-[10px] letter-spacing-wide">Premium Collection 2024</span>
+                    <span className="text-white/90 font-semibold tracking-[0.2em] uppercase text-[10px] letter-spacing-wide">Premium Collection 2026</span>
                   </div>
                   <h1 className="text-4xl lg:text-6xl font-bold leading-[1.1] font-['Playfair_Display']"
                     style={{
@@ -261,6 +266,7 @@ const Home: React.FC = () => {
                     ))}
                   </div>
                 </div>
+                
                 {/* Right - 3D image */}
                 <div className="relative hidden lg:block animate-slide-up" style={{ animationDelay: '0.2s' }}>
                   <div className="relative">
@@ -343,17 +349,17 @@ const Home: React.FC = () => {
       </section>
 
       {/* Ad Banner Section */}
-      <div className="py-8 bg-white">
+      <div className="py-4 md:py-8 bg-white">
         <AdBanner />
       </div>
 
       {/* Categories Section */}
-      <section className="py-12 md:py-16 bg-white relative overflow-hidden">
+      <section className="py-6 md:py-16 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-8 gap-3">
+          <div className="flex flex-row items-end justify-between mb-4 md:mb-8 gap-3">
             <div className="max-w-2xl">
-              <span className="text-[#d4af37] font-bold tracking-widest uppercase text-xs mb-1.5 block">Collections</span>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#2d5016] font-['Playfair_Display'] mb-2">
+              <span className="text-[#d4af37] font-bold tracking-widest uppercase text-xs mb-1 block">Collections</span>
+              <h2 className="text-xl md:text-3xl lg:text-4xl font-bold text-[#2d5016] font-['Playfair_Display'] mb-2">
                 Explore Our <span className="italic text-gray-400 font-light">Categories</span>
               </h2>
               <p className="text-gray-500 text-sm md:text-base font-light leading-relaxed hidden md:block">
@@ -362,9 +368,9 @@ const Home: React.FC = () => {
             </div>
             <Link
               to="/categories"
-              className="group inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-100 hover:bg-[#2d5016] text-[#2d5016] hover:text-white rounded-full transition-all duration-300 font-semibold text-sm self-start md:self-auto"
+              className="group inline-flex items-center justify-center gap-2 w-10 h-10 md:w-auto md:h-auto md:px-5 md:py-2.5 bg-neutral-100 hover:bg-[#2d5016] text-[#2d5016] hover:text-white rounded-full transition-all duration-300 font-semibold text-sm flex-shrink-0"
             >
-              <span>View All</span>
+              <span className="hidden md:inline">View All</span>
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -451,7 +457,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Featured Products */}
-      <section className="px-3 md:px-6 py-8 md:py-16 bg-white">
+      <section className="px-3 md:px-6 py-6 md:py-16 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-end justify-between mb-4 md:mb-8">
             <div>
@@ -476,8 +482,13 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Ad Banner 2 */}
+      <div className="py-4 md:py-8 bg-white">
+        <AdBanner fixedIndex={1} />
+      </div>
+
       {/* Bestsellers */}
-      <section className="px-3 md:px-6 py-8 md:py-16 bg-neutral-50">
+      <section className="px-3 md:px-6 py-6 md:py-16 bg-neutral-50">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-end justify-between mb-4 md:mb-8">
             <div>
