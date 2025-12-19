@@ -27,8 +27,8 @@ const Header: React.FC = () => {
       <div className="px-6 h-16 flex items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <img src="/apple-touch-icon.png" alt="Leaflyn Logo" className="w-10 h-10 rounded-xl shadow-md" />
-          <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">Leaflyn</span>
+          <img src="/fernrie-logo.jpg" alt="fernrie Logo" className="w-10 h-10 rounded-xl shadow-md" />
+          <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">fernrie</span>
         </Link>
 
         {/* Navigation Links - Hidden on mobile, visible on desktop */}
@@ -49,7 +49,7 @@ const Header: React.FC = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-4">
-           <Link to="/notifications" className="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
+          <Link to="/notifications" className="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
             <Bell size={22} className="text-gray-700" />
             {unreadCount > 0 && (
               <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white">
@@ -70,8 +70,8 @@ const Header: React.FC = () => {
           </button>
           {isAuthenticated && user ? (
             <div className="hidden lg:flex items-center gap-3">
-              <Link 
-                to="/account" 
+              <Link
+                to="/account"
                 className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
                 <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center border border-gray-200 overflow-hidden">
@@ -94,7 +94,7 @@ const Header: React.FC = () => {
               </button>
             </div>
           ) : (
-            <Link 
+            <Link
               to="/login"
               className="hidden lg:flex items-center gap-2 px-4 py-2 bg-[#2d5016] text-white rounded-full text-sm font-bold hover:bg-[#3d6622] transition-colors"
             >
@@ -103,7 +103,7 @@ const Header: React.FC = () => {
             </Link>
           )}
 
-         
+
         </div>
 
       </div>

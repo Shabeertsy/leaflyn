@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  User as UserIcon, 
-  MapPin, 
-  Package, 
-  Heart, 
-  HelpCircle, 
+import {
+  User as UserIcon,
+  MapPin,
+  Package,
+  Heart,
+  HelpCircle,
   LogOut,
   ChevronRight,
   Gift,
@@ -75,7 +75,7 @@ const Account: React.FC = () => {
             backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.4) 0%, transparent 50%)'
           }}
         />
-        
+
         <div className="relative max-w-2xl mx-auto text-center">
           <div className="relative inline-block mb-4">
             <div className="w-28 h-28 rounded-full p-1 bg-gradient-to-br from-[#d4af37] to-[#8b7355] shadow-2xl">
@@ -89,10 +89,10 @@ const Account: React.FC = () => {
               <Camera size={16} />
             </button>
           </div>
-          
+
           <h1 className="text-3xl font-bold font-['Playfair_Display'] mb-1">{user.first_name} {user.last_name}</h1>
           <p className="text-white/70 mb-6">{user.email}</p>
-          
+
           {/* Stats Cards */}
           <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
             {[
@@ -178,7 +178,7 @@ const Account: React.FC = () => {
 
         {/* App Info */}
         <div className="py-6 text-center text-sm text-gray-400">
-          <p className="font-medium mb-2">Leaflyn v1.0.0</p>
+          <p className="font-medium mb-2">fernrie v1.0.0</p>
           <div className="flex justify-center gap-4">
             <Link to="/terms" className="hover:text-[#2d5016] transition-colors">Terms of Service</Link>
             <span>•</span>

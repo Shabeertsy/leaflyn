@@ -47,18 +47,18 @@ const Footer: React.FC = () => {
           {/* Brand Section */}
           <div className="space-y-6">
             <Link to="/" className="flex items-center gap-2">
-              <img src="/apple-touch-icon.png" alt="Leaflyn Logo" className="w-10 h-10 rounded-xl shadow-sm" />
-              <span className="text-2xl font-bold font-['Playfair_Display']">{companyContact?.company_name || 'Leaflyn'}</span>
+              <img src="/fernrie-logo.jpg" alt="fernrie Logo" className="w-10 h-10 rounded-xl shadow-sm" />
+              <span className="text-2xl font-bold font-['Playfair_Display']">{companyContact?.company_name || 'fernrie'}</span>
             </Link>
             <p className="text-white/60 leading-relaxed text-sm max-w-xs">
               Bringing nature closer to you with our premium collection of plants, aquatics, and accessories.
             </p>
             <div className="flex items-center gap-4">
               {socialLinks.map((social, index) => (
-                <a 
+                <a
                   key={index}
-                  href={social.url} 
-                  target="_blank" 
+                  href={social.url}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#d4af37] hover:text-[#1a3a0f] transition-all duration-300"
                 >
@@ -111,7 +111,7 @@ const Footer: React.FC = () => {
               <li className="flex items-center gap-3 text-white/60 text-sm">
                 <Mail size={18} className="text-[#d4af37] shrink-0" />
                 <a href={`mailto:${companyContact?.company_email}`} className="hover:text-[#d4af37] transition-colors">
-                  {companyContact?.company_email || 'hello@leaflyn.com'}
+                  {companyContact?.company_email || 'hello@fernrie.com'}
                 </a>
               </li>
             </ul>
@@ -143,7 +143,7 @@ const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/50 text-sm">
-            © {new Date().getFullYear()} {companyContact?.company_name || 'Leaflyn'}. All rights reserved.
+            © {new Date().getFullYear()} {companyContact?.company_name || 'fernrie'}. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-sm text-white/50">
             <Link to="/privacy" className="hover:text-[#d4af37] transition-colors">Privacy Policy</Link>

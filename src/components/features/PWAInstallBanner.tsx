@@ -47,13 +47,13 @@ const PWAInstallBanner: React.FC = () => {
           <div className="flex-shrink-0 w-12 h-12 bg-white rounded-xl flex items-center justify-center">
             <Download size={24} className="text-[#2d5016]" />
           </div>
-          
+
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-base mb-1">Install Leaflyn App</h3>
+            <h3 className="font-bold text-base mb-1">Install fernrie App</h3>
             <p className="text-sm text-white/90 leading-snug">
               Add to your home screen for a better experience!
             </p>
-            
+
             <div className="flex gap-2 mt-3">
               <button
                 onClick={handleInstall}
@@ -69,7 +69,7 @@ const PWAInstallBanner: React.FC = () => {
               </button>
             </div>
           </div>
-          
+
           <button
             onClick={handleDismiss}
             className="flex-shrink-0 p-1 hover:bg-white/10 rounded-full transition-colors"

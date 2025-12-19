@@ -105,9 +105,9 @@ const Register: React.FC = () => {
             <Link to="/" className="inline-block mb-6">
               <div className="flex items-center justify-center gap-2">
                 <div className="w-10 h-10 bg-[#2d5016] rounded-full flex items-center justify-center">
-                  <span className="text-white text-xl font-bold">L</span>
+                  <span className="text-white text-xl font-bold">f</span>
                 </div>
-                <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">Leaflyn</span>
+                <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">fernrie</span>
               </div>
             </Link>
             <h1 className="text-3xl font-bold text-gray-900 mb-2 font-['Playfair_Display']">Create Account</h1>
@@ -235,21 +235,21 @@ const Register: React.FC = () => {
         {/* OTP Modal */}
         {showOtpModal && (
           <div className="absolute inset-0 bg-white z-50 flex flex-col items-center justify-center p-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
-            <button 
+            <button
               onClick={() => setShowOtpModal(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
             >
               <X size={24} />
             </button>
-            
+
             <div className="w-full max-w-sm text-center">
               <div className="w-16 h-16 bg-[#2d5016]/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Mail size={32} className="text-[#2d5016]" />
               </div>
-              
+
               <h2 className="text-2xl font-bold text-gray-900 mb-2 font-['Playfair_Display']">Verify Your Email</h2>
               <p className="text-gray-500 mb-8">
-                We've sent a verification code to <br/>
+                We've sent a verification code to <br />
                 <span className="font-semibold text-gray-900">{email}</span>
               </p>
 
@@ -273,7 +273,7 @@ const Register: React.FC = () => {
                         onChange={(e) => {
                           const value = e.target.value;
                           if (/[^0-9]/.test(value)) return;
-                          
+
                           const newOtp = otp.split('');
                           newOtp[index] = value;
                           const newOtpString = newOtp.join('');

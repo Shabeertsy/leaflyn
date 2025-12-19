@@ -72,7 +72,7 @@ const Checkout: React.FC = () => {
   const [selectedGateway, setSelectedGateway] = useState<number | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<'gateway' | 'cod'>('gateway');
   const [showGatewayModal, setShowGatewayModal] = useState(false);
-  
+
   // Track if user started as guest to prevent UI flash
   const [isGuestFlow, setIsGuestFlow] = useState(false);
 
@@ -109,7 +109,7 @@ const Checkout: React.FC = () => {
       const fetchGateways = async () => {
         try {
           const response = await api.get('/pay/list/gateways/');
-          
+
           if (response.data && response.data.gateways) {
             setGateways(response.data.gateways);
             if (response.data.gateways.length > 0) {
@@ -134,10 +134,10 @@ const Checkout: React.FC = () => {
     if (paymentMethod === 'cod') {
       // Handle COD - Create order via API
       setLoading(true);
-      
+
       // Get selected address
       const selectedAddress = addresses[selectedAddressIndex];
-      
+
       if (!selectedAddress || !selectedAddress.uuid) {
         alert('Please select a shipping address');
         setLoading(false);
@@ -150,7 +150,7 @@ const Checkout: React.FC = () => {
         });
 
         console.log('COD Order created:', response.data);
-        
+
         setOrderSuccessData({
           order_id: response.data.order_id || response.data.uuid || 'N/A',
           total_amount: response.data.total_amount || total
@@ -185,7 +185,7 @@ const Checkout: React.FC = () => {
   const initiatePayment = async (gatewayId: number) => {
     setLoading(true);
     setShowGatewayModal(false);
-    
+
     try {
       const response = await api.post('/pay/initiate/', {
         gateway_id: gatewayId,
@@ -228,7 +228,7 @@ const Checkout: React.FC = () => {
 
       // Close modal and reset form
       setShowAddressModal(false);
-      setSelectedAddressIndex(addresses.length); 
+      setSelectedAddressIndex(addresses.length);
       setNewAddress({
         label: 'Home',
         name: '',
@@ -256,7 +256,7 @@ const Checkout: React.FC = () => {
 
     setSendingOTP(true);
     try {
-      await api.post('/api/send-otp/', { 
+      await api.post('/api/send-otp/', {
         contact: email, // Send OTP to email
         contact_type: 'email' // Specify that OTP should be sent via email
       });
@@ -272,21 +272,21 @@ const Checkout: React.FC = () => {
   const handleOTPVerified = async (tokenData: { access: string; refresh: string; user: any }) => {
     setShowOTPModal(false);
     setIsGuestFlow(true); // Mark as guest flow to prevent UI flash
-    
+
     // Store tokens from OTP verification
     localStorage.setItem('token', tokenData.access);
     localStorage.setItem('refreshToken', tokenData.refresh);
-    
+
     // Update auth store with user data
     setUser(tokenData.user);
-    
+
     // Sync local cart items to backend before proceeding
     try {
       await syncLocalCartToBackend();
     } catch (error) {
       console.error('Failed to sync cart, but continuing with checkout:', error);
     }
-    
+
     // Register user address using the token
     await handleGuestRegistration();
   };
@@ -343,7 +343,7 @@ const Checkout: React.FC = () => {
 
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    
+
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
@@ -377,9 +377,9 @@ const Checkout: React.FC = () => {
         </div>
         <h1 className="text-4xl font-bold text-[#2d5016] mb-4 font-['Playfair_Display']">Order Confirmed!</h1>
         <p className="text-gray-500 mb-10 max-w-md text-lg font-light">
-          Thank you for choosing Leaflyn. Your green friends are being prepared with care and will be with you soon!
+          Thank you for choosing fernrie. Your green friends are being prepared with care and will be with you soon!
         </p>
-        
+
         <div className="bg-white rounded-2xl p-6 w-full max-w-sm mb-10 shadow-lg border border-gray-100 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#d4af37] to-[#f4d03f]" />
           <div className="flex justify-between items-center mb-4 pb-4 border-b border-gray-100">
@@ -421,9 +421,9 @@ const Checkout: React.FC = () => {
         <div className="mb-12 max-w-3xl mx-auto">
           <div className="relative flex items-center justify-between px-4">
             {/* Background Line - connects through center of circles */}
-            <div 
-              className="absolute h-2 rounded-full overflow-hidden" 
-              style={{ 
+            <div
+              className="absolute h-2 rounded-full overflow-hidden"
+              style={{
                 top: '28px',
                 zIndex: 1,
                 left: '28px',
@@ -432,11 +432,11 @@ const Checkout: React.FC = () => {
             >
               <div className="absolute inset-0 bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100" />
             </div>
-            
+
             {/* Active Progress Line - Animated gradient with glow */}
-            <div 
+            <div
               className="absolute h-2 rounded-full transition-all duration-700 ease-out overflow-hidden"
-              style={{ 
+              style={{
                 top: '28px',
                 left: '28px',
                 width: step === 'address' ? '0%' : step === 'payment' ? 'calc(50% - 28px)' : 'calc(100% - 56px)',
@@ -446,7 +446,7 @@ const Checkout: React.FC = () => {
             >
               <div className="absolute inset-0 bg-gradient-to-r from-[#2d5016] via-[#3d6622] to-[#2d5016] animate-pulse" />
               {/* Shimmer effect */}
-              <div 
+              <div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30"
                 style={{
                   animation: 'shimmer 2s infinite',
@@ -465,24 +465,22 @@ const Checkout: React.FC = () => {
               const thisStepOrder = stepOrder[s.id as keyof typeof stepOrder];
               const isCompleted = currentStepOrder > thisStepOrder;
               const isActive = step === s.id;
-              
+
               return (
                 <div key={s.id} className="flex flex-col items-center gap-3 relative z-10">
                   {/* Circle is 56px (14 * 4), so center is at 28px */}
-                  <div 
-                    className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 border-4 ${
-                      isCompleted
+                  <div
+                    className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 border-4 ${isCompleted
                         ? 'bg-gradient-to-br from-[#2d5016] to-[#3d6622] border-[#2d5016] text-white shadow-lg shadow-[#2d5016]/30'
-                        : isActive 
-                        ? 'bg-gradient-to-br from-[#2d5016] to-[#3d6622] border-[#2d5016] text-white shadow-xl shadow-[#2d5016]/50 scale-110 animate-pulse' 
-                        : 'bg-white border-gray-300 text-gray-400 shadow-md'
-                    }`}
+                        : isActive
+                          ? 'bg-gradient-to-br from-[#2d5016] to-[#3d6622] border-[#2d5016] text-white shadow-xl shadow-[#2d5016]/50 scale-110 animate-pulse'
+                          : 'bg-white border-gray-300 text-gray-400 shadow-md'
+                      }`}
                   >
                     {isCompleted ? <CheckCircle size={22} fill="currentColor" /> : <s.icon size={22} />}
                   </div>
-                  <span className={`text-xs font-bold uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${
-                    isCompleted || isActive ? 'text-[#2d5016] scale-105' : 'text-gray-400'
-                  }`}>
+                  <span className={`text-xs font-bold uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${isCompleted || isActive ? 'text-[#2d5016] scale-105' : 'text-gray-400'
+                    }`}>
                     {s.label}
                   </span>
                 </div>
@@ -516,14 +514,14 @@ const Checkout: React.FC = () => {
                       </div>
                     ) : addresses.length > 0 ? (
                       <div className="relative">
-                        <div 
+                        <div
                           className="overflow-hidden rounded-2xl select-none"
                           style={{ touchAction: 'pan-y pinch-zoom' }}
                           onTouchStart={onTouchStart}
                           onTouchMove={onTouchMove}
                           onTouchEnd={onTouchEnd}
                         >
-                          <div 
+                          <div
                             className="flex transition-transform duration-300 ease-out"
                             style={{ transform: `translateX(-${selectedAddressIndex * 100}%)` }}
                           >
@@ -533,20 +531,18 @@ const Checkout: React.FC = () => {
                                 className="min-w-full flex-shrink-0 px-1"
                               >
                                 <div
-                                  className={`border-2 p-4 sm:p-5 rounded-2xl cursor-pointer transition-all ${
-                                    index === selectedAddressIndex
+                                  className={`border-2 p-4 sm:p-5 rounded-2xl cursor-pointer transition-all ${index === selectedAddressIndex
                                       ? 'border-[#2d5016] bg-[#2d5016]/5 shadow-md'
                                       : 'border-gray-200 bg-white'
-                                  }`}
+                                    }`}
                                   onClick={() => setSelectedAddressIndex(index)}
                                 >
                                   {/* Header */}
                                   <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-100">
-                                    <span className={`text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide ${
-                                      address.isDefault
+                                    <span className={`text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide ${address.isDefault
                                         ? 'bg-[#2d5016] text-white'
                                         : 'bg-gray-100 text-gray-600'
-                                    }`}>
+                                      }`}>
                                       {address.isDefault ? 'Default' : 'Address'}
                                     </span>
                                     {index === selectedAddressIndex && (
@@ -586,11 +582,10 @@ const Checkout: React.FC = () => {
                               <button
                                 key={index}
                                 onClick={() => setSelectedAddressIndex(index)}
-                                className={`transition-all duration-300 rounded-full ${
-                                  index === selectedAddressIndex
+                                className={`transition-all duration-300 rounded-full ${index === selectedAddressIndex
                                     ? 'w-8 h-2 bg-[#2d5016]'
                                     : 'w-2 h-2 bg-gray-300 hover:bg-gray-400'
-                                }`}
+                                  }`}
                                 aria-label={`Select address ${index + 1}`}
                               />
                             ))}
@@ -747,36 +742,36 @@ const Checkout: React.FC = () => {
                       <span className="ml-auto text-xs bg-amber-500 text-white px-2 py-1 rounded-full font-bold">Required</span>
                     </div>
                     <p className="text-sm text-gray-600 mb-5">We'll use these details to keep you updated about your order</p>
-                    
+
                     <div className="space-y-4">
                       <div className="space-y-1.5">
                         <label className="text-xs font-bold text-gray-700 uppercase tracking-wide flex items-center gap-1">
                           <Mail size={12} />
                           Email Address
                         </label>
-                        <input 
-                          type="email" 
+                        <input
+                          type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="w-full p-3.5 bg-white rounded-xl border-2 border-amber-200 focus:border-amber-500 focus:ring-0 transition-colors outline-none font-medium" 
+                          className="w-full p-3.5 bg-white rounded-xl border-2 border-amber-200 focus:border-amber-500 focus:ring-0 transition-colors outline-none font-medium"
                           placeholder="john@example.com"
                           required
                         />
                       </div>
 
 
-                      
+
                       <div className="space-y-1.5">
                         <label className="text-xs font-bold text-gray-700 uppercase tracking-wide flex items-center gap-1">
                           <Lock size={12} />
                           Create Password
                         </label>
                         <div className="relative">
-                          <input 
+                          <input
                             type={showPassword ? 'text' : 'password'}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full p-3.5 pr-12 bg-white rounded-xl border-2 border-amber-200 focus:border-amber-500 focus:ring-0 transition-colors outline-none font-medium" 
+                            className="w-full p-3.5 pr-12 bg-white rounded-xl border-2 border-amber-200 focus:border-amber-500 focus:ring-0 transition-colors outline-none font-medium"
                             placeholder="Create a secure password"
                             required
                           />
@@ -822,16 +817,16 @@ const Checkout: React.FC = () => {
             ) : (
               <div className="space-y-6 animate-slide-up">
                 <h2 className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">Payment Method</h2>
-                
+
                 <div className="space-y-4">
                   {/* Online Payment / Gateways */}
                   <div className={`bg-white border-2 rounded-2xl overflow-hidden shadow-md transition-all ${paymentMethod === 'gateway' ? 'border-[#2d5016]' : 'border-gray-200'}`}>
                     <label className="flex items-center gap-4 p-5 cursor-pointer" onClick={() => setPaymentMethod('gateway')}>
                       <div className="relative flex items-center justify-center">
-                        <input 
-                          type="radio" 
-                          name="payment" 
-                          className="peer sr-only" 
+                        <input
+                          type="radio"
+                          name="payment"
+                          className="peer sr-only"
                           checked={paymentMethod === 'gateway'}
                           onChange={() => setPaymentMethod('gateway')}
                         />
@@ -852,10 +847,10 @@ const Checkout: React.FC = () => {
                   {/* Cash on Delivery */}
                   <label className={`flex items-center gap-4 p-5 bg-white border-2 rounded-2xl cursor-pointer hover:shadow-md transition-all group ${paymentMethod === 'cod' ? 'border-[#2d5016]' : 'border-gray-200'}`} onClick={() => setPaymentMethod('cod')}>
                     <div className="relative flex items-center justify-center">
-                      <input 
-                        type="radio" 
-                        name="payment" 
-                        className="peer sr-only" 
+                      <input
+                        type="radio"
+                        name="payment"
+                        className="peer sr-only"
                         checked={paymentMethod === 'cod'}
                         onChange={() => setPaymentMethod('cod')}
                       />
@@ -877,11 +872,11 @@ const Checkout: React.FC = () => {
                 <div className="mt-6 mb-4">
                   <label className="flex items-start gap-3 cursor-pointer group">
                     <div className="relative flex items-center justify-center mt-0.5">
-                      <input 
-                        type="checkbox" 
+                      <input
+                        type="checkbox"
                         checked={acceptedTerms}
                         onChange={(e) => setAcceptedTerms(e.target.checked)}
-                        className="peer sr-only" 
+                        className="peer sr-only"
                       />
                       <div className="w-5 h-5 border-2 border-gray-300 rounded peer-checked:border-[#2d5016] peer-checked:bg-[#2d5016] transition-all flex items-center justify-center">
                         {acceptedTerms && (
@@ -891,7 +886,7 @@ const Checkout: React.FC = () => {
                     </div>
                     <span className="text-sm text-gray-600 leading-relaxed">
                       I agree to the{' '}
-                      <button 
+                      <button
                         type="button"
                         onClick={() => setShowTermsModal(true)}
                         className="text-[#2d5016] font-semibold hover:underline bg-transparent border-none p-0 cursor-pointer inline"
@@ -924,7 +919,7 @@ const Checkout: React.FC = () => {
                     </>
                   )}
                 </button>
-                
+
                 <div className="flex items-center justify-center gap-2 text-xs text-gray-400 mt-4">
                   <ShieldCheck size={14} />
                   <span>256-bit SSL Secure Payment</span>
@@ -938,7 +933,7 @@ const Checkout: React.FC = () => {
             <div className="lg:w-96 animate-in slide-in-from-right duration-500">
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 sticky top-24">
                 <h3 className="font-bold text-xl text-[#2d5016] mb-6 font-['Playfair_Display']">Order Summary</h3>
-                
+
                 <div className="space-y-4 mb-6 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                   {cart.map((item) => (
                     <div key={item.product.id} className="flex gap-3">
@@ -953,7 +948,7 @@ const Checkout: React.FC = () => {
                     </div>
                   ))}
                 </div>
-                
+
                 <div className="space-y-3 pt-4 border-t border-gray-100">
                   <div className="flex justify-between text-sm text-gray-600">
                     <span>Subtotal</span>
@@ -1144,7 +1139,7 @@ const Checkout: React.FC = () => {
 
             <div className="p-6 space-y-4">
               <p className="text-sm text-gray-600 mb-4">Choose your preferred payment partner to continue</p>
-              
+
               {gateways.map((gateway) => (
                 <button
                   key={gateway.id}
@@ -1193,9 +1188,9 @@ const Checkout: React.FC = () => {
         />
       )}
       {/* Terms and Conditions Modal */}
-      <TermsModal 
-        isOpen={showTermsModal} 
-        onClose={() => setShowTermsModal(false)} 
+      <TermsModal
+        isOpen={showTermsModal}
+        onClose={() => setShowTermsModal(false)}
       />
     </div>
   );

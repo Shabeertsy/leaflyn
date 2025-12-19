@@ -45,7 +45,7 @@ const ContactUsPage: React.FC = () => {
         subject: '',
         content: '',
       });
-      
+
       // Reset success message after 5 seconds
       setTimeout(() => {
         setSubmitStatus('idle');
@@ -63,20 +63,20 @@ const ContactUsPage: React.FC = () => {
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-[#1a3a0f] via-[#2d5016] to-[#1f4412] text-white overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-[#d4af37]/30 to-transparent rounded-full blur-3xl animate-pulse" 
-            style={{ animationDuration: '8s' }} 
+          <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-[#d4af37]/30 to-transparent rounded-full blur-3xl animate-pulse"
+            style={{ animationDuration: '8s' }}
           />
-          <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-tl from-[#8b7355]/20 to-transparent rounded-full blur-3xl animate-pulse" 
-            style={{ animationDuration: '10s', animationDelay: '2s' }} 
+          <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-tl from-[#8b7355]/20 to-transparent rounded-full blur-3xl animate-pulse"
+            style={{ animationDuration: '10s', animationDelay: '2s' }}
           />
         </div>
-        
+
         <div className="relative px-6 py-20 lg:py-24 max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center gap-2.5 bg-white/10 backdrop-blur-xl px-5 py-2.5 rounded-full border border-white/30 mb-6">
             <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full animate-pulse" />
             <span className="text-white/90 font-semibold tracking-widest uppercase text-xs">We're Here to Help</span>
           </div>
-          
+
           <h1 className="text-4xl lg:text-6xl font-bold leading-tight font-['Playfair_Display'] mb-6"
             style={{
               textShadow: '0 4px 20px rgba(0,0,0,0.4)',
@@ -85,15 +85,15 @@ const ContactUsPage: React.FC = () => {
           >
             Get in <span className="bg-gradient-to-r from-[#f4d03f] via-[#d4af37] to-[#c9a961] bg-clip-text text-transparent">Touch</span>
           </h1>
-          
+
           <p className="text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
             Have questions about our plants or services? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
           </p>
         </div>
-        
+
         <div className="absolute bottom-0 left-0 right-0">
           <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#fafaf9"/>
+            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#fafaf9" />
           </svg>
         </div>
       </section>
@@ -138,7 +138,7 @@ const ContactUsPage: React.FC = () => {
                     <h3 className="font-bold text-gray-900 mb-1">Email</h3>
                     <p className="text-gray-600 text-sm mb-2">Our friendly team is here to help</p>
                     <a href={`mailto:${companyContact?.company_email}`} className="text-[#2d5016] font-semibold hover:text-[#d4af37] transition-colors">
-                      {companyContact?.company_email || 'hello@leaflyn.com'}
+                      {companyContact?.company_email || 'hello@fernrie.com'}
                     </a>
                   </div>
                 </div>
@@ -167,8 +167,8 @@ const ContactUsPage: React.FC = () => {
               <p className="text-white/80 mb-4 leading-relaxed">
                 For urgent plant care questions or order issues, our support team is ready to assist you immediately.
               </p>
-              <a 
-                href={`tel:${companyContact?.company_phone}`} 
+              <a
+                href={`tel:${companyContact?.company_phone}`}
                 className="inline-flex items-center gap-2 bg-white text-[#2d5016] px-6 py-3 rounded-full font-bold hover:bg-[#d4af37] hover:text-white transition-all duration-300"
               >
                 <Phone size={18} />
