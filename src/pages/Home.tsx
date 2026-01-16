@@ -4,7 +4,7 @@ import { ChevronRight, ArrowRight } from 'lucide-react';
 import ProductCard from '../components/features/ProductCard';
 import ProductCardCompact from '../components/features/ProductCardCompact';
 import AdBanner from '../components/features/AdBanner';
-import StatsBar from '../components/features/StatsBar';
+
 import { useCategoriesStore } from '../store/useCategoriesStore';
 import { useProductCollectionStore } from '../store/useProductCollectionStore';
 import { mapVariantToProduct } from '../lib/mappers';
@@ -19,7 +19,7 @@ const getImageUrl = (imagePath: string) => {
   if (imagePath.startsWith('http')) return imagePath;
   const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
   return `${baseURL}${imagePath}`;
-}; 
+};
 
 
 const Home: React.FC = () => {
@@ -67,191 +67,189 @@ const Home: React.FC = () => {
       {/* HERO SECTION  Mobile */}
       <AdBanner variant="hero" className="md:hidden" />
       <div className="md:hidden">
-        <StatsBar />
+        {/* <StatsBar /> */}
       </div>
 
 
-        {/* DESKTOP */}
-        <div className="hidden md:block">
-          <section className="relative min-h-[500px] lg:min-h-[550px] bg-gradient-to-br from-[#1a3a0f] via-[#2d5016] to-[#1f4412] text-white overflow-hidden">
-            <div className="absolute inset-0">
-              <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-[#d4af37]/30 to-transparent rounded-full blur-3xl animate-pulse"
-                style={{
-                  animationDuration: '8s',
-                  transform: 'translateZ(0)',
-                  boxShadow: '0 25px 50px -12px rgba(212, 175, 55, 0.25)'
-                }}
-              />
-              <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-tl from-[#8b7355]/20 to-transparent rounded-full blur-3xl animate-pulse"
-                style={{
-                  animationDuration: '10s',
-                  animationDelay: '2s',
-                  transform: 'translateZ(0)',
-                  boxShadow: '0 25px 50px -12px rgba(139, 115, 85, 0.15)'
-                }}
-              />
-              <div className="absolute top-1/2 left-1/3 w-80 h-80 bg-gradient-to-br from-emerald-400/10 to-transparent rounded-full blur-3xl animate-pulse"
-                style={{
-                  animationDuration: '12s',
-                  animationDelay: '4s',
-                  transform: 'translateZ(0)'
-                }}
-              />
-              <div className="absolute top-40 right-1/4 w-32 h-32 border-2 border-[#d4af37]/20 rounded-2xl rotate-45 animate-float"
-                style={{
-                  animation: 'float 6s ease-in-out infinite',
-                  boxShadow: '0 10px 30px rgba(212, 175, 55, 0.1)'
-                }}
-              />
-              <div className="absolute bottom-40 left-1/4 w-24 h-24 border-2 border-white/10 rounded-full animate-float"
-                style={{
-                  animation: 'float 8s ease-in-out infinite',
-                  animationDelay: '1s'
-                }}
-              />
-              <div className="absolute inset-0 opacity-5"
-                style={{
-                  backgroundImage: 'linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)',
-                  backgroundSize: '50px 50px'
-                }}
-              />
-            </div>
-            <div className="relative px-6 py-16 lg:py-20 max-w-7xl mx-auto">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                {/* Left Content */}
-                <div className="space-y-6 animate-slide-up">
-                  {/* Premium Badge */}
-                  <div className="inline-flex items-center gap-2.5 bg-gradient-to-r from-white/15 to-white/5 backdrop-blur-xl px-5 py-2.5 rounded-full border border-white/30 shadow-lg">
-                    <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full animate-pulse shadow-lg shadow-[#d4af37]/50" />
-                    <span className="text-white/90 font-semibold tracking-[0.2em] uppercase text-[10px] letter-spacing-wide">Premium Collection 2026</span>
-                  </div>
-                  <h1 className="text-4xl lg:text-6xl font-bold leading-[1.1] font-['Playfair_Display']"
+      {/* DESKTOP */}
+      <div className="hidden md:block">
+        <section className="relative min-h-[500px] lg:min-h-[550px] bg-gradient-to-br from-[#1a3a0f] via-[#2d5016] to-[#1f4412] text-white overflow-hidden">
+          <div className="absolute inset-0">
+            <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-[#d4af37]/30 to-transparent rounded-full blur-3xl animate-pulse"
+              style={{
+                animationDuration: '8s',
+                transform: 'translateZ(0)',
+                boxShadow: '0 25px 50px -12px rgba(212, 175, 55, 0.25)'
+              }}
+            />
+            <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-tl from-[#8b7355]/20 to-transparent rounded-full blur-3xl animate-pulse"
+              style={{
+                animationDuration: '10s',
+                animationDelay: '2s',
+                transform: 'translateZ(0)',
+                boxShadow: '0 25px 50px -12px rgba(139, 115, 85, 0.15)'
+              }}
+            />
+            <div className="absolute top-1/2 left-1/3 w-80 h-80 bg-gradient-to-br from-emerald-400/10 to-transparent rounded-full blur-3xl animate-pulse"
+              style={{
+                animationDuration: '12s',
+                animationDelay: '4s',
+                transform: 'translateZ(0)'
+              }}
+            />
+            <div className="absolute top-40 right-1/4 w-32 h-32 border-2 border-[#d4af37]/20 rounded-2xl rotate-45 animate-float"
+              style={{
+                animation: 'float 6s ease-in-out infinite',
+                boxShadow: '0 10px 30px rgba(212, 175, 55, 0.1)'
+              }}
+            />
+            <div className="absolute bottom-40 left-1/4 w-24 h-24 border-2 border-white/10 rounded-full animate-float"
+              style={{
+                animation: 'float 8s ease-in-out infinite',
+                animationDelay: '1s'
+              }}
+            />
+            <div className="absolute inset-0 opacity-5"
+              style={{
+                backgroundImage: 'linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)',
+                backgroundSize: '50px 50px'
+              }}
+            />
+          </div>
+          <div className="relative px-6 py-16 lg:py-20 max-w-7xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Left Content */}
+              <div className="space-y-6 animate-slide-up">
+                {/* Premium Badge */}
+                <div className="inline-flex items-center gap-2.5 bg-gradient-to-r from-white/15 to-white/5 backdrop-blur-xl px-5 py-2.5 rounded-full border border-white/30 shadow-lg">
+                  <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full animate-pulse shadow-lg shadow-[#d4af37]/50" />
+                  <span className="text-white/90 font-semibold tracking-[0.2em] uppercase text-[10px] letter-spacing-wide">Premium Collection 2026</span>
+                </div>
+                <h1 className="text-4xl lg:text-6xl font-bold leading-[1.1] font-['Playfair_Display']"
+                  style={{
+                    textShadow: '0 4px 20px rgba(0,0,0,0.4), 0 0 40px rgba(212,175,55,0.15)',
+                    letterSpacing: '-0.02em'
+                  }}
+                >
+                  <span className="text-white">Elevate Your Space</span>
+                  <br />
+                  <span className="text-white">with</span>
+                  <span className="block mt-1 bg-gradient-to-r from-[#f4d03f] via-[#d4af37] to-[#c9a961] bg-clip-text text-transparent"
                     style={{
-                      textShadow: '0 4px 20px rgba(0,0,0,0.4), 0 0 40px rgba(212,175,55,0.15)',
-                      letterSpacing: '-0.02em'
+                      backgroundSize: '200% auto',
+                      animation: 'shimmer 4s linear infinite'
                     }}
                   >
-                    <span className="text-white">Elevate Your Space</span>
-                    <br />
-                    <span className="text-white">with</span>
-                    <span className="block mt-1 bg-gradient-to-r from-[#f4d03f] via-[#d4af37] to-[#c9a961] bg-clip-text text-transparent"
-                      style={{
-                        backgroundSize: '200% auto',
-                        animation: 'shimmer 4s linear infinite'
-                      }}
-                    >
-                      Nature's Finest
-                    </span>
-                  </h1>
-                  <p className="text-base lg:text-lg text-white/70 leading-relaxed max-w-xl font-light">
-                    Curated selection of premium plants and aquatic life for the discerning collector. Transform your environment into a living masterpiece.
-                  </p>
-                  <div className="flex flex-wrap gap-3 pt-2">
-                    <Link
-                      to="/search"
-                      className="group relative inline-flex items-center gap-2.5 px-8 py-3.5 bg-white text-[#2d5016] rounded-full font-bold overflow-hidden transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-[1.02]"
-                    >
-                      <span className="relative z-10">Explore Collection</span>
-                      <ArrowRight size={18} className="relative z-10 group-hover:translate-x-1 transition-transform" />
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#d4af37] to-[#f4d03f] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </Link>
-                   
-                  </div>
-                  <div className="grid grid-cols-3 gap-6 pt-6 border-t border-white/10">
-                    {[
-                      { value: '500+', label: 'Premium Plants' },
-                      { value: '50k+', label: 'Happy Customers' },
-                      { value: '4.9', label: 'Average Rating', icon: '★' }
-                    ].map((stat, index) => (
-                      <div key={index} className="text-center lg:text-left">
-                        <div className="text-2xl lg:text-3xl font-bold bg-gradient-to-br from-[#f4d03f] to-[#d4af37] bg-clip-text text-transparent mb-1">
-                          {stat.value}{stat.icon}
-                        </div>
-                        <div className="text-[11px] text-white/50 uppercase tracking-wider font-medium">{stat.label}</div>
-                      </div>
-                    ))}
-                  </div>
+                    Nature's Finest
+                  </span>
+                </h1>
+                <p className="text-base lg:text-lg text-white/70 leading-relaxed max-w-xl font-light">
+                  Curated selection of premium plants and aquatic life for the discerning collector. Transform your environment into a living masterpiece.
+                </p>
+                <div className="flex flex-wrap gap-3 pt-2">
+                  <Link
+                    to="/search"
+                    className="group relative inline-flex items-center gap-2.5 px-8 py-3.5 bg-white text-[#2d5016] rounded-full font-bold overflow-hidden transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-[1.02]"
+                  >
+                    <span className="relative z-10">Explore Collection</span>
+                    <ArrowRight size={18} className="relative z-10 group-hover:translate-x-1 transition-transform" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#d4af37] to-[#f4d03f] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </Link>
+
                 </div>
-                
-                {/* Right - 3D image */}
-                <div className="relative hidden lg:block animate-slide-up" style={{ animationDelay: '0.2s' }}>
-                  <div className="relative">
-                    <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl rounded-[2rem] p-6 border border-white/20 shadow-2xl overflow-hidden"
-                      style={{
-                        transform: 'perspective(1000px) rotateY(-5deg) rotateX(5deg)',
-                        boxShadow: '0 50px 100px rgba(0,0,0,0.4), 0 0 80px rgba(212,175,55,0.15), inset 0 1px 0 rgba(255,255,255,0.1)'
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#d4af37]/5 via-transparent to-transparent" />
-                      <div className="relative aspect-square bg-gradient-to-br from-white/10 to-transparent rounded-2xl overflow-hidden border border-white/10">
-                        <div className="relative w-full h-full">
-                          {heroImages.map((item, index) => (
-                            <div
-                              key={index}
-                              className={`absolute inset-0 transition-opacity duration-1000 ${
-                                index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                <div className="grid grid-cols-3 gap-6 pt-6 border-t border-white/10">
+                  {[
+                    { value: '500+', label: 'Premium Plants' },
+                    { value: '50k+', label: 'Happy Customers' },
+                    { value: '4.9', label: 'Average Rating', icon: '★' }
+                  ].map((stat, index) => (
+                    <div key={index} className="text-center lg:text-left">
+                      <div className="text-2xl lg:text-3xl font-bold bg-gradient-to-br from-[#f4d03f] to-[#d4af37] bg-clip-text text-transparent mb-1">
+                        {stat.value}{stat.icon}
+                      </div>
+                      <div className="text-[11px] text-white/50 uppercase tracking-wider font-medium">{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right - 3D image */}
+              <div className="relative hidden lg:block animate-slide-up" style={{ animationDelay: '0.2s' }}>
+                <div className="relative">
+                  <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl rounded-[2rem] p-6 border border-white/20 shadow-2xl overflow-hidden"
+                    style={{
+                      transform: 'perspective(1000px) rotateY(-5deg) rotateX(5deg)',
+                      boxShadow: '0 50px 100px rgba(0,0,0,0.4), 0 0 80px rgba(212,175,55,0.15), inset 0 1px 0 rgba(255,255,255,0.1)'
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#d4af37]/5 via-transparent to-transparent" />
+                    <div className="relative aspect-square bg-gradient-to-br from-white/10 to-transparent rounded-2xl overflow-hidden border border-white/10">
+                      <div className="relative w-full h-full">
+                        {heroImages.map((item, index) => (
+                          <div
+                            key={index}
+                            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'
                               }`}
-                            >
-                              <img
-                                src={item.image}
-                                alt={`Plant ${index + 1}`}
-                                className="w-full h-full object-cover"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-                            </div>
-                          ))}
-                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                            {heroImages.map((_, idx) => (
-                              <button
-                                key={idx}
-                                onClick={() => setCurrentImageIndex(idx)}
-                                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                                  idx === currentImageIndex
-                                    ? 'bg-white w-6'
-                                    : 'bg-white/50 hover:bg-white/75'
-                                }`}
-                                aria-label={`Go to image ${idx + 1}`}
-                              />
-                            ))}
+                          >
+                            <img
+                              src={item.image}
+                              alt={`Plant ${index + 1}`}
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                           </div>
+                        ))}
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                          {heroImages.map((_, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => setCurrentImageIndex(idx)}
+                              className={`w-2 h-2 rounded-full transition-all duration-300 ${idx === currentImageIndex
+                                ? 'bg-white w-6'
+                                : 'bg-white/50 hover:bg-white/75'
+                                }`}
+                              aria-label={`Go to image ${idx + 1}`}
+                            />
+                          ))}
                         </div>
                       </div>
                     </div>
-                    <div className="absolute -top-4 -right-4 bg-white rounded-2xl p-3.5 shadow-2xl border border-gray-100 z-10">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-10 h-10 bg-gradient-to-br from-[#2d5016] to-[#3d6622] rounded-xl flex items-center justify-center shadow-lg">
-                          <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="text-[10px] text-gray-500 uppercase tracking-wider font-medium">Quality</div>
-                          <div className="font-bold text-gray-900 text-sm">Guaranteed</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="absolute -bottom-4 -left-4 bg-gradient-to-br from-[#d4af37] to-[#c9a961] rounded-2xl p-3.5 shadow-2xl z-10">
-                      <div className="flex items-center gap-2.5">
-                        <div className="text-2xl">🚚</div>
-                        <div className="text-white">
-                          <div className="text-[10px] opacity-90 uppercase tracking-wider font-medium">Free Delivery</div>
-                          <div className="font-bold text-sm">Nationwide</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border border-white/5 rounded-full animate-spin-slow" />
-                    <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] border border-white/5 rounded-full animate-spin-slow" style={{ animationDirection: 'reverse', animationDuration: '30s' }} />
                   </div>
+                  <div className="absolute -top-4 -right-4 bg-white rounded-2xl p-3.5 shadow-2xl border border-gray-100 z-10">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#2d5016] to-[#3d6622] rounded-xl flex items-center justify-center shadow-lg">
+                        <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <div>
+                        <div className="text-[10px] text-gray-500 uppercase tracking-wider font-medium">Quality</div>
+                        <div className="font-bold text-gray-900 text-sm">Guaranteed</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute -bottom-4 -left-4 bg-gradient-to-br from-[#d4af37] to-[#c9a961] rounded-2xl p-3.5 shadow-2xl z-10">
+                    <div className="flex items-center gap-2.5">
+                      <div className="text-2xl">🚚</div>
+                      <div className="text-white">
+                        <div className="text-[10px] opacity-90 uppercase tracking-wider font-medium">Free Delivery</div>
+                        <div className="font-bold text-sm">Nationwide</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border border-white/5 rounded-full animate-spin-slow" />
+                  <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] border border-white/5 rounded-full animate-spin-slow" style={{ animationDirection: 'reverse', animationDuration: '30s' }} />
                 </div>
               </div>
             </div>
-            <div className="absolute bottom-0 left-0 right-0">
-              <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-                <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#fafaf9"/>
-              </svg>
-            </div>
-          </section>
-        </div>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+              <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#fafaf9" />
+            </svg>
+          </div>
+        </section>
+      </div>
 
 
       {/* Ad Banner Section */}
@@ -283,9 +281,9 @@ const Home: React.FC = () => {
 
           {/* Mobile: Horizontal Scroll Circular Categories */}
           <div className="md:hidden">
-       
-         
-             <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
+
+
+            <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
               {categories.map((category) => (
                 <Link
                   key={category.id}
@@ -293,15 +291,15 @@ const Home: React.FC = () => {
                   className="snap-start flex flex-col items-center flex-shrink-0 group"
                 >
                   <div className="w-16 h-16 rounded-full bg-[#f3f4f6] flex items-center justify-center mb-2 border border-[#e5e7eb] group-hover:border-[#2d5016] transition-colors">
-                     {category.icon ? (
-                          <img 
-                            src={getImageUrl(category.icon)} 
-                            alt={category.category_name}
-                            className="w-full h-full object-cover rounded-full opacity-90 group-hover:opacity-100 transition-opacity"
-                          />
-                      ) : (
-                         <div className="w-8 h-8 rounded-full bg-[#d1d5db]" />
-                      )}
+                    {category.icon ? (
+                      <img
+                        src={getImageUrl(category.icon)}
+                        alt={category.category_name}
+                        className="w-full h-full object-cover rounded-full opacity-90 group-hover:opacity-100 transition-opacity"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-[#d1d5db]" />
+                    )}
                   </div>
                   <span className="text-xs font-medium text-[#4b5563] text-center w-20 leading-tight">
                     {category.category_name}
@@ -321,21 +319,21 @@ const Home: React.FC = () => {
               >
                 {/* Background Image */}
                 <div className="absolute inset-0 transition-all duration-500 group-hover:scale-110">
-                    {category.icon ? (
-                        <img 
-                          src={getImageUrl(category.icon)} 
-                          alt={category.category_name}
-                          className="w-full h-full object-cover"
-                        />
-                    ) : (
-                        <div className="w-full h-full" style={{
-                          background: index % 4 === 0 ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)' :
-                                      index % 4 === 1 ? 'linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%)' :
-                                      index % 4 === 2 ? 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)' :
-                                      'linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%)'
-                        }} />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/90 group-hover:via-black/40 transition-all duration-300" />
+                  {category.icon ? (
+                    <img
+                      src={getImageUrl(category.icon)}
+                      alt={category.category_name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full" style={{
+                      background: index % 4 === 0 ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)' :
+                        index % 4 === 1 ? 'linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%)' :
+                          index % 4 === 2 ? 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)' :
+                            'linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%)'
+                    }} />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/90 group-hover:via-black/40 transition-all duration-300" />
                 </div>
 
                 <div className="absolute inset-0 p-5 flex flex-col justify-end z-10">
@@ -365,13 +363,13 @@ const Home: React.FC = () => {
               <h2 className="text-xl md:text-4xl font-bold text-[#1f2937] mb-1 md:mb-2 font-['Playfair_Display']">New Arrivals</h2>
             </div>
           </div>
-          
+
           {/* Mobile Horizontal Scroll for Products */}
           <div className="md:hidden flex gap-3 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
             {featuredProducts.length > 0 ? (
               featuredProducts.slice(0, 8).map((variant) => (
                 <div key={variant.uuid} className="snap-start">
-                   <ProductCardCompact product={mapVariantToProduct(variant)} />
+                  <ProductCardCompact product={mapVariantToProduct(variant)} />
                 </div>
               ))
             ) : (
@@ -387,7 +385,7 @@ const Home: React.FC = () => {
                 <ProductCard key={variant.uuid} product={mapVariantToProduct(variant)} />
               ))
             ) : (
-                <div className="col-span-full text-center py-8 text-gray-500 text-sm">
+              <div className="col-span-full text-center py-8 text-gray-500 text-sm">
                 No new arrivals available.
               </div>
             )}
