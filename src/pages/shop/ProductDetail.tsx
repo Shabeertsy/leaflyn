@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   ArrowLeft, Heart, Share2, Star, ShoppingCart, Truck,
   ChevronRight, Leaf, Droplet, Sun, ThermometerSun,
-  Package, Award, CheckCircle, Minus, Plus
+  CheckCircle, Minus, Plus
 } from 'lucide-react';
 import axios from '../../lib/axios';
 import { useCartStore } from '../../store/useCartStore';

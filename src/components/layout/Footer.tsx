@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Twitter, Youtube, Mail, MapPin, Phone, CheckCircle, Package, Clock, Heart, Linkedin } from 'lucide-react';
+import { Facebook, Instagram, Twitter, Youtube, Mail, MapPin, Phone, CheckCircle, Package, Clock, Linkedin } from 'lucide-react';
 import { useCompanyStore } from '../../store/useCompanyStore';
 import Logo from '../common/Logo';
 
