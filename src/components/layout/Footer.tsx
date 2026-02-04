@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Twitter, Youtube, Mail, MapPin, Phone, CheckCircle, Package, Clock, Heart, Linkedin } from 'lucide-react';
 import { useCompanyStore } from '../../store/useCompanyStore';
+import Logo from '../common/Logo';
 
 const Footer: React.FC = () => {
   const { companyContact, fetchCompanyContact } = useCompanyStore();
@@ -27,8 +28,7 @@ const Footer: React.FC = () => {
             {[
               { icon: CheckCircle, title: 'Premium Quality', desc: 'Hand-selected for optimal health' },
               { icon: Package, title: 'Secure Packaging', desc: 'Safe arrival guaranteed' },
-              { icon: Clock, title: 'Lifetime Support', desc: 'Expert care advice always available' },
-              { icon: Heart, title: '7-Day Guarantee', desc: 'Hassle-free replacements' },
+              { icon: Clock, title: 'Support', desc: 'Expert care advice always available' },
             ].map((feature, index) => (
               <div key={index} className="flex items-start gap-3">
                 <feature.icon size={18} className="text-[#d4af37] shrink-0 mt-0.5" />
@@ -47,7 +47,7 @@ const Footer: React.FC = () => {
           {/* Brand Section */}
           <div className="space-y-6">
             <Link to="/" className="flex items-center gap-2">
-              <img src="/fernrie-logo.jpg" alt="fernrie Logo" className="w-10 h-10 rounded-xl shadow-sm" />
+              <Logo className="w-10 h-10 rounded-xl shadow-sm" />
               <span className="text-2xl font-bold font-['Playfair_Display']">{companyContact?.company_name || 'fernrie'}</span>
             </Link>
             <p className="text-white/60 leading-relaxed text-sm max-w-xs">

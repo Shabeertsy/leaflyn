@@ -12,8 +12,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Leafin - Plants & Aquatics Store',
-        short_name: 'Leafin',
+        name: 'Fernrie - Plants & Aquatics Store',
+        short_name: 'Fernrie',
         description: 'Your premium destination for plants and aquatic products',
         theme_color: '#10b981',
         background_color: '#ffffff',

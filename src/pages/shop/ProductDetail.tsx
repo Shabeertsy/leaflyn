@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { 
+import {
   ArrowLeft, Heart, Share2, Star, ShoppingCart, Truck,
   ChevronRight, Leaf, Droplet, Sun, ThermometerSun,
   Package, Award, CheckCircle, Minus, Plus
@@ -26,10 +26,10 @@ const ProductDetail: React.FC = () => {
   const { addToWishlist, removeFromWishlist, isInWishlist, isLoading: wishlistLoading } = useWishlistStore();
   const { setShowLoginPrompt, setPendingAction } = useUIStore();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  
+
   const { featuredProducts, bestsellerProducts, fetchProductCollections } = useProductCollectionStore();
   const { products: searchProducts } = useProductStore();
-  
+
   const [fetchedProduct, setFetchedProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
@@ -38,7 +38,7 @@ const ProductDetail: React.FC = () => {
 
   // Try to find product in all available local sources
   let product = products.find((p) => p.id === id) || fetchedProduct;
-  
+
   if (!product && id) {
     const variant = [...featuredProducts, ...bestsellerProducts, ...searchProducts].find(v => v.uuid === id);
     if (variant) {
@@ -58,7 +58,6 @@ const ProductDetail: React.FC = () => {
           }
 
           // If still not found (checked in next render), or if we want to be sure, fetch specific
-          // We can try fetching the specific variant directly
           const response = await axios.get(`/api/product-variants/${id}/`);
           setFetchedProduct(mapVariantToProduct(response.data));
         } catch (error) {
@@ -77,20 +76,20 @@ const ProductDetail: React.FC = () => {
   useEffect(() => {
     const fetchSimilarProducts = async () => {
       if (!id) return;
-      
+
       setLoadingSimilar(true);
       try {
         const response = await axios.get(`/api/similar-product/`, {
           params: { uuid: id } // Changed from product_id to uuid
         });
-        
+
         console.log('Similar products API response:', response.data);
-        
+
         // Map API variants to Product format
         const mappedProducts = response.data
           .map(mapVariantToProduct)
-          .filter((p: Product) => p.id || p.uuid); // Only include products with valid IDs
-        
+          .filter((p: Product) => p.id || p.uuid);
+
         console.log('Mapped similar products:', mappedProducts);
         setSimilarProducts(mappedProducts);
       } catch (error) {
@@ -136,7 +135,7 @@ const ProductDetail: React.FC = () => {
 
   const handleAddToCart = async () => {
     if (cartLoading || !product) return;
-    
+
     const addToCartAction = async () => {
       try {
         await addToCart(product, quantity);
@@ -157,7 +156,7 @@ const ProductDetail: React.FC = () => {
 
   const handleWishlistToggle = async () => {
     if (wishlistLoading || !product) return;
-    
+
     const toggleWishlistAction = async () => {
       try {
         if (inWishlist) {
@@ -206,11 +205,11 @@ const ProductDetail: React.FC = () => {
 
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    
+
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
-    
+
     if (isLeftSwipe && selectedImage < images.length - 1) {
       setSelectedImage(selectedImage + 1);
     }
@@ -233,15 +232,14 @@ const ProductDetail: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={handleWishlistToggle}
-              className={`p-2 rounded-full transition-all ${
-                inWishlist 
-                  ? 'bg-red-50 text-red-500' 
-                  : 'hover:bg-gray-100 text-gray-700'
-              }`}
+              className={`p-2 rounded-full transition-all ${inWishlist
+                ? 'bg-red-50 text-red-500'
+                : 'hover:bg-gray-100 text-gray-700'
+                }`}
             >
               <Heart size={24} fill={inWishlist ? 'currentColor' : 'none'} />
             </button>
-            <button 
+            <button
               onClick={handleShare}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-700"
             >
@@ -254,13 +252,13 @@ const ProductDetail: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         {/* Image Gallery Section */}
         <div className="bg-white">
-          <div 
+          <div
             className="relative aspect-square lg:aspect-[16/10] bg-gradient-to-br from-neutral-50 to-white overflow-hidden"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
           >
-            <div 
+            <div
               className="flex transition-transform duration-300 ease-out h-full"
               style={{ transform: `translateX(-${selectedImage * 100}%)` }}
             >
@@ -274,7 +272,7 @@ const ProductDetail: React.FC = () => {
                 </div>
               ))}
             </div>
-            
+
             {product.discount && (
               <div className="absolute top-6 left-6 bg-gradient-to-r from-[#2d5016] to-[#3d6622] text-white text-base font-bold px-5 py-2.5 rounded-full shadow-xl z-10 border-2 border-white/20">
                 <span className="text-lg">{product.discount}%</span> OFF
@@ -285,7 +283,7 @@ const ProductDetail: React.FC = () => {
                 Out of Stock
               </div>
             )}
-            
+
             {/* Dot Indicators for Mobile */}
             {images.length > 1 && (
               <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10 lg:hidden">
@@ -293,18 +291,17 @@ const ProductDetail: React.FC = () => {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`transition-all ${
-                      selectedImage === index
-                        ? 'w-8 h-2 bg-[#2d5016]'
-                        : 'w-2 h-2 bg-gray-300 hover:bg-gray-400'
-                    } rounded-full`}
+                    className={`transition-all ${selectedImage === index
+                      ? 'w-8 h-2 bg-[#2d5016]'
+                      : 'w-2 h-2 bg-gray-300 hover:bg-gray-400'
+                      } rounded-full`}
                     aria-label={`View image ${index + 1}`}
                   />
                 ))}
               </div>
             )}
           </div>
-          
+
           {/* Thumbnail Gallery */}
           {images.length > 1 && (
             <div className="flex gap-3 p-4 lg:p-6 overflow-x-auto no-scrollbar">
@@ -312,11 +309,10 @@ const ProductDetail: React.FC = () => {
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`flex-shrink-0 w-16 h-16 lg:w-20 lg:h-20 rounded-xl overflow-hidden border-2 transition-all ${
-                    selectedImage === index
-                      ? 'border-[#2d5016] scale-105 shadow-md'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
+                  className={`flex-shrink-0 w-16 h-16 lg:w-20 lg:h-20 rounded-xl overflow-hidden border-2 transition-all ${selectedImage === index
+                    ? 'border-[#2d5016] scale-105 shadow-md'
+                    : 'border-gray-200 hover:border-gray-300'
+                    }`}
                 >
                   <img src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
                 </button>
@@ -378,7 +374,7 @@ const ProductDetail: React.FC = () => {
             <p className="text-sm text-gray-500">Inclusive of all taxes</p>
           </div>
 
-        
+
 
           {/* Tabs */}
           <div className="border-b border-gray-200 mb-6">
@@ -391,11 +387,10 @@ const ProductDetail: React.FC = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`pb-4 px-2 font-bold text-sm transition-colors relative ${
-                    activeTab === tab.id
-                      ? 'text-[#2d5016]'
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
+                  className={`pb-4 px-2 font-bold text-sm transition-colors relative ${activeTab === tab.id
+                    ? 'text-[#2d5016]'
+                    : 'text-gray-500 hover:text-gray-700'
+                    }`}
                 >
                   {tab.label}
                   {activeTab === tab.id && (
@@ -463,19 +458,6 @@ const ProductDetail: React.FC = () => {
             )}
           </div>
 
-          {/* Additional Info Cards */}
-          <div className="grid grid-cols-2 gap-4 mb-8">
-            <div className="bg-gradient-to-br from-[#2d5016]/5 to-[#2d5016]/10 rounded-2xl p-4 border border-[#2d5016]/20">
-              <Package size={24} className="text-[#2d5016] mb-2" />
-              <h4 className="font-bold text-gray-900 mb-1">Premium Packaging</h4>
-              <p className="text-xs text-gray-600">Carefully packed to ensure safe delivery</p>
-            </div>
-            <div className="bg-gradient-to-br from-[#d4af37]/5 to-[#d4af37]/10 rounded-2xl p-4 border border-[#d4af37]/20">
-              <Award size={24} className="text-[#d4af37] mb-2" />
-              <h4 className="font-bold text-gray-900 mb-1">Quality Guarantee</h4>
-              <p className="text-xs text-gray-600">100% healthy plants guaranteed</p>
-            </div>
-          </div>
         </div>
 
         {/* Similar Products */}
@@ -492,7 +474,7 @@ const ProductDetail: React.FC = () => {
                 </Link>
               )}
             </div>
-            
+
             {loadingSimilar ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[...Array(4)].map((_, i) => (
@@ -506,9 +488,9 @@ const ProductDetail: React.FC = () => {
             ) : similarProducts.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {similarProducts.map((similarProduct, index) => (
-                  <ProductCard 
-                    key={similarProduct.uuid || similarProduct.id || `similar-${index}`} 
-                    product={similarProduct} 
+                  <ProductCard
+                    key={similarProduct.uuid || similarProduct.id || `similar-${index}`}
+                    product={similarProduct}
                   />
                 ))}
               </div>
@@ -560,13 +542,12 @@ const ProductDetail: React.FC = () => {
           <button
             onClick={handleAddToCart}
             disabled={!product.inStock || cartLoading}
-            className={`flex-1 py-3 lg:py-4 rounded-xl font-bold text-white transition-all flex items-center justify-center gap-2 shadow-lg text-sm lg:text-base ${
-              addedToCart
-                ? 'bg-green-600'
-                : product.inStock
+            className={`flex-1 py-3 lg:py-4 rounded-xl font-bold text-white transition-all flex items-center justify-center gap-2 shadow-lg text-sm lg:text-base ${addedToCart
+              ? 'bg-green-600'
+              : product.inStock
                 ? 'bg-[#2d5016] hover:bg-[#3d6622] hover:shadow-xl hover:-translate-y-0.5 active:scale-95'
                 : 'bg-gray-400 cursor-not-allowed'
-            } ${cartLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+              } ${cartLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
             {cartLoading ? (
               <>
@@ -600,7 +581,7 @@ const ProductDetail: React.FC = () => {
             <button
               onClick={async () => {
                 if (cartLoading) return;
-                
+
                 const buyNowAction = async () => {
                   try {
                     await addToCart(product, quantity);
@@ -618,9 +599,8 @@ const ProductDetail: React.FC = () => {
                 }
               }}
               disabled={cartLoading}
-              className={`flex-1 py-3 lg:py-4 bg-gradient-to-r from-[#d4af37] to-[#bfa040] text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95 text-sm lg:text-base ${
-                cartLoading ? 'opacity-70 cursor-not-allowed' : ''
-              }`}
+              className={`flex-1 py-3 lg:py-4 bg-gradient-to-r from-[#d4af37] to-[#bfa040] text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95 text-sm lg:text-base ${cartLoading ? 'opacity-70 cursor-not-allowed' : ''
+                }`}
             >
               <Truck size={18} />
               <span className="hidden sm:inline">{cartLoading ? 'Processing...' : 'Buy Now'}</span>

@@ -5,6 +5,7 @@ import { useCartStore } from '../../store/useCartStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useUIStore } from '../../store/useUIStore';
 import { useNotificationStore } from '../../store/useNotificationStore';
+import Logo from '../common/Logo';
 
 const Header: React.FC = () => {
   const cartCount = useCartStore((state) => state.getCartCount());
@@ -27,7 +28,7 @@ const Header: React.FC = () => {
       <div className="px-6 h-16 flex items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <img src="/fernrie-logo.jpg" alt="fernrie Logo" className="w-10 h-10 rounded-xl shadow-md" />
+          <Logo className="w-10 h-10 rounded-xl" />
           <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">fernrie</span>
         </Link>
 
