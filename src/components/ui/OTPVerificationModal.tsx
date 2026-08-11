@@ -134,7 +134,7 @@ const OTPVerificationModal: React.FC<OTPVerificationModalProps> = ({ email, onVe
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="bg-white rounded-2xl w-full max-w-md animate-in slide-in-from-bottom-4 duration-300">
         <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-          <h3 className="text-xl font-bold text-[#2d5016] font-['Playfair_Display']">Verify Your Email</h3>
+          <h3 className="text-xl font-bold text-[#059669] font-['Poppins']">Verify Your Email</h3>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -145,9 +145,9 @@ const OTPVerificationModal: React.FC<OTPVerificationModalProps> = ({ email, onVe
 
         <div className="p-6 space-y-6">
           {/* Email Display */}
-          <div className="flex items-center gap-3 p-4 bg-[#2d5016]/5 rounded-xl">
-            <div className="w-10 h-10 bg-[#2d5016]/10 rounded-full flex items-center justify-center">
-              <Mail size={20} className="text-[#2d5016]" />
+          <div className="flex items-center gap-3 p-4 bg-[#059669]/5 rounded-xl">
+            <div className="w-10 h-10 bg-[#059669]/10 rounded-full flex items-center justify-center">
+              <Mail size={20} className="text-[#059669]" />
             </div>
             <div className="flex-1">
               <p className="text-xs text-gray-500 mb-0.5">OTP sent to</p>
@@ -171,7 +171,7 @@ const OTPVerificationModal: React.FC<OTPVerificationModalProps> = ({ email, onVe
                   value={digit}
                   onChange={(e) => handleChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
-                  className="w-12 h-14 text-center text-xl font-bold border-2 border-gray-200 rounded-xl focus:border-[#2d5016] focus:ring-0 transition-colors outline-none"
+                  className="w-12 h-14 text-center text-xl font-bold border-2 border-gray-200 rounded-xl focus:border-[#059669] focus:ring-0 transition-colors outline-none"
                   disabled={loading}
                 />
               ))}
@@ -189,7 +189,7 @@ const OTPVerificationModal: React.FC<OTPVerificationModalProps> = ({ email, onVe
           <button
             onClick={() => handleVerify()}
             disabled={loading || otp.some(d => !d)}
-            className="w-full py-3 bg-[#2d5016] text-white rounded-xl font-bold hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-3 bg-[#059669] text-white rounded-xl font-bold hover:bg-[#006638] transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -210,13 +210,13 @@ const OTPVerificationModal: React.FC<OTPVerificationModalProps> = ({ email, onVe
               <button
                 onClick={handleResend}
                 disabled={resending}
-                className="text-sm text-[#2d5016] font-semibold hover:underline disabled:opacity-50"
+                className="text-sm text-[#059669] font-semibold hover:underline disabled:opacity-50"
               >
                 {resending ? 'Sending...' : 'Resend OTP'}
               </button>
             ) : (
               <p className="text-sm text-gray-500">
-                Resend OTP in <span className="font-bold text-[#2d5016]">{countdown}s</span>
+                Resend OTP in <span className="font-bold text-[#059669]">{countdown}s</span>
               </p>
             )}
           </div>

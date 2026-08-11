@@ -77,7 +77,7 @@ const AddressForm: React.FC = () => {
         <button onClick={() => navigate(-1)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
           <ArrowLeft size={24} className="text-gray-700" />
         </button>
-        <h1 className="text-xl font-bold text-[#2d5016] font-['Playfair_Display']">
+        <h1 className="text-xl font-bold text-[#059669] font-['Poppins']">
           {id ? 'Edit Address' : 'Add New Address'}
         </h1>
       </div>
@@ -91,7 +91,7 @@ const AddressForm: React.FC = () => {
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                 placeholder="John Doe"
                 required
               />
@@ -103,7 +103,7 @@ const AddressForm: React.FC = () => {
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                 placeholder="+91 98765 43210"
                 required
               />
@@ -115,7 +115,7 @@ const AddressForm: React.FC = () => {
                 type="text"
                 value={formData.address_line_1}
                 onChange={(e) => setFormData({ ...formData, address_line_1: e.target.value })}
-                className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                 placeholder="House No, Building Name"
                 required
               />
@@ -127,7 +127,7 @@ const AddressForm: React.FC = () => {
                 type="text"
                 value={formData.address_line_2}
                 onChange={(e) => setFormData({ ...formData, address_line_2: e.target.value })}
-                className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                 placeholder="Street, Area"
               />
             </div>
@@ -139,7 +139,7 @@ const AddressForm: React.FC = () => {
                   type="text"
                   value={formData.city}
                   onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                  className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                  className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                   placeholder="City"
                   required
                 />
@@ -150,7 +150,7 @@ const AddressForm: React.FC = () => {
                   type="text"
                   value={formData.state}
                   onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                  className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                  className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                   placeholder="State"
                   required
                 />
@@ -164,7 +164,7 @@ const AddressForm: React.FC = () => {
                   type="text"
                   value={formData.country}
                   onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                  className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                  className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                   placeholder="Country"
                   required
                 />
@@ -175,7 +175,7 @@ const AddressForm: React.FC = () => {
                   type="text"
                   value={formData.pin_code}
                   onChange={(e) => setFormData({ ...formData, pin_code: e.target.value })}
-                  className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                  className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                   placeholder="Pincode"
                   required
                 />
@@ -188,7 +188,7 @@ const AddressForm: React.FC = () => {
                 id="is_default"
                 checked={formData.is_default}
                 onChange={(e) => setFormData({ ...formData, is_default: e.target.checked })}
-                className="w-5 h-5 text-[#2d5016] border-gray-300 rounded focus:ring-[#2d5016]"
+                className="w-5 h-5 text-[#059669] border-gray-300 rounded focus:ring-[#059669]"
               />
               <label htmlFor="is_default" className="text-sm font-medium text-gray-700">
                 Set as default address
@@ -199,7 +199,7 @@ const AddressForm: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-4 bg-[#2d5016] text-white rounded-xl font-bold text-lg hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-4 bg-[#059669] text-white rounded-xl font-bold text-lg hover:bg-[#006638] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>

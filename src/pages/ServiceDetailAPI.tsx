@@ -51,7 +51,7 @@ const ServiceDetailAPI: React.FC = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-neutral-50">
-        <Loader2 className="w-8 h-8 animate-spin text-[#2d5016]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#059669]" />
       </div>
     );
   }
@@ -63,7 +63,7 @@ const ServiceDetailAPI: React.FC = () => {
         <p className="text-gray-600 mb-6">{error}</p>
         <button
           onClick={() => fetchServices()}
-          className="px-6 py-2.5 bg-[#2d5016] text-white rounded-full font-semibold hover:bg-[#3d6622] transition-colors"
+          className="px-6 py-2.5 bg-[#059669] text-white rounded-full font-semibold hover:bg-[#006638] transition-colors"
         >
           Try Again
         </button>
@@ -78,7 +78,7 @@ const ServiceDetailAPI: React.FC = () => {
         <p className="text-gray-600 mb-6">The service you are looking for does not exist.</p>
         <Link 
           to="/services" 
-          className="px-6 py-2.5 bg-[#2d5016] text-white rounded-full font-semibold hover:bg-[#3d6622] transition-colors"
+          className="px-6 py-2.5 bg-[#059669] text-white rounded-full font-semibold hover:bg-[#006638] transition-colors"
         >
           Back to Services
         </Link>
@@ -107,17 +107,17 @@ const ServiceDetailAPI: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
             <div>
               <div className="inline-flex items-center gap-2 bg-emerald-50 px-3 py-1 rounded-full mb-3">
-                <span className="text-xs font-semibold text-[#2d5016] uppercase tracking-wider">
+                <span className="text-xs font-semibold text-[#059669] uppercase tracking-wider">
                   {getCategoryName(service.category)}
                 </span>
               </div>
-              <h1 className="text-2xl md:text-4xl font-bold text-[#2d5016] font-['Playfair_Display'] mb-2">
+              <h1 className="text-2xl md:text-4xl font-bold text-[#059669] font-['Poppins'] mb-2">
                 {service.name}
               </h1>
             </div>
             <div className="text-left md:text-right">
               <div className="text-sm text-gray-500 mb-1">Starting from</div>
-              <div className="text-3xl md:text-4xl font-bold text-[#2d5016]">
+              <div className="text-3xl md:text-4xl font-bold text-[#059669]">
                 ₹{parseFloat(service.price).toFixed(2)}
               </div>
             </div>
@@ -150,13 +150,13 @@ const ServiceDetailAPI: React.FC = () => {
             {service.features.length > 0 && (
               <>
                 <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <CheckCircle2 className="text-[#2d5016]" size={24} />
+                  <CheckCircle2 className="text-[#059669]" size={24} />
                   Service Features
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-4">
                   {service.features.map((feature) => (
                     <div key={feature.uuid} className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="w-2 h-2 rounded-full bg-[#d4af37] mt-2 flex-shrink-0" />
+                      <div className="w-2 h-2 rounded-full bg-[#059669] mt-2 flex-shrink-0" />
                       <span className="text-gray-700 font-medium">{feature.name}</span>
                     </div>
                   ))}
@@ -171,7 +171,7 @@ const ServiceDetailAPI: React.FC = () => {
             <div className="space-y-3">
               {companyContact?.company_phone && (
                 <a href={`tel:${companyContact.company_phone}`} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-200">
-                  <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-[#2d5016]">
+                  <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-[#059669]">
                     <Phone size={18} />
                   </div>
                   <div>
@@ -182,7 +182,7 @@ const ServiceDetailAPI: React.FC = () => {
               )}
               {companyContact?.company_email && (
                 <a href={`mailto:${companyContact.company_email}`} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-200">
-                  <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-[#2d5016]">
+                  <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-[#059669]">
                     <Mail size={18} />
                   </div>
                   <div>
@@ -193,7 +193,7 @@ const ServiceDetailAPI: React.FC = () => {
               )}
               {companyContact?.whatsapp && (
                 <a href={`https://wa.me/${companyContact.whatsapp.replace(/[^0-9]/g, '')}`} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-200">
-                  <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-[#2d5016]">
+                  <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-[#059669]">
                     <MessageCircle size={18} />
                   </div>
                   <div>
@@ -205,7 +205,7 @@ const ServiceDetailAPI: React.FC = () => {
             </div>
             <Link 
               to="/contact-us"
-              className="mt-6 w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#2d5016] text-white rounded-xl font-bold hover:bg-[#3d6622] transition-colors"
+              className="mt-6 w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#059669] text-white rounded-xl font-bold hover:bg-[#006638] transition-colors"
             >
               <span>Get a Quote</span>
               <ArrowRight size={18} />
@@ -216,7 +216,7 @@ const ServiceDetailAPI: React.FC = () => {
         {/* Gallery Grid */}
         {service.images.length > 0 && (
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 font-['Playfair_Display']">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 font-['Poppins']">
               Project Gallery
             </h2>
             {/* Grid Layout similar to Search Page */}
@@ -243,7 +243,7 @@ const ServiceDetailAPI: React.FC = () => {
         {/* Related Services */}
         {services.filter(s => getCategoryId(s.category) === getCategoryId(service.category) && s.id !== service.id).length > 0 && (
           <div className="mt-12 md:mt-16">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 font-['Playfair_Display']">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 font-['Poppins']">
               Related Services
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
@@ -254,7 +254,7 @@ const ServiceDetailAPI: React.FC = () => {
                   <Link
                     key={relatedService.uuid}
                     to={`/services/${relatedService.id}`}
-                    className="group bg-white rounded-xl overflow-hidden border border-gray-200 hover:border-[#2d5016]/20 hover:shadow-lg transition-all duration-300"
+                    className="group bg-white rounded-xl overflow-hidden border border-gray-200 hover:border-[#059669]/20 hover:shadow-lg transition-all duration-300"
                   >
                     <div className="relative h-40 overflow-hidden">
                       <img

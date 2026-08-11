@@ -32,14 +32,14 @@ const BottomNav: React.FC = () => {
                 flex flex-col items-center justify-center gap-1 rounded-2xl my-1
                 transition-all duration-300 relative
                 ${isActive 
-                  ? 'text-[#2d5016]' 
+                  ? 'text-[#059669]' 
                   : 'text-gray-400 hover:text-gray-600'
                 }
               `}
             >
               <div className={`
                 relative p-1.5 rounded-xl transition-all duration-300
-                ${isActive ? 'bg-[#2d5016]/10 translate-y-[-2px]' : ''}
+                ${isActive ? 'bg-[#059669]/10 translate-y-[-2px]' : ''}
               `}>
                 <Icon 
                   size={22} 
@@ -48,12 +48,12 @@ const BottomNav: React.FC = () => {
                   className={`transition-transform duration-300 ${isActive ? 'scale-110' : ''}`}
                 />
                 {item.badge !== undefined && item.badge > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 bg-[#d4af37] text-white text-[10px] font-bold rounded-full min-w-[16px] h-[16px] flex items-center justify-center px-1 shadow-sm border border-white">
+                  <span className="absolute -top-1.5 -right-1.5 bg-[#059669] text-white text-[10px] font-bold rounded-full min-w-[16px] h-[16px] flex items-center justify-center px-1 shadow-sm border border-white">
                     {item.badge > 99 ? '99+' : item.badge}
                   </span>
                 )}
               </div>
-              <span className={`text-[10px] font-medium transition-all duration-300 ${isActive ? 'font-bold text-[#2d5016]' : 'text-gray-500'}`}>
+              <span className={`text-[10px] font-medium transition-all duration-300 ${isActive ? 'font-bold text-[#059669]' : 'text-gray-500'}`}>
                 {item.label}
               </span>
             </Link>

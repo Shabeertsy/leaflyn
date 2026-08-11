@@ -68,29 +68,22 @@ const Account: React.FC = () => {
   return (
     <div className="pb-24 lg:pb-0 bg-neutral-50 min-h-screen">
       {/* Profile Header */}
-      <div className="relative bg-[#2d5016] text-white pt-12 pb-24 px-6 rounded-b-[2.5rem] shadow-xl overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.4) 0%, transparent 50%)'
-          }}
-        />
-
+      <div className="relative bg-[#059669] text-white pt-12 pb-24 px-6 rounded-b-[2.5rem] overflow-hidden">
         <div className="relative max-w-2xl mx-auto text-center">
           <div className="relative inline-block mb-4">
-            <div className="w-28 h-28 rounded-full p-1 bg-gradient-to-br from-[#d4af37] to-[#8b7355] shadow-2xl">
+            <div className="w-28 h-28 rounded-full p-1 bg-[#006638]">
               <img
                 src={user.avatar || `https://ui-avatars.com/api/?name=${user.first_name}+${user.last_name}&background=random`}
                 alt={`${user.first_name} ${user.last_name}`}
-                className="w-full h-full rounded-full border-4 border-[#2d5016] object-cover"
+                className="w-full h-full rounded-full border-4 border-[#059669] object-cover"
               />
             </div>
-            <button className="absolute bottom-1 right-1 p-2 bg-white text-[#2d5016] rounded-full shadow-lg hover:bg-gray-100 transition-colors">
+            <button className="absolute bottom-1 right-1 p-2 bg-white text-[#059669] rounded-full shadow-lg hover:bg-gray-100 transition-colors">
               <Camera size={16} />
             </button>
           </div>
 
-          <h1 className="text-3xl font-bold font-['Playfair_Display'] mb-1">{user.first_name} {user.last_name}</h1>
+          <h1 className="text-3xl font-bold font-['Poppins'] mb-1">{user.first_name} {user.last_name}</h1>
           <p className="text-white/70 mb-6">{user.email}</p>
 
           {/* Stats Cards */}
@@ -100,8 +93,8 @@ const Account: React.FC = () => {
               { label: 'Wishlist', value: '8' },
               { label: 'Points', value: '450' },
             ].map((stat, index) => (
-              <div key={index} className="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/10">
-                <p className="text-2xl font-bold text-[#d4af37] mb-0.5">{stat.value}</p>
+              <div key={index} className="bg-[#006638] rounded-2xl p-3">
+                <p className="text-2xl font-bold text-white mb-0.5">{stat.value}</p>
                 <p className="text-xs text-white/60 uppercase tracking-wider font-medium">{stat.label}</p>
               </div>
             ))}
@@ -114,19 +107,19 @@ const Account: React.FC = () => {
         {isInstallable && (
           <button
             onClick={installApp}
-            className="w-full bg-gradient-to-r from-[#d4af37] to-[#bfa040] text-white p-1 rounded-2xl shadow-xl hover:shadow-2xl transition-all hover:-translate-y-0.5 group"
+            className="w-full bg-[#059669] text-white p-1 rounded-2xl shadow-xl hover:shadow-2xl transition-all hover:-translate-y-0.5 group"
           >
-            <div className="bg-[#2d5016] rounded-xl p-4 flex items-center justify-between">
+            <div className="bg-[#059669] rounded-xl p-4 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="bg-white/10 p-3 rounded-xl group-hover:bg-white/20 transition-colors">
-                  <Download size={24} className="text-[#d4af37]" />
+                  <Download size={24} className="text-[#059669]" />
                 </div>
                 <div className="text-left">
                   <p className="font-bold text-lg">Install App</p>
                   <p className="text-sm text-white/60">Get the best mobile experience</p>
                 </div>
               </div>
-              <span className="bg-[#d4af37] text-[#2d5016] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide">
+              <span className="bg-[#059669] text-[#059669] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide">
                 Install
               </span>
             </div>
@@ -146,21 +139,21 @@ const Account: React.FC = () => {
                   to={item.path}
                   className="flex items-center gap-4 px-6 py-4 hover:bg-neutral-50 transition-colors group"
                 >
-                  <div className="w-10 h-10 bg-neutral-100 rounded-xl flex items-center justify-center group-hover:bg-[#2d5016]/10 transition-colors">
-                    <item.icon size={20} className="text-gray-500 group-hover:text-[#2d5016] transition-colors" />
+                  <div className="w-10 h-10 bg-neutral-100 rounded-xl flex items-center justify-center group-hover:bg-[#059669]/10 transition-colors">
+                    <item.icon size={20} className="text-gray-500 group-hover:text-[#059669] transition-colors" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <span className="font-semibold text-gray-900">{item.label}</span>
                       {item.badge && (
-                        <span className="bg-[#d4af37] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                        <span className="bg-[#059669] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                           {item.badge}
                         </span>
                       )}
                     </div>
                     <p className="text-xs text-gray-500 mt-0.5">{item.subtitle}</p>
                   </div>
-                  <ChevronRight size={18} className="text-gray-300 group-hover:text-[#2d5016] transition-colors" />
+                  <ChevronRight size={18} className="text-gray-300 group-hover:text-[#059669] transition-colors" />
                 </Link>
               ))}
             </div>
@@ -178,11 +171,11 @@ const Account: React.FC = () => {
 
         {/* App Info */}
         <div className="py-6 text-center text-sm text-gray-400">
-          <p className="font-medium mb-2">fernrie</p>
+          <p className="font-medium mb-2">catsclaw</p>
           <div className="flex justify-center gap-4">
-            <Link to="/terms" className="hover:text-[#2d5016] transition-colors">Terms of Service</Link>
+            <Link to="/terms" className="hover:text-[#059669] transition-colors">Terms of Service</Link>
             <span>•</span>
-            <Link to="/privacy" className="hover:text-[#2d5016] transition-colors">Privacy Policy</Link>
+            <Link to="/privacy" className="hover:text-[#059669] transition-colors">Privacy Policy</Link>
           </div>
         </div>
       </div>

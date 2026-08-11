@@ -93,7 +93,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         
         {/* Discount Badge */}
         {product.discount && (
-          <div className="absolute top-3 left-3 bg-gradient-to-r from-[#2d5016] to-[#3d6622] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+          <div className="absolute top-3 left-3 bg-gradient-to-r from-[#059669] to-[#006638] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
             {product.discount}% OFF
           </div>
         )}
@@ -104,7 +104,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           disabled={wishlistLoading}
           className={`absolute top-3 right-3 p-2 rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
             inWishlist
-              ? 'bg-[#2d5016] text-white'
+              ? 'bg-[#059669] text-white'
               : 'bg-white/90 text-gray-700 hover:bg-white'
           }`}
           aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
@@ -122,7 +122,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           disabled={cartLoading}
           className={`hidden md:block absolute bottom-0 left-0 right-0 py-3.5 font-semibold text-sm transition-all duration-500 disabled:cursor-not-allowed ${
             addedToCart
-              ? 'bg-[#2d5016] text-white translate-y-0'
+              ? 'bg-[#059669] text-white translate-y-0'
               : 'bg-white/95 text-gray-900 translate-y-full group-hover:translate-y-0'
           }`}
         >
@@ -145,7 +145,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       {/* Product Info */}
       <div className="p-4">
         {/* Name */}
-        <h3 className="text-sm md:text-base font-semibold text-gray-900 mb-2 line-clamp-2 leading-tight group-hover:text-[#2d5016] transition-colors font-sans">
+        <h3 className="text-sm md:text-base font-semibold text-gray-900 mb-2 line-clamp-2 leading-tight group-hover:text-[#059669] transition-colors font-sans">
           {product.name}
         </h3>
 
@@ -156,7 +156,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               <Star
                 key={i}
                 size={12}
-                className={i < Math.floor(product.rating) ? 'fill-[#d4af37] text-[#d4af37]' : 'text-gray-300'}
+                className={i < Math.floor(product.rating) ? 'fill-[#059669] text-[#059669]' : 'text-gray-300'}
               />
             ))}
           </div>
@@ -168,7 +168,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {/* Price */}
         <div className="flex items-center justify-between mt-2">
           <div className="flex items-baseline gap-2">
-            <span className="text-base md:text-lg font-bold text-[#2d5016] font-sans tracking-wide">
+            <span className="text-base md:text-lg font-bold text-[#059669] font-sans tracking-wide">
               ₹{product.price}
             </span>
             {product.originalPrice && (
@@ -183,8 +183,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             disabled={cartLoading}
             className={`md:hidden px-3 py-1.5 text-xs font-bold rounded-full transition-all duration-300 ${
               addedToCart
-                ? 'bg-[#2d5016] text-white'
-                : 'bg-green-100/80 text-[#2d5016] hover:bg-[#2d5016] hover:text-white'
+                ? 'bg-[#059669] text-white'
+                : 'bg-green-100/80 text-[#059669] hover:bg-[#059669] hover:text-white'
             }`}
           >
             {addedToCart ? 'Added' : 'Add'}

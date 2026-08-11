@@ -259,59 +259,52 @@ const Search: React.FC = () => {
   return (
     <div className="pb-20 lg:pb-0 bg-neutral-50 min-h-screen">
       {/* Header Section */}
-      <div className="bg-[#2d5016] text-white pt-6 pb-8 md:pt-8 md:pb-12 px-4 md:px-6 rounded-b-[1.5rem] md:rounded-b-[2rem] shadow-xl relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.4) 0%, transparent 50%)'
-          }}
-        />
-        
-        <div className="relative max-w-7xl mx-auto">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold font-['Playfair_Display'] mb-2">
-            Explore Collections
+      <div className="bg-white border-b border-gray-100 pt-10 pb-12 px-4 md:px-6">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 text-gray-900">
+            Explore <span className="text-[#059669]">Collections</span>
           </h1>
-          <p className="text-sm md:text-base text-white/80 mb-6 md:mb-8 max-w-xl">
+          <p className="text-sm md:text-base text-gray-500 mb-8 max-w-xl">
             Discover our curated selection of premium plants and accessories for your home.
           </p>
 
           {/* Search Bar */}
           <div className="relative max-w-2xl">
-            <div className="absolute inset-y-0 left-3 md:left-4 flex items-center pointer-events-none">
-              <SearchIcon className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
+            <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+              <SearchIcon className="w-5 h-5 text-gray-400" />
             </div>
             <input
               type="text"
               placeholder="Search for plants..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 md:pl-12 pr-10 md:pr-12 py-3 md:py-4 bg-white text-gray-900 rounded-xl md:rounded-2xl shadow-lg border-none focus:ring-2 focus:ring-[#d4af37] placeholder-gray-400 text-sm md:text-base"
+              className="w-full pl-12 pr-12 py-4 bg-neutral-50 text-gray-900 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669] transition-all placeholder-gray-400 text-base"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
               >
-                <X className="w-4 h-4 md:w-5 md:h-5" />
+                <X className="w-5 h-5" />
               </button>
             )}
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 -mt-5 md:-mt-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 pt-6 relative z-10">
         {/* Categories Scroll - Redesigned */}
         <div className="flex gap-2 md:gap-3 overflow-x-auto pb-4 no-scrollbar scrollbar-hide">
           <button
             onClick={() => setSelectedCategoryId('all')}
-            className={`group flex-shrink-0 px-5 py-2.5 md:px-6 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 ${
+            className={`group flex-shrink-0 px-5 py-2.5 font-semibold text-sm transition-all duration-300 ${
               selectedCategoryId === 'all'
-                ? 'bg-gradient-to-r from-[#2d5016] to-[#3d6622] text-white shadow-lg scale-105'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 hover:border-[#2d5016]/30 hover:shadow-md'
+                ? 'bg-[#059669] text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
             }`}
           >
             <span className="flex items-center gap-2">
-              <span className={`text-base ${selectedCategoryId === 'all' ? 'animate-pulse' : ''}`}>🌿</span>
+              <span className={`text-base ${selectedCategoryId === 'all' ? 'opacity-90' : ''}`}>🌿</span>
               <span>All Items</span>
             </span>
           </button>
@@ -324,10 +317,10 @@ const Search: React.FC = () => {
                 key={category.id}
                 data-category-id={category.id}
                 onClick={() => setSelectedCategoryId(String(category.id))}
-                className={`group flex-shrink-0 px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 flex items-center gap-2 border ${
+                className={`group flex-shrink-0 px-5 py-2.5 font-semibold text-sm transition-all duration-300 flex items-center gap-2 border ${
                   isSelected
-                    ? 'bg-[#2d5016] text-white border-[#2d5016] shadow-md'
-                    : 'bg-white text-gray-700 border-gray-200 hover:border-[#2d5016]/50 hover:bg-gray-50'
+                    ? 'bg-[#059669] text-white border-[#059669]'
+                    : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
                 }`}
               >
                 {category.icon && (
@@ -349,7 +342,7 @@ const Search: React.FC = () => {
         {/* Filter Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
           <p className="text-xs md:text-sm text-gray-600 font-medium">
-            Showing <span className="text-[#2d5016] font-bold">{filteredProducts.length}</span> results
+            Showing <span className="text-[#059669] font-bold">{filteredProducts.length}</span> results
           </p>
           
           <div className="flex items-center gap-3">
@@ -360,7 +353,7 @@ const Search: React.FC = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="pl-9 md:pl-10 pr-8 py-2 md:py-2.5 bg-white border border-gray-200 rounded-lg text-xs md:text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d5016] appearance-none cursor-pointer hover:border-gray-300 shadow-sm"
+                className="pl-9 md:pl-10 pr-8 py-2 md:py-2.5 bg-white border border-gray-200 rounded-lg text-xs md:text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#059669] appearance-none cursor-pointer hover:border-gray-300 shadow-sm"
               >
                 <option value="popular">Most Popular</option>
                 <option value="price-low">Price: Low to High</option>
@@ -374,28 +367,30 @@ const Search: React.FC = () => {
         {/* Products Grid */}
         {isLoading && currentPage === 1 ? (
           <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2d5016]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#059669]"></div>
           </div>
         ) : filteredProducts.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
-            <div className="w-24 h-24 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <SearchIcon size={40} className="text-gray-400" />
+          <div className="text-center py-24 bg-white rounded-2xl border border-gray-100">
+            <div className="w-20 h-20 bg-[#059669]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <SearchIcon size={32} className="text-[#059669]" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-3 font-['Playfair_Display']">
-              No matches found
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              Coming soon..
             </h3>
             <p className="text-gray-500 mb-8 max-w-md mx-auto">
-              We couldn't find any products matching your search. Try checking for typos or using different keywords.
+              We are working hard to bring you more products. Please check back later or clear your search to view available items.
             </p>
-            <button
-              onClick={() => {
-                setSearchQuery('');
-                setSelectedCategoryId('all');
-              }}
-              className="px-8 py-3 bg-[#2d5016] text-white rounded-full font-bold hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-            >
-              Clear All Filters
-            </button>
+            {(searchQuery || selectedCategoryId !== 'all') && (
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedCategoryId('all');
+                }}
+                className="px-8 py-3 bg-white text-gray-900 border border-gray-200 rounded-full font-semibold hover:border-gray-300 hover:bg-gray-50 transition-all"
+              >
+                Clear Filters
+              </button>
+            )}
           </div>
         ) : (
           <>
@@ -408,7 +403,7 @@ const Search: React.FC = () => {
             {/* Infinite Scroll Trigger */}
             {nextPage && (
               <div ref={observerTarget} className="mt-12 flex justify-center items-center py-8">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#2d5016]"></div>
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#059669]"></div>
               </div>
             )}
 

@@ -216,7 +216,7 @@ const AdBanner: React.FC<AdBannerProps> = ({
                     {/* Content */}
                     <div className="relative h-full max-w-7xl mx-auto px-6 flex items-center">
                       <div className="text-white max-w-2xl">
-                        <h2 className="text-4xl lg:text-5xl font-bold mb-3 font-['Playfair_Display'] animate-slide-up">
+                        <h2 className="text-4xl lg:text-5xl font-bold mb-3 font-['Poppins'] animate-slide-up">
                           {slide.title}
                         </h2>
                         <p
@@ -330,7 +330,7 @@ const AdBanner: React.FC<AdBannerProps> = ({
                             variant === 'hero'
                               ? 'text-4xl leading-tight mb-2'
                               : 'text-xl'
-                          } font-bold font-['Playfair_Display'] drop-shadow-lg`}
+                          } font-bold font-['Poppins'] drop-shadow-lg`}
                         >
                           {slide.title}
                         </h3>
@@ -348,12 +348,12 @@ const AdBanner: React.FC<AdBannerProps> = ({
                           (slide.link ? (
                             <a
                               href={slide.link}
-                              className="inline-block px-8 py-3 bg-[#2d5016] text-white rounded-full text-base font-bold shadow-lg hover:bg-[#3d6622] transition-colors"
+                              className="inline-block px-8 py-3 bg-[#059669] text-white rounded-full text-base font-bold shadow-lg hover:bg-[#006638] transition-colors"
                             >
                               Shop Collection
                             </a>
                           ) : (
-                            <button className="px-8 py-3 bg-[#2d5016] text-white rounded-full text-base font-bold shadow-lg hover:bg-[#3d6622] transition-colors">
+                            <button className="px-8 py-3 bg-[#059669] text-white rounded-full text-base font-bold shadow-lg hover:bg-[#006638] transition-colors">
                               Shop Collection
                             </button>
                           ))}
@@ -391,7 +391,7 @@ const AdBanner: React.FC<AdBannerProps> = ({
                     onClick={() => setCurrentSlide(index)}
                     className={`transition-all duration-300 rounded-full ${
                       index === currentSlide
-                        ? 'w-6 h-1.5 bg-[#2d5016]'
+                        ? 'w-6 h-1.5 bg-[#059669]'
                         : 'w-1.5 h-1.5 bg-gray-300'
                     }`}
                     aria-label={`Go to slide ${index + 1}`}

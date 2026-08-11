@@ -114,7 +114,7 @@ const ProductDetail: React.FC = () => {
   if (isLoading && !product) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-neutral-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2d5016]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#059669]"></div>
       </div>
     );
   }
@@ -123,7 +123,7 @@ const ProductDetail: React.FC = () => {
     return (
       <div className="pb-20 lg:pb-0 px-6 py-16 text-center max-w-7xl mx-auto">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Product not found</h2>
-        <Link to="/" className="text-[#2d5016] font-semibold">
+        <Link to="/" className="text-[#059669] font-semibold">
           Go back to home
         </Link>
       </div>
@@ -274,7 +274,7 @@ const ProductDetail: React.FC = () => {
             </div>
 
             {product.discount && (
-              <div className="absolute top-6 left-6 bg-gradient-to-r from-[#2d5016] to-[#3d6622] text-white text-base font-bold px-5 py-2.5 rounded-full shadow-xl z-10 border-2 border-white/20">
+              <div className="absolute top-6 left-6 bg-gradient-to-r from-[#059669] to-[#006638] text-white text-base font-bold px-5 py-2.5 rounded-full shadow-xl z-10 border-2 border-white/20">
                 <span className="text-lg">{product.discount}%</span> OFF
               </div>
             )}
@@ -292,7 +292,7 @@ const ProductDetail: React.FC = () => {
                     key={index}
                     onClick={() => setSelectedImage(index)}
                     className={`transition-all ${selectedImage === index
-                      ? 'w-8 h-2 bg-[#2d5016]'
+                      ? 'w-8 h-2 bg-[#059669]'
                       : 'w-2 h-2 bg-gray-300 hover:bg-gray-400'
                       } rounded-full`}
                     aria-label={`View image ${index + 1}`}
@@ -310,7 +310,7 @@ const ProductDetail: React.FC = () => {
                   key={index}
                   onClick={() => setSelectedImage(index)}
                   className={`flex-shrink-0 w-16 h-16 lg:w-20 lg:h-20 rounded-xl overflow-hidden border-2 transition-all ${selectedImage === index
-                    ? 'border-[#2d5016] scale-105 shadow-md'
+                    ? 'border-[#059669] scale-105 shadow-md'
                     : 'border-gray-200 hover:border-gray-300'
                     }`}
                 >
@@ -324,15 +324,15 @@ const ProductDetail: React.FC = () => {
         {/* Product Info Section */}
         <div className="px-6 py-8 bg-white mt-2">
           {/* Category Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#2d5016]/10 rounded-full mb-4">
-            <Leaf size={14} className="text-[#2d5016]" />
-            <span className="text-sm text-[#2d5016] font-bold uppercase tracking-wide">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#059669]/10 rounded-full mb-4">
+            <Leaf size={14} className="text-[#059669]" />
+            <span className="text-sm text-[#059669] font-bold uppercase tracking-wide">
               {product.category.replace('-', ' ')}
             </span>
           </div>
 
           {/* Product Name */}
-          <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-4 font-['Playfair_Display'] leading-tight">
+          <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-4 font-['Poppins'] leading-tight">
             {product.name}
           </h1>
 
@@ -344,14 +344,14 @@ const ProductDetail: React.FC = () => {
                   <Star
                     key={i}
                     size={18}
-                    className={i < Math.floor(product.rating) ? 'fill-[#d4af37] text-[#d4af37]' : 'text-gray-300'}
+                    className={i < Math.floor(product.rating) ? 'fill-[#059669] text-[#059669]' : 'text-gray-300'}
                   />
                 ))}
               </div>
               <span className="text-lg font-bold text-gray-900">{product.rating}</span>
             </div>
             <span className="text-gray-400">|</span>
-            <Link to="#reviews" className="text-sm text-gray-600 hover:text-[#2d5016] font-medium">
+            <Link to="#reviews" className="text-sm text-gray-600 hover:text-[#059669] font-medium">
               {product.reviewCount} Reviews
             </Link>
           </div>
@@ -359,7 +359,7 @@ const ProductDetail: React.FC = () => {
           {/* Price Section */}
           <div className="mb-8">
             <div className="flex items-baseline gap-3 mb-2">
-              <span className="text-3xl lg:text-5xl font-bold text-[#2d5016] font-sans tracking-wide">
+              <span className="text-3xl lg:text-5xl font-bold text-[#059669] font-sans tracking-wide">
                 ₹{product.price}
               </span>
               {product.originalPrice && (
@@ -388,13 +388,13 @@ const ProductDetail: React.FC = () => {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`pb-4 px-2 font-bold text-sm transition-colors relative ${activeTab === tab.id
-                    ? 'text-[#2d5016]'
+                    ? 'text-[#059669]'
                     : 'text-gray-500 hover:text-gray-700'
                     }`}
                 >
                   {tab.label}
                   {activeTab === tab.id && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2d5016]" />
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#059669]" />
                   )}
                 </button>
               ))}
@@ -464,11 +464,11 @@ const ProductDetail: React.FC = () => {
         {(similarProducts.length > 0 || loadingSimilar) && (
           <div className="px-6 py-12 bg-white mt-2">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-bold text-gray-900 font-['Playfair_Display']">Similar Products</h3>
+              <h3 className="text-2xl font-bold text-gray-900 font-['Poppins']">Similar Products</h3>
               {product.category && similarProducts.length > 0 && (
                 <Link
                   to={`/category/${product.category}`}
-                  className="text-[#2d5016] font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all"
+                  className="text-[#059669] font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all"
                 >
                   See All <ChevronRight size={16} />
                 </Link>
@@ -505,7 +505,7 @@ const ProductDetail: React.FC = () => {
                 <p className="text-gray-500 mb-6">We couldn't find any similar products at the moment.</p>
                 <Link
                   to="/search"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#2d5016] text-white rounded-full font-semibold hover:bg-[#3d6622] transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#059669] text-white rounded-full font-semibold hover:bg-[#006638] transition-all"
                 >
                   Browse All Products
                   <ChevronRight size={18} />
@@ -545,7 +545,7 @@ const ProductDetail: React.FC = () => {
             className={`flex-1 py-3 lg:py-4 rounded-xl font-bold text-white transition-all flex items-center justify-center gap-2 shadow-lg text-sm lg:text-base ${addedToCart
               ? 'bg-green-600'
               : product.inStock
-                ? 'bg-[#2d5016] hover:bg-[#3d6622] hover:shadow-xl hover:-translate-y-0.5 active:scale-95'
+                ? 'bg-[#059669] hover:bg-[#006638] hover:shadow-xl hover:-translate-y-0.5 active:scale-95'
                 : 'bg-gray-400 cursor-not-allowed'
               } ${cartLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
@@ -599,7 +599,7 @@ const ProductDetail: React.FC = () => {
                 }
               }}
               disabled={cartLoading}
-              className={`flex-1 py-3 lg:py-4 bg-gradient-to-r from-[#d4af37] to-[#bfa040] text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95 text-sm lg:text-base ${cartLoading ? 'opacity-70 cursor-not-allowed' : ''
+              className={`flex-1 py-3 lg:py-4 bg-gradient-to-r from-[#059669] to-[#bfa040] text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95 text-sm lg:text-base ${cartLoading ? 'opacity-70 cursor-not-allowed' : ''
                 }`}
             >
               <Truck size={18} />

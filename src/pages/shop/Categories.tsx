@@ -22,7 +22,7 @@ const Categories: React.FC = () => {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 size={48} className="text-[#2d5016] animate-spin mx-auto mb-4" />
+          <Loader2 size={48} className="text-[#059669] animate-spin mx-auto mb-4" />
           <p className="text-gray-500 font-medium">Loading categories...</p>
         </div>
       </div>
@@ -40,7 +40,7 @@ const Categories: React.FC = () => {
           <p className="text-gray-500 mb-6">{error}</p>
           <button
             onClick={fetchCategories}
-            className="px-6 py-3 bg-[#2d5016] text-white rounded-full font-semibold hover:bg-[#3d6622] transition-colors"
+            className="px-6 py-3 bg-[#059669] text-white rounded-full font-semibold hover:bg-[#006638] transition-colors"
           >
             Try Again
           </button>
@@ -55,14 +55,14 @@ const Categories: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <Link 
             to="/" 
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-[#2d5016] transition-colors mb-4"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-[#059669] transition-colors mb-4"
           >
             <ArrowLeft size={20} />
             <span className="font-medium">Back to Home</span>
           </Link>
           <div>
-            <span className="text-[#d4af37] font-bold tracking-widest uppercase text-xs mb-2 block">Browse</span>
-            <h1 className="text-4xl lg:text-5xl font-bold text-[#2d5016] font-['Playfair_Display'] mb-3">
+            <span className="text-[#059669] font-bold tracking-widest uppercase text-xs mb-2 block">Browse</span>
+            <h1 className="text-4xl lg:text-5xl font-bold text-[#059669] font-['Poppins'] mb-3">
               All Collections
             </h1>
             <p className="text-gray-500 text-lg font-light">
@@ -116,7 +116,7 @@ const Categories: React.FC = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-2xl lg:text-3xl font-bold text-white font-['Playfair_Display'] mb-3 group-hover:text-white/90 transition-colors drop-shadow-md">
+                  <h3 className="text-2xl lg:text-3xl font-bold text-white font-['Poppins'] mb-3 group-hover:text-white/90 transition-colors drop-shadow-md">
                     {category.category_name}
                   </h3>
                   <p className="text-white/80 text-sm lg:text-base opacity-90 line-clamp-2 mb-4 group-hover:opacity-100 transition-opacity drop-shadow-sm">

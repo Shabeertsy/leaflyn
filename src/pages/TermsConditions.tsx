@@ -36,40 +36,20 @@ const TermsConditionsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-white pb-20 lg:pb-8">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#1a3a0f] via-[#2d5016] to-[#1f4412] text-white overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-[#d4af37]/30 to-transparent rounded-full blur-3xl animate-pulse" 
-            style={{ animationDuration: '8s' }} 
-          />
-          <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-tl from-[#8b7355]/20 to-transparent rounded-full blur-3xl animate-pulse" 
-            style={{ animationDuration: '10s', animationDelay: '2s' }} 
-          />
-        </div>
-        
-        <div className="relative px-6 py-20 lg:py-24 max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2.5 bg-white/10 backdrop-blur-xl px-5 py-2.5 rounded-full border border-white/30 mb-6">
-            <Shield className="w-4 h-4 text-[#d4af37]" />
-            <span className="text-white/90 font-semibold tracking-widest uppercase text-xs">Legal Information</span>
+      <section className="bg-neutral-50 border-b border-gray-100">
+        <div className="px-6 py-20 lg:py-24 max-w-7xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2.5 bg-[#059669]/10 px-5 py-2.5 rounded-full border border-[#059669]/20 mb-6">
+            <Shield className="w-4 h-4 text-[#059669]" />
+            <span className="text-[#059669] font-semibold tracking-widest uppercase text-xs">Legal Information</span>
           </div>
           
-          <h1 className="text-4xl lg:text-6xl font-bold leading-tight font-['Playfair_Display'] mb-6"
-            style={{
-              textShadow: '0 4px 20px rgba(0,0,0,0.4)',
-              letterSpacing: '-0.02em'
-            }}
-          >
-            Terms & <span className="bg-gradient-to-r from-[#f4d03f] via-[#d4af37] to-[#c9a961] bg-clip-text text-transparent">Conditions</span>
+          <h1 className="text-4xl lg:text-6xl font-bold leading-tight font-['Poppins'] mb-6 text-gray-900">
+            Terms & <span className="text-[#059669]">Conditions</span>
           </h1>
           
-          <p className="text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
             Please read these terms and conditions carefully before using our service.
           </p>
-        </div>
-        
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#fafaf9"/>
-          </svg>
         </div>
       </section>
 
@@ -77,7 +57,7 @@ const TermsConditionsPage: React.FC = () => {
       <section className="max-w-4xl mx-auto px-6 py-16 lg:py-20">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
-            <div className="w-16 h-16 border-4 border-[#2d5016]/20 border-t-[#2d5016] rounded-full animate-spin mb-4" />
+            <div className="w-16 h-16 border-4 border-[#059669]/20 border-t-[#059669] rounded-full animate-spin mb-4" />
             <p className="text-gray-600">Loading terms and conditions...</p>
           </div>
         ) : error ? (
@@ -99,10 +79,10 @@ const TermsConditionsPage: React.FC = () => {
         ) : (
           <div className="space-y-8">
             {/* Info Banner */}
-            <div className="bg-gradient-to-r from-[#2d5016] to-[#1a3a0f] rounded-2xl p-6 text-white">
+            <div className="bg-[#059669] rounded-2xl p-6 text-white">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shrink-0">
-                  <Clock className="text-[#d4af37]" size={24} />
+                  <Clock className="text-[#059669]" size={24} />
                 </div>
                 <div>
                   <h3 className="font-bold text-lg mb-1">Last Updated</h3>
@@ -119,11 +99,11 @@ const TermsConditionsPage: React.FC = () => {
                 {termsData.map((term, index) => (
                   <div key={term.uuid} className="space-y-4">
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-gradient-to-br from-[#2d5016] to-[#3d6622] rounded-xl flex items-center justify-center shrink-0 text-white font-bold">
+                      <div className="w-10 h-10 bg-[#059669] rounded-xl flex items-center justify-center shrink-0 text-white font-bold">
                         {index + 1}
                       </div>
                       <div className="flex-1">
-                        <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 font-['Playfair_Display']">
+                        <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 font-['Poppins']">
                           {term.title}
                         </h2>
                         <div 
@@ -176,7 +156,7 @@ const TermsConditionsPage: React.FC = () => {
               </p>
               <a 
                 href="/contact-us" 
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#2d5016] to-[#1a3a0f] text-white px-8 py-3 rounded-full font-bold hover:from-[#d4af37] hover:to-[#c9a961] transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="inline-flex items-center gap-2 bg-[#059669] text-white px-8 py-3 rounded-full font-bold hover:bg-[#006638] transition-all duration-300 shadow-lg shadow-[#059669]/20"
               >
                 Contact Support
               </a>

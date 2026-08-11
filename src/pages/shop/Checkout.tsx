@@ -372,25 +372,25 @@ const Checkout: React.FC = () => {
   if (step === 'success') {
     return (
       <div className="min-h-screen bg-neutral-50 flex flex-col items-center justify-center p-6 text-center pb-20">
-        <div className="w-28 h-28 bg-[#2d5016]/10 rounded-full flex items-center justify-center mb-8 animate-scale-in">
-          <CheckCircle size={56} className="text-[#2d5016]" />
+        <div className="w-28 h-28 bg-[#059669]/10 rounded-full flex items-center justify-center mb-8 animate-scale-in">
+          <CheckCircle size={56} className="text-[#059669]" />
         </div>
-        <h1 className="text-4xl font-bold text-[#2d5016] mb-4 font-['Playfair_Display']">Order Confirmed!</h1>
+        <h1 className="text-4xl font-bold text-[#059669] mb-4 font-['Poppins']">Order Confirmed!</h1>
         <p className="text-gray-500 mb-10 max-w-md text-lg font-light">
-          Thank you for choosing fernrie. Your green friends are being prepared with care and will be with you soon!
+          Thank you for choosing catsclaw. Your green friends are being prepared with care and will be with you soon!
         </p>
 
         <div className="bg-white rounded-2xl p-6 w-full max-w-sm mb-10 shadow-lg border border-gray-100 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#d4af37] to-[#f4d03f]" />
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#059669] to-[#10b981]" />
           <div className="flex justify-between items-center mb-4 pb-4 border-b border-gray-100">
             <span className="text-sm text-gray-500 uppercase tracking-wider">Order ID</span>
-            <span className="font-mono font-bold text-[#2d5016]">
+            <span className="font-mono font-bold text-[#059669]">
               {orderSuccessData?.order_id || `#LF-${Math.floor(Math.random() * 100000)}`}
             </span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-500 uppercase tracking-wider">Amount Paid</span>
-            <span className="font-bold text-xl text-[#2d5016]">
+            <span className="font-bold text-xl text-[#059669]">
               ₹{orderSuccessData?.total_amount || total}
             </span>
           </div>
@@ -398,7 +398,7 @@ const Checkout: React.FC = () => {
 
         <button
           onClick={() => navigate('/')}
-          className="px-10 py-4 bg-[#2d5016] text-white rounded-full font-bold hover:bg-[#3d6622] transition-all w-full max-w-sm shadow-xl hover:shadow-2xl hover:-translate-y-1"
+          className="px-10 py-4 bg-[#059669] text-white rounded-full font-bold hover:bg-[#006638] transition-all w-full max-w-sm shadow-xl hover:shadow-2xl hover:-translate-y-1"
         >
           Continue Shopping
         </button>
@@ -413,7 +413,7 @@ const Checkout: React.FC = () => {
         <button onClick={() => navigate(-1)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
           <ArrowLeft size={24} className="text-gray-700" />
         </button>
-        <h1 className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">Checkout</h1>
+        <h1 className="text-2xl font-bold text-[#059669] font-['Poppins']">Checkout</h1>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
@@ -444,7 +444,7 @@ const Checkout: React.FC = () => {
                 boxShadow: '0 0 20px rgba(45, 80, 22, 0.4)'
               }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-[#2d5016] via-[#3d6622] to-[#2d5016] animate-pulse" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#059669] via-[#006638] to-[#059669] animate-pulse" />
               {/* Shimmer effect */}
               <div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30"
@@ -471,15 +471,15 @@ const Checkout: React.FC = () => {
                   {/* Circle is 56px (14 * 4), so center is at 28px */}
                   <div
                     className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 border-4 ${isCompleted
-                        ? 'bg-gradient-to-br from-[#2d5016] to-[#3d6622] border-[#2d5016] text-white shadow-lg shadow-[#2d5016]/30'
+                        ? 'bg-gradient-to-br from-[#059669] to-[#006638] border-[#059669] text-white shadow-lg shadow-[#059669]/30'
                         : isActive
-                          ? 'bg-gradient-to-br from-[#2d5016] to-[#3d6622] border-[#2d5016] text-white shadow-xl shadow-[#2d5016]/50 scale-110 animate-pulse'
+                          ? 'bg-gradient-to-br from-[#059669] to-[#006638] border-[#059669] text-white shadow-xl shadow-[#059669]/50 scale-110 animate-pulse'
                           : 'bg-white border-gray-300 text-gray-400 shadow-md'
                       }`}
                   >
                     {isCompleted ? <CheckCircle size={22} fill="currentColor" /> : <s.icon size={22} />}
                   </div>
-                  <span className={`text-xs font-bold uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${isCompleted || isActive ? 'text-[#2d5016] scale-105' : 'text-gray-400'
+                  <span className={`text-xs font-bold uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${isCompleted || isActive ? 'text-[#059669] scale-105' : 'text-gray-400'
                     }`}>
                     {s.label}
                   </span>
@@ -502,7 +502,7 @@ const Checkout: React.FC = () => {
           <div className="flex-1">
             {step === 'address' ? (
               <div className="space-y-6 animate-slide-up">
-                <h2 className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">Shipping Address</h2>
+                <h2 className="text-2xl font-bold text-[#059669] font-['Poppins']">Shipping Address</h2>
 
                 {/* For Authenticated Users: Show Address Slider */}
                 {isAuthenticated && !isGuestFlow && (
@@ -532,7 +532,7 @@ const Checkout: React.FC = () => {
                               >
                                 <div
                                   className={`border-2 p-4 sm:p-5 rounded-2xl cursor-pointer transition-all ${index === selectedAddressIndex
-                                      ? 'border-[#2d5016] bg-[#2d5016]/5 shadow-md'
+                                      ? 'border-[#059669] bg-[#059669]/5 shadow-md'
                                       : 'border-gray-200 bg-white'
                                     }`}
                                   onClick={() => setSelectedAddressIndex(index)}
@@ -540,14 +540,14 @@ const Checkout: React.FC = () => {
                                   {/* Header */}
                                   <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-100">
                                     <span className={`text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide ${address.isDefault
-                                        ? 'bg-[#2d5016] text-white'
+                                        ? 'bg-[#059669] text-white'
                                         : 'bg-gray-100 text-gray-600'
                                       }`}>
                                       {address.isDefault ? 'Default' : 'Address'}
                                     </span>
                                     {index === selectedAddressIndex && (
-                                      <div className="flex items-center gap-1.5 text-[#2d5016]">
-                                        <div className="w-5 h-5 rounded-full bg-[#2d5016] flex items-center justify-center">
+                                      <div className="flex items-center gap-1.5 text-[#059669]">
+                                        <div className="w-5 h-5 rounded-full bg-[#059669] flex items-center justify-center">
                                           <CheckCircle size={14} className="text-white" fill="currentColor" />
                                         </div>
                                         <span className="text-xs font-semibold hidden sm:inline">Selected</span>
@@ -583,7 +583,7 @@ const Checkout: React.FC = () => {
                                 key={index}
                                 onClick={() => setSelectedAddressIndex(index)}
                                 className={`transition-all duration-300 rounded-full ${index === selectedAddressIndex
-                                    ? 'w-8 h-2 bg-[#2d5016]'
+                                    ? 'w-8 h-2 bg-[#059669]'
                                     : 'w-2 h-2 bg-gray-300 hover:bg-gray-400'
                                   }`}
                                 aria-label={`Select address ${index + 1}`}
@@ -598,14 +598,14 @@ const Checkout: React.FC = () => {
                             <button
                               onClick={() => scrollAddresses('left')}
                               disabled={selectedAddressIndex === 0}
-                              className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 bg-white border-2 border-gray-200 rounded-full items-center justify-center hover:border-[#2d5016] hover:bg-[#2d5016] hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg z-10"
+                              className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 bg-white border-2 border-gray-200 rounded-full items-center justify-center hover:border-[#059669] hover:bg-[#059669] hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg z-10"
                             >
                               <ChevronLeftIcon size={20} />
                             </button>
                             <button
                               onClick={() => scrollAddresses('right')}
                               disabled={selectedAddressIndex === addresses.length - 1}
-                              className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 bg-white border-2 border-gray-200 rounded-full items-center justify-center hover:border-[#2d5016] hover:bg-[#2d5016] hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg z-10"
+                              className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 bg-white border-2 border-gray-200 rounded-full items-center justify-center hover:border-[#059669] hover:bg-[#059669] hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg z-10"
                             >
                               <ChevronRightIcon size={20} />
                             </button>
@@ -617,9 +617,9 @@ const Checkout: React.FC = () => {
                     {/* Add Address Button for Authenticated Users */}
                     <button
                       onClick={() => setShowAddressModal(true)}
-                      className="group w-full border-2 border-dashed border-gray-300 p-5 rounded-2xl flex items-center justify-center gap-3 text-gray-400 hover:border-[#2d5016] hover:text-[#2d5016] hover:bg-white transition-all duration-300"
+                      className="group w-full border-2 border-dashed border-gray-300 p-5 rounded-2xl flex items-center justify-center gap-3 text-gray-400 hover:border-[#059669] hover:text-[#059669] hover:bg-white transition-all duration-300"
                     >
-                      <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#2d5016] group-hover:text-white transition-colors duration-300">
+                      <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#059669] group-hover:text-white transition-colors duration-300">
                         <Plus size={20} />
                       </div>
                       <span className="font-bold">Add New Address</span>
@@ -639,7 +639,7 @@ const Checkout: React.FC = () => {
                             type="text"
                             value={newAddress.name}
                             onChange={(e) => setNewAddress({ ...newAddress, name: e.target.value })}
-                            className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                            className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                             placeholder="John Doe"
                             required
                           />
@@ -650,7 +650,7 @@ const Checkout: React.FC = () => {
                             type="tel"
                             value={newAddress.phone}
                             onChange={(e) => setNewAddress({ ...newAddress, phone: e.target.value })}
-                            className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                            className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                             placeholder="+91 98765 43210"
                             required
                           />
@@ -663,7 +663,7 @@ const Checkout: React.FC = () => {
                           type="text"
                           value={newAddress.buildingName}
                           onChange={(e) => setNewAddress({ ...newAddress, buildingName: e.target.value })}
-                          className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                          className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                           placeholder="Green Villa, Apt 301"
                         />
                       </div>
@@ -674,7 +674,7 @@ const Checkout: React.FC = () => {
                           type="text"
                           value={newAddress.place}
                           onChange={(e) => setNewAddress({ ...newAddress, place: e.target.value })}
-                          className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                          className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                           placeholder="123 Green Street"
                           required
                         />
@@ -687,7 +687,7 @@ const Checkout: React.FC = () => {
                             type="text"
                             value={newAddress.city}
                             onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
-                            className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                            className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                             placeholder="Eco Valley"
                             required
                           />
@@ -698,7 +698,7 @@ const Checkout: React.FC = () => {
                             type="text"
                             value={newAddress.district}
                             onChange={(e) => setNewAddress({ ...newAddress, district: e.target.value })}
-                            className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                            className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                             placeholder="Nature District"
                           />
                         </div>
@@ -711,7 +711,7 @@ const Checkout: React.FC = () => {
                             type="text"
                             value={newAddress.state}
                             onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
-                            className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                            className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                             placeholder="Kerala"
                           />
                         </div>
@@ -721,7 +721,7 @@ const Checkout: React.FC = () => {
                             type="text"
                             value={newAddress.pincode}
                             onChange={(e) => setNewAddress({ ...newAddress, pincode: e.target.value })}
-                            className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                            className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                             placeholder="670001"
                             required
                           />
@@ -799,7 +799,7 @@ const Checkout: React.FC = () => {
                     }
                   }}
                   disabled={sendingOTP || loading || isGuestFlow}
-                  className="w-full py-4 bg-[#2d5016] text-white rounded-xl font-bold text-lg hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="w-full py-4 bg-[#059669] text-white rounded-xl font-bold text-lg hover:bg-[#006638] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {sendingOTP || isGuestFlow ? (
                     <>
@@ -816,11 +816,11 @@ const Checkout: React.FC = () => {
               </div>
             ) : (
               <div className="space-y-6 animate-slide-up">
-                <h2 className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">Payment Method</h2>
+                <h2 className="text-2xl font-bold text-[#059669] font-['Poppins']">Payment Method</h2>
 
                 <div className="space-y-4">
                   {/* Online Payment / Gateways */}
-                  <div className={`bg-white border-2 rounded-2xl overflow-hidden shadow-md transition-all ${paymentMethod === 'gateway' ? 'border-[#2d5016]' : 'border-gray-200'}`}>
+                  <div className={`bg-white border-2 rounded-2xl overflow-hidden shadow-md transition-all ${paymentMethod === 'gateway' ? 'border-[#059669]' : 'border-gray-200'}`}>
                     <label className="flex items-center gap-4 p-5 cursor-pointer" onClick={() => setPaymentMethod('gateway')}>
                       <div className="relative flex items-center justify-center">
                         <input
@@ -830,11 +830,11 @@ const Checkout: React.FC = () => {
                           checked={paymentMethod === 'gateway'}
                           onChange={() => setPaymentMethod('gateway')}
                         />
-                        <div className="w-6 h-6 border-2 border-gray-300 rounded-full peer-checked:border-[#2d5016] peer-checked:bg-[#2d5016] transition-all relative">
+                        <div className="w-6 h-6 border-2 border-gray-300 rounded-full peer-checked:border-[#059669] peer-checked:bg-[#059669] transition-all relative">
                           <div className="absolute inset-0 m-auto w-2.5 h-2.5 bg-white rounded-full opacity-0 peer-checked:opacity-100 transition-opacity" />
                         </div>
                       </div>
-                      <div className="w-12 h-12 bg-[#2d5016]/10 rounded-xl flex items-center justify-center text-2xl">
+                      <div className="w-12 h-12 bg-[#059669]/10 rounded-xl flex items-center justify-center text-2xl">
                         📱
                       </div>
                       <div className="flex-1">
@@ -845,7 +845,7 @@ const Checkout: React.FC = () => {
                   </div>
 
                   {/* Cash on Delivery */}
-                  <label className={`flex items-center gap-4 p-5 bg-white border-2 rounded-2xl cursor-pointer hover:shadow-md transition-all group ${paymentMethod === 'cod' ? 'border-[#2d5016]' : 'border-gray-200'}`} onClick={() => setPaymentMethod('cod')}>
+                  <label className={`flex items-center gap-4 p-5 bg-white border-2 rounded-2xl cursor-pointer hover:shadow-md transition-all group ${paymentMethod === 'cod' ? 'border-[#059669]' : 'border-gray-200'}`} onClick={() => setPaymentMethod('cod')}>
                     <div className="relative flex items-center justify-center">
                       <input
                         type="radio"
@@ -854,11 +854,11 @@ const Checkout: React.FC = () => {
                         checked={paymentMethod === 'cod'}
                         onChange={() => setPaymentMethod('cod')}
                       />
-                      <div className="w-6 h-6 border-2 border-gray-300 rounded-full peer-checked:border-[#2d5016] peer-checked:bg-[#2d5016] transition-all relative">
+                      <div className="w-6 h-6 border-2 border-gray-300 rounded-full peer-checked:border-[#059669] peer-checked:bg-[#059669] transition-all relative">
                         <div className="absolute inset-0 m-auto w-2.5 h-2.5 bg-white rounded-full opacity-0 peer-checked:opacity-100 transition-opacity" />
                       </div>
                     </div>
-                    <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-2xl group-hover:bg-[#2d5016]/10 transition-colors">
+                    <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-2xl group-hover:bg-[#059669]/10 transition-colors">
                       💵
                     </div>
                     <div className="flex-1">
@@ -878,7 +878,7 @@ const Checkout: React.FC = () => {
                         onChange={(e) => setAcceptedTerms(e.target.checked)}
                         className="peer sr-only"
                       />
-                      <div className="w-5 h-5 border-2 border-gray-300 rounded peer-checked:border-[#2d5016] peer-checked:bg-[#2d5016] transition-all flex items-center justify-center">
+                      <div className="w-5 h-5 border-2 border-gray-300 rounded peer-checked:border-[#059669] peer-checked:bg-[#059669] transition-all flex items-center justify-center">
                         {acceptedTerms && (
                           <CheckCircle size={14} className="text-white" fill="currentColor" />
                         )}
@@ -889,7 +889,7 @@ const Checkout: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setShowTermsModal(true)}
-                        className="text-[#2d5016] font-semibold hover:underline bg-transparent border-none p-0 cursor-pointer inline"
+                        className="text-[#059669] font-semibold hover:underline bg-transparent border-none p-0 cursor-pointer inline"
                       >
                         Terms and Conditions
                       </button>
@@ -906,7 +906,7 @@ const Checkout: React.FC = () => {
                 <button
                   onClick={handlePlaceOrder}
                   disabled={loading || addressesLoading || !acceptedTerms}
-                  className="w-full py-4 bg-gradient-to-r from-[#d4af37] to-[#bfa040] text-white rounded-xl font-bold text-lg hover:shadow-xl transition-all shadow-lg disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                  className="w-full py-4 bg-gradient-to-r from-[#059669] to-[#bfa040] text-white rounded-xl font-bold text-lg hover:shadow-xl transition-all shadow-lg disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                 >
                   {loading ? (
                     <>
@@ -932,7 +932,7 @@ const Checkout: React.FC = () => {
           {isAuthenticated && (
             <div className="lg:w-96 animate-in slide-in-from-right duration-500">
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 sticky top-24">
-                <h3 className="font-bold text-xl text-[#2d5016] mb-6 font-['Playfair_Display']">Order Summary</h3>
+                <h3 className="font-bold text-xl text-[#059669] mb-6 font-['Poppins']">Order Summary</h3>
 
                 <div className="space-y-4 mb-6 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                   {cart.map((item) => (
@@ -943,7 +943,7 @@ const Checkout: React.FC = () => {
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-gray-900 text-sm line-clamp-1">{item.product.name}</p>
                         <p className="text-xs text-gray-500 mt-1">Qty: {item.quantity}</p>
-                        <p className="text-sm font-bold text-[#2d5016] mt-1 font-sans">₹{item.product.price * item.quantity}</p>
+                        <p className="text-sm font-bold text-[#059669] mt-1 font-sans">₹{item.product.price * item.quantity}</p>
                       </div>
                     </div>
                   ))}
@@ -956,7 +956,7 @@ const Checkout: React.FC = () => {
                   </div>
                   <div className="flex justify-between text-sm text-gray-600">
                     <span>Shipping</span>
-                    <span className="font-semibold text-[#2d5016] font-sans">{shipping === 0 ? 'Free' : `₹${shipping}`}</span>
+                    <span className="font-semibold text-[#059669] font-sans">{shipping === 0 ? 'Free' : `₹${shipping}`}</span>
                   </div>
                   <div className="flex justify-between text-sm text-gray-600">
                     <span>Tax</span>
@@ -964,7 +964,7 @@ const Checkout: React.FC = () => {
                   </div>
                   <div className="flex justify-between items-end pt-3 border-t border-dashed border-gray-200">
                     <span className="font-bold text-gray-900">Total Amount</span>
-                    <span className="text-xl md:text-2xl font-bold text-[#2d5016] font-sans tracking-wide">₹{total}</span>
+                    <span className="text-xl md:text-2xl font-bold text-[#059669] font-sans tracking-wide">₹{total}</span>
                   </div>
                 </div>
 
@@ -985,7 +985,7 @@ const Checkout: React.FC = () => {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300">
             <div className="sticky top-0 bg-white border-b border-gray-100 p-6 flex items-center justify-between">
-              <h3 className="text-xl font-bold text-[#2d5016] font-['Playfair_Display']">Add New Address</h3>
+              <h3 className="text-xl font-bold text-[#059669] font-['Poppins']">Add New Address</h3>
               <button
                 onClick={() => setShowAddressModal(false)}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -1000,7 +1000,7 @@ const Checkout: React.FC = () => {
                 <select
                   value={newAddress.label}
                   onChange={(e) => setNewAddress({ ...newAddress, label: e.target.value })}
-                  className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                  className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                 >
                   <option value="Home">Home</option>
                   <option value="Work">Work</option>
@@ -1015,7 +1015,7 @@ const Checkout: React.FC = () => {
                     type="text"
                     value={newAddress.name}
                     onChange={(e) => setNewAddress({ ...newAddress, name: e.target.value })}
-                    className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                    className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                     placeholder="John Doe"
                     required
                   />
@@ -1026,7 +1026,7 @@ const Checkout: React.FC = () => {
                     type="tel"
                     value={newAddress.phone}
                     onChange={(e) => setNewAddress({ ...newAddress, phone: e.target.value })}
-                    className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                    className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                     placeholder="+91 98765 43210"
                     required
                   />
@@ -1039,7 +1039,7 @@ const Checkout: React.FC = () => {
                   type="text"
                   value={newAddress.buildingName}
                   onChange={(e) => setNewAddress({ ...newAddress, buildingName: e.target.value })}
-                  className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                  className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                   placeholder="Green Villa, Apt 301"
                 />
               </div>
@@ -1050,7 +1050,7 @@ const Checkout: React.FC = () => {
                   type="text"
                   value={newAddress.place}
                   onChange={(e) => setNewAddress({ ...newAddress, place: e.target.value })}
-                  className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                  className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                   placeholder="123 Green Street"
                   required
                 />
@@ -1063,7 +1063,7 @@ const Checkout: React.FC = () => {
                     type="text"
                     value={newAddress.city}
                     onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
-                    className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                    className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                     placeholder="Eco Valley"
                     required
                   />
@@ -1074,7 +1074,7 @@ const Checkout: React.FC = () => {
                     type="text"
                     value={newAddress.district}
                     onChange={(e) => setNewAddress({ ...newAddress, district: e.target.value })}
-                    className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                    className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                     placeholder="Nature District"
                   />
                 </div>
@@ -1087,7 +1087,7 @@ const Checkout: React.FC = () => {
                     type="text"
                     value={newAddress.state}
                     onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
-                    className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                    className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                     placeholder="Kerala"
                   />
                 </div>
@@ -1097,7 +1097,7 @@ const Checkout: React.FC = () => {
                     type="text"
                     value={newAddress.pincode}
                     onChange={(e) => setNewAddress({ ...newAddress, pincode: e.target.value })}
-                    className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                    className="w-full p-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                     placeholder="670001"
                     required
                   />
@@ -1107,7 +1107,7 @@ const Checkout: React.FC = () => {
               <button
                 onClick={handleSaveAddress}
                 disabled={loading}
-                className="w-full py-4 bg-[#2d5016] text-white rounded-xl font-bold text-lg hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-4 bg-[#059669] text-white rounded-xl font-bold text-lg hover:bg-[#006638] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -1128,7 +1128,7 @@ const Checkout: React.FC = () => {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl w-full max-w-md max-h-[80vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300">
             <div className="sticky top-0 bg-white border-b border-gray-100 p-6 flex items-center justify-between">
-              <h3 className="text-xl font-bold text-[#2d5016] font-['Playfair_Display']">Select Payment Gateway</h3>
+              <h3 className="text-xl font-bold text-[#059669] font-['Poppins']">Select Payment Gateway</h3>
               <button
                 onClick={() => setShowGatewayModal(false)}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -1147,7 +1147,7 @@ const Checkout: React.FC = () => {
                     setSelectedGateway(gateway.id);
                     initiatePayment(gateway.id);
                   }}
-                  className="w-full p-5 border-2 border-gray-200 rounded-xl hover:border-[#2d5016] hover:bg-[#2d5016]/5 transition-all flex items-center gap-4 group"
+                  className="w-full p-5 border-2 border-gray-200 rounded-xl hover:border-[#059669] hover:bg-[#059669]/5 transition-all flex items-center gap-4 group"
                 >
                   <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-2xl group-hover:bg-white transition-colors">
                     {gateway.logo ? (
@@ -1171,7 +1171,7 @@ const Checkout: React.FC = () => {
                       )}
                     </div>
                   </div>
-                  <ChevronRight size={20} className="text-gray-400 group-hover:text-[#2d5016] transition-colors" />
+                  <ChevronRight size={20} className="text-gray-400 group-hover:text-[#059669] transition-colors" />
                 </button>
               ))}
             </div>

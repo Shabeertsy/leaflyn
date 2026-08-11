@@ -103,14 +103,11 @@ const Register: React.FC = () => {
         <div className="p-8 md:p-10">
           <div className="text-center mb-8">
             <Link to="/" className="inline-block mb-6">
-              <div className="flex items-center justify-center gap-2">
-                <div className="w-10 h-10 bg-[#2d5016] rounded-full flex items-center justify-center">
-                  <span className="text-white text-xl font-bold">f</span>
-                </div>
-                <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">fernrie</span>
+              <div className="flex items-center gap-2 mb-8 justify-center">
+                <span className="text-2xl font-bold text-[#059669] font-['Poppins']">catsclaw</span>
               </div>
             </Link>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2 font-['Playfair_Display']">Create Account</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2 font-['Poppins']">Create Account</h1>
             <p className="text-gray-500">Join our community of plant lovers</p>
           </div>
 
@@ -131,7 +128,7 @@ const Register: React.FC = () => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#2d5016] focus:ring-0 outline-none transition-all font-medium"
+                  className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#059669] focus:ring-0 outline-none transition-all font-medium"
                   placeholder="John Doe"
                   required
                 />
@@ -148,7 +145,7 @@ const Register: React.FC = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#2d5016] focus:ring-0 outline-none transition-all font-medium"
+                  className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#059669] focus:ring-0 outline-none transition-all font-medium"
                   placeholder="john@example.com"
                   required
                 />
@@ -165,7 +162,7 @@ const Register: React.FC = () => {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-12 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#2d5016] focus:ring-0 outline-none transition-all font-medium"
+                  className="w-full pl-12 pr-12 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#059669] focus:ring-0 outline-none transition-all font-medium"
                   placeholder="••••••••"
                   required
                 />
@@ -193,7 +190,7 @@ const Register: React.FC = () => {
                   type={showPassword ? 'text' : 'password'}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full pl-12 pr-12 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#2d5016] focus:ring-0 outline-none transition-all font-medium"
+                  className="w-full pl-12 pr-12 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#059669] focus:ring-0 outline-none transition-all font-medium"
                   placeholder="••••••••"
                   required
                 />
@@ -201,16 +198,16 @@ const Register: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-2">
-              <input type="checkbox" id="terms" className="rounded text-[#2d5016] focus:ring-[#2d5016]" required />
+              <input type="checkbox" id="terms" className="rounded text-[#059669] focus:ring-[#059669]" required />
               <label htmlFor="terms" className="text-sm text-gray-500">
-                I agree to the <Link to="/terms" className="text-[#2d5016] font-semibold hover:underline">Terms of Service</Link> and <Link to="/privacy" className="text-[#2d5016] font-semibold hover:underline">Privacy Policy</Link>
+                I agree to the <Link to="/terms" className="text-[#059669] font-semibold hover:underline">Terms of Service</Link> and <Link to="/privacy" className="text-[#059669] font-semibold hover:underline">Privacy Policy</Link>
               </label>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#2d5016] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-[#059669] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#006638] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <Loader2 size={24} className="animate-spin" />
@@ -225,7 +222,7 @@ const Register: React.FC = () => {
           <div className="mt-8 text-center">
             <p className="text-gray-500">
               Already have an account?{' '}
-              <Link to="/login" className="font-bold text-[#2d5016] hover:underline">
+              <Link to="/login" className="font-bold text-[#059669] hover:underline">
                 Sign In
               </Link>
             </p>
@@ -243,11 +240,11 @@ const Register: React.FC = () => {
             </button>
 
             <div className="w-full max-w-sm text-center">
-              <div className="w-16 h-16 bg-[#2d5016]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Mail size={32} className="text-[#2d5016]" />
+              <div className="w-16 h-16 bg-[#059669]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Mail size={32} className="text-[#059669]" />
               </div>
 
-              <h2 className="text-2xl font-bold text-gray-900 mb-2 font-['Playfair_Display']">Verify Your Email</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2 font-['Poppins']">Verify Your Email</h2>
               <p className="text-gray-500 mb-8">
                 We've sent a verification code to <br />
                 <span className="font-semibold text-gray-900">{email}</span>
@@ -289,7 +286,7 @@ const Register: React.FC = () => {
                           }
                         }}
                         onPaste={handlePaste}
-                        className="w-12 h-14 text-center text-xl font-bold border border-gray-200 rounded-xl focus:border-[#2d5016] focus:ring-0 outline-none transition-all bg-gray-50"
+                        className="w-12 h-14 text-center text-xl font-bold border border-gray-200 rounded-xl focus:border-[#059669] focus:ring-0 outline-none transition-all bg-gray-50"
                         required={index === 0}
                       />
                     ))}
@@ -299,7 +296,7 @@ const Register: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading || otp.length !== 6}
-                  className="w-full bg-[#2d5016] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="w-full bg-[#059669] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#006638] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <Loader2 size={24} className="animate-spin" />
@@ -311,14 +308,14 @@ const Register: React.FC = () => {
                 <div className="text-center">
                   {timer > 0 ? (
                     <p className="text-sm text-gray-500">
-                      Resend code in <span className="font-bold text-[#2d5016]">{Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, '0')}</span>
+                      Resend code in <span className="font-bold text-[#059669]">{Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, '0')}</span>
                     </p>
                   ) : (
                     <button
                       type="button"
                       onClick={handleResendOtp}
                       disabled={loading}
-                      className="text-sm font-bold text-[#2d5016] hover:underline disabled:opacity-50"
+                      className="text-sm font-bold text-[#059669] hover:underline disabled:opacity-50"
                     >
                       Resend OTP
                     </button>

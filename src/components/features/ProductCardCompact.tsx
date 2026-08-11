@@ -72,7 +72,7 @@ const ProductCardCompact: React.FC<ProductCardCompactProps> = ({ product }) => {
         {/* Price and Add Button */}
         <div className="flex items-center justify-between">
           <div className="flex items-baseline gap-1">
-            <span className="text-sm font-bold text-[#2d5016]">
+            <span className="text-sm font-bold text-[#059669]">
               ₹{product.price}
             </span>
           </div>
@@ -82,8 +82,8 @@ const ProductCardCompact: React.FC<ProductCardCompactProps> = ({ product }) => {
             disabled={cartLoading}
             className={`px-3 py-1 text-[10px] font-bold rounded-full transition-all duration-300 ${
               addedToCart
-                ? 'bg-[#2d5016] text-white'
-                : 'bg-green-100/80 text-[#2d5016] hover:bg-[#2d5016] hover:text-white'
+                ? 'bg-[#059669] text-white'
+                : 'bg-green-100/80 text-[#059669] hover:bg-[#059669] hover:text-white'
             }`}
           >
             {addedToCart ? 'Added' : 'Add'}

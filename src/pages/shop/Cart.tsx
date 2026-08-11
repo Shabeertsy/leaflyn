@@ -15,16 +15,16 @@ const Cart: React.FC = () => {
   if (cart.length === 0) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center bg-neutral-50">
-        <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-6 shadow-xl shadow-[#2d5016]/5 border border-gray-100">
+        <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-6 shadow-xl shadow-[#059669]/5 border border-gray-100">
           <ShoppingBag size={40} className="text-gray-300" />
         </div>
-        <h2 className="text-3xl font-bold text-[#2d5016] mb-3 font-['Playfair_Display']">Your cart is empty</h2>
+        <h2 className="text-3xl font-bold text-[#059669] mb-3 font-['Poppins']">Your cart is empty</h2>
         <p className="text-gray-500 mb-8 max-w-md font-light">
           Looks like you haven't added any plants yet. Start your green journey today!
         </p>
         <Link
           to="/search"
-          className="group inline-flex items-center gap-2 px-8 py-3.5 bg-[#2d5016] text-white rounded-full font-bold hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+          className="group inline-flex items-center gap-2 px-8 py-3.5 bg-[#059669] text-white rounded-full font-bold hover:bg-[#006638] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
         >
           Start Shopping
           <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -38,7 +38,7 @@ const Cart: React.FC = () => {
       {/* Header */}
       <div className="bg-white border-b border-gray-100 sticky top-0 z-30 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-6">
-          <h1 className="text-3xl font-bold text-[#2d5016] font-['Playfair_Display']">Shopping Cart</h1>
+          <h1 className="text-3xl font-bold text-[#059669] font-['Poppins']">Shopping Cart</h1>
           <p className="text-sm text-gray-500 mt-1">{cartCount} items in your cart</p>
         </div>
       </div>
@@ -68,7 +68,7 @@ const Cart: React.FC = () => {
                   <div>
                     <div className="flex justify-between items-start gap-2">
                       <Link to={`/product/${item.product.id}`}>
-                        <h3 className="font-bold text-gray-900 line-clamp-2 hover:text-[#2d5016] transition-colors font-['Playfair_Display'] text-lg">
+                        <h3 className="font-bold text-gray-900 line-clamp-2 hover:text-[#059669] transition-colors font-['Poppins'] text-lg">
                           {item.product.name}
                         </h3>
                       </Link>
@@ -80,7 +80,7 @@ const Cart: React.FC = () => {
                         <Trash2 size={18} />
                       </button>
                     </div>
-                    <p className="text-sm font-medium text-[#2d5016] font-sans">₹{item.product.price}</p>
+                    <p className="text-sm font-medium text-[#059669] font-sans">₹{item.product.price}</p>
                   </div>
 
                   <div className="flex items-center justify-between mt-3">
@@ -118,7 +118,7 @@ const Cart: React.FC = () => {
           {/* Order Summary */}
           <div className="lg:w-96 space-y-6">
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 sticky top-24">
-              <h3 className="font-bold text-xl text-[#2d5016] mb-6 font-['Playfair_Display']">Order Summary</h3>
+              <h3 className="font-bold text-xl text-[#059669] mb-6 font-['Poppins']">Order Summary</h3>
               
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between text-gray-600">
@@ -130,7 +130,7 @@ const Cart: React.FC = () => {
                   <span>Shipping</span>
                   <span className="font-semibold text-gray-900 font-sans">
                     {shipping === 0 ? (
-                      <span className="text-[#2d5016] font-bold">Free</span>
+                      <span className="text-[#059669] font-bold">Free</span>
                     ) : (
                       `₹${shipping}`
                     )}
@@ -153,21 +153,21 @@ const Cart: React.FC = () => {
               <div className="border-t border-dashed border-gray-200 pt-4 mb-6">
                 <div className="flex justify-between items-end">
                   <span className="text-gray-900 font-bold">Total</span>
-                  <span className="text-2xl md:text-3xl font-bold text-[#2d5016] font-sans tracking-wide">₹{total}</span>
+                  <span className="text-2xl md:text-3xl font-bold text-[#059669] font-sans tracking-wide">₹{total}</span>
                 </div>
                 <p className="text-xs text-gray-500 mt-1 text-right">Including all taxes</p>
               </div>
 
               <Link
                 to="/checkout"
-                className="hidden lg:flex group items-center justify-center gap-2 w-full py-4 bg-[#2d5016] text-white rounded-xl font-bold hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                className="hidden lg:flex group items-center justify-center gap-2 w-full py-4 bg-[#059669] text-white rounded-xl font-bold hover:bg-[#006638] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
               >
                 Proceed to Checkout
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </Link>
 
               <div className="mt-6 flex items-center justify-center gap-2 text-xs text-gray-500">
-                <ShieldCheck size={14} className="text-[#2d5016]" />
+                <ShieldCheck size={14} className="text-[#059669]" />
                 <span>Secure Checkout & Payment</span>
               </div>
             </div>
@@ -180,13 +180,13 @@ const Cart: React.FC = () => {
           <div className="flex-1">
             <p className="text-xs text-gray-500 font-medium mb-0.5">Total Amount</p>
             <div className="flex items-baseline gap-1">
-              <span className="text-xl font-bold text-[#2d5016] font-sans">₹{total}</span>
+              <span className="text-xl font-bold text-[#059669] font-sans">₹{total}</span>
               <span className="text-[10px] text-gray-400 font-medium">inc. taxes</span>
             </div>
           </div>
           <Link
             to="/checkout"
-            className="flex-1 flex items-center justify-center gap-2 bg-[#2d5016] text-white py-2.5 px-6 rounded-full text-sm font-bold shadow-lg shadow-[#2d5016]/20 active:scale-95 transition-transform"
+            className="flex-1 flex items-center justify-center gap-2 bg-[#059669] text-white py-2.5 px-6 rounded-full text-sm font-bold shadow-lg shadow-[#059669]/20 active:scale-95 transition-transform"
           >
             Checkout
             <ArrowRight size={18} />

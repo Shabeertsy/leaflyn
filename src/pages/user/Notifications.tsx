@@ -136,10 +136,10 @@ const Notifications: React.FC = () => {
                 <ArrowLeft size={20} className="text-gray-700 group-hover:text-gray-900 transition-colors" />
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 font-['Playfair_Display'] tracking-tight">Notifications</h1>
+                <h1 className="text-2xl font-bold text-gray-900 font-['Poppins'] tracking-tight">Notifications</h1>
                 {unreadCount > 0 && (
-                  <p className="text-xs font-medium text-[#2d5016] mt-0.5 flex items-center gap-1.5 animate-fade-in">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#2d5016] animate-pulse shadow-[0_0_8px_rgba(45,80,22,0.4)]" />
+                  <p className="text-xs font-medium text-[#059669] mt-0.5 flex items-center gap-1.5 animate-fade-in">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#059669] animate-pulse shadow-[0_0_8px_rgba(45,80,22,0.4)]" />
                     {unreadCount} unread
                   </p>
                 )}
@@ -148,7 +148,7 @@ const Notifications: React.FC = () => {
             {unreadCount > 0 && (
               <button
                 onClick={markAllAsRead}
-                className="text-xs font-bold uppercase tracking-wider text-[#2d5016] hover:bg-[#2d5016]/5 px-4 py-2 rounded-full transition-all duration-300 border border-[#2d5016]/20 hover:border-[#2d5016]/40 active:scale-95"
+                className="text-xs font-bold uppercase tracking-wider text-[#059669] hover:bg-[#059669]/5 px-4 py-2 rounded-full transition-all duration-300 border border-[#059669]/20 hover:border-[#059669]/40 active:scale-95"
               >
                 Mark all read
               </button>
@@ -185,7 +185,7 @@ const Notifications: React.FC = () => {
       <div className="max-w-3xl mx-auto px-4 md:px-6 py-6">
         {isLoading && currentPage === 1 ? (
           <div className="flex flex-col justify-center items-center py-32 gap-4">
-            <div className="animate-spin rounded-full h-10 w-10 border-[3px] border-[#2d5016] border-t-transparent"></div>
+            <div className="animate-spin rounded-full h-10 w-10 border-[3px] border-[#059669] border-t-transparent"></div>
             <p className="text-sm text-gray-400 font-medium animate-pulse">Checking for updates...</p>
           </div>
         ) : filteredNotifications.length === 0 ? (
@@ -193,7 +193,7 @@ const Notifications: React.FC = () => {
             <div className="w-24 h-24 bg-gradient-to-br from-gray-50 to-gray-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
               <Bell size={32} className="text-gray-300" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2 font-['Playfair_Display']">All Caught Up</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-2 font-['Poppins']">All Caught Up</h3>
             <p className="text-gray-500 max-w-xs mx-auto leading-relaxed text-sm">
               You have no new notifications. We'll notify you when something important arrives.
             </p>
@@ -210,7 +210,7 @@ const Notifications: React.FC = () => {
                     className={`group relative overflow-hidden rounded-2xl p-4 transition-all duration-300 cursor-pointer border ${
                       notification.is_read
                         ? 'bg-white border-gray-100 hover:border-gray-200 hover:shadow-sm'
-                        : 'bg-white border-[#2d5016]/20 shadow-[0_4px_20px_-12px_rgba(45,80,22,0.15)] hover:shadow-[0_8px_25px_-12px_rgba(45,80,22,0.2)]'
+                        : 'bg-white border-[#059669]/20 shadow-[0_4px_20px_-12px_rgba(45,80,22,0.15)] hover:shadow-[0_8px_25px_-12px_rgba(45,80,22,0.2)]'
                     }`}
                     style={{
                       animation: `fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards ${index * 0.05}s`,
@@ -236,7 +236,7 @@ const Notifications: React.FC = () => {
                               {formatTime(notification.created_at)}
                             </span>
                             {!notification.is_read && (
-                              <span className="w-2 h-2 rounded-full bg-[#2d5016] shadow-[0_0_0_2px_white]" />
+                              <span className="w-2 h-2 rounded-full bg-[#059669] shadow-[0_0_0_2px_white]" />
                             )}
                           </div>
                         </div>
@@ -254,7 +254,7 @@ const Notifications: React.FC = () => {
             {/* Infinite Scroll Trigger */}
             {nextPage && (
               <div ref={observerTarget} className="mt-8 flex justify-center items-center py-8">
-                <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#2d5016] border-t-transparent"></div>
+                <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#059669] border-t-transparent"></div>
               </div>
             )}
 

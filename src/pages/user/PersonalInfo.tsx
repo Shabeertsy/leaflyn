@@ -96,7 +96,7 @@ const PersonalInfo: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-neutral-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2d5016]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#059669]"></div>
       </div>
     );
   }
@@ -108,7 +108,7 @@ const PersonalInfo: React.FC = () => {
         <button onClick={() => navigate(-1)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
           <ArrowLeft size={24} className="text-gray-700" />
         </button>
-        <h1 className="text-xl font-bold text-[#2d5016] font-['Playfair_Display']">Personal Information</h1>
+        <h1 className="text-xl font-bold text-[#059669] font-['Poppins']">Personal Information</h1>
       </div>
 
       <div className="max-w-2xl mx-auto px-6 py-8">
@@ -116,7 +116,7 @@ const PersonalInfo: React.FC = () => {
           {/* Avatar Section */}
           <div className="flex flex-col items-center">
             <div className="relative">
-              <div className="w-32 h-32 rounded-full p-1 bg-gradient-to-br from-[#d4af37] to-[#8b7355] shadow-xl">
+              <div className="w-32 h-32 rounded-full p-1 bg-gradient-to-br from-[#059669] to-[#8b7355] shadow-xl">
                 <img
                   src={previewUrl || formData.avatar || `https://ui-avatars.com/api/?name=${formData.first_name}+${formData.last_name}&background=random`}
                   alt="Profile"
@@ -126,7 +126,7 @@ const PersonalInfo: React.FC = () => {
               <button 
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="absolute bottom-0 right-0 p-2.5 bg-[#2d5016] text-white rounded-full shadow-lg hover:bg-[#3d6622] transition-colors border-4 border-white"
+                className="absolute bottom-0 right-0 p-2.5 bg-[#059669] text-white rounded-full shadow-lg hover:bg-[#006638] transition-colors border-4 border-white"
               >
                 <Camera size={18} />
               </button>
@@ -152,7 +152,7 @@ const PersonalInfo: React.FC = () => {
                     type="text"
                     value={formData.first_name}
                     onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                    className="w-full pl-11 pr-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                    className="w-full pl-11 pr-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                     placeholder="John"
                   />
                 </div>
@@ -166,7 +166,7 @@ const PersonalInfo: React.FC = () => {
                     type="text"
                     value={formData.last_name}
                     onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                    className="w-full pl-11 pr-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                    className="w-full pl-11 pr-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                     placeholder="Doe"
                   />
                 </div>
@@ -195,7 +195,7 @@ const PersonalInfo: React.FC = () => {
                   type="tel"
                   value={formData.phone_number || ''}
                   onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
-                  className="w-full pl-11 pr-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium"
+                  className="w-full pl-11 pr-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium"
                   placeholder="+91 98765 43210"
                 />
               </div>
@@ -206,7 +206,7 @@ const PersonalInfo: React.FC = () => {
               <textarea
                 value={formData.bio || ''}
                 onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                className="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#2d5016] focus:ring-0 transition-colors outline-none font-medium min-h-[100px] resize-none"
+                className="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#059669] focus:ring-0 transition-colors outline-none font-medium min-h-[100px] resize-none"
                 placeholder="Tell us a bit about yourself..."
               />
             </div>
@@ -215,7 +215,7 @@ const PersonalInfo: React.FC = () => {
           <button
             type="submit"
             disabled={saving}
-            className="w-full py-4 bg-[#2d5016] text-white rounded-xl font-bold text-lg hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-4 bg-[#059669] text-white rounded-xl font-bold text-lg hover:bg-[#006638] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {saving ? (
               <>

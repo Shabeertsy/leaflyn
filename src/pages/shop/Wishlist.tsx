@@ -15,16 +15,16 @@ const Wishlist: React.FC = () => {
   if (wishlist.length === 0) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center bg-neutral-50">
-        <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-6 shadow-xl shadow-[#2d5016]/5 border border-gray-100">
+        <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-6 shadow-xl shadow-[#059669]/5 border border-gray-100">
           <Heart size={40} className="text-gray-300" />
         </div>
-        <h2 className="text-3xl font-bold text-[#2d5016] mb-3 font-['Playfair_Display']">Your wishlist is empty</h2>
+        <h2 className="text-3xl font-bold text-[#059669] mb-3 font-['Poppins']">Your wishlist is empty</h2>
         <p className="text-gray-500 mb-8 max-w-md font-light">
           Create your dream garden by saving your favorite plants and accessories for later.
         </p>
         <Link
           to="/search"
-          className="group inline-flex items-center gap-2 px-8 py-3.5 bg-[#2d5016] text-white rounded-full font-bold hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+          className="group inline-flex items-center gap-2 px-8 py-3.5 bg-[#059669] text-white rounded-full font-bold hover:bg-[#006638] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
         >
           Explore Collection
           <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -40,12 +40,12 @@ const Wishlist: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-[#2d5016] font-['Playfair_Display']">My Wishlist</h1>
+              <h1 className="text-3xl font-bold text-[#059669] font-['Poppins']">My Wishlist</h1>
               <p className="text-sm text-gray-500 mt-1">{wishlist.length} items saved</p>
             </div>
             <Link 
               to="/cart"
-              className="hidden md:flex items-center gap-2 text-[#2d5016] font-semibold hover:text-[#d4af37] transition-colors"
+              className="hidden md:flex items-center gap-2 text-[#059669] font-semibold hover:text-[#059669] transition-colors"
             >
               Go to Cart <ShoppingBag size={18} />
             </Link>

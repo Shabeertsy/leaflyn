@@ -38,8 +38,8 @@ const LoginPromptModal: React.FC = () => {
           >
             <X size={20} />
           </button>
-          <div className="w-12 h-12 bg-[#2d5016]/10 rounded-full flex items-center justify-center mb-4">
-            <LogIn size={24} className="text-[#2d5016]" />
+          <div className="w-12 h-12 bg-[#059669]/10 rounded-full flex items-center justify-center mb-4">
+            <LogIn size={24} className="text-[#059669]" />
           </div>
           <h3 className="text-xl font-bold text-gray-900 mb-2">
             Sync Your Cart?
@@ -53,7 +53,7 @@ const LoginPromptModal: React.FC = () => {
         <div className="p-6 space-y-3">
           <button
             onClick={handleLogin}
-            className="w-full py-3 px-4 bg-[#2d5016] text-white font-bold rounded-xl hover:bg-[#3d6622] transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+            className="w-full py-3 px-4 bg-[#059669] text-white font-bold rounded-xl hover:bg-[#006638] transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
           >
             <LogIn size={18} />
             Login to Sync

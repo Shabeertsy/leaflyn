@@ -5,7 +5,6 @@ import { useCartStore } from '../../store/useCartStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useUIStore } from '../../store/useUIStore';
 import { useNotificationStore } from '../../store/useNotificationStore';
-import Logo from '../common/Logo';
 
 const Header: React.FC = () => {
   const cartCount = useCartStore((state) => state.getCartCount());
@@ -28,22 +27,24 @@ const Header: React.FC = () => {
       <div className="px-6 h-16 flex items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <Logo className="w-10 h-10 rounded-xl" />
-          <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">fernrie</span>
+          <span className="text-2xl font-bold text-[#059669] font-['Poppins']">catsclaw.in</span>
         </Link>
 
         {/* Navigation Links - Hidden on mobile, visible on desktop */}
         <nav className="hidden lg:flex items-center gap-6">
-          <Link to="/search" className="text-gray-700 hover:text-[#2d5016] font-medium transition-colors">
+          <Link to="/" className="text-gray-700 hover:text-[#059669] font-medium transition-colors">
+            Home
+          </Link>
+          <Link to="/search" className="text-gray-700 hover:text-[#059669] font-medium transition-colors">
             Shop
           </Link>
-          <Link to="/categories" className="text-gray-700 hover:text-[#2d5016] font-medium transition-colors">
+          <Link to="/categories" className="text-gray-700 hover:text-[#059669] font-medium transition-colors">
             Categories
           </Link>
-          <Link to="/services" className="text-gray-700 hover:text-[#2d5016] font-medium transition-colors">
+          <Link to="/services" className="text-gray-700 hover:text-[#059669] font-medium transition-colors">
             Services
           </Link>
-          <Link to="/contact-us" className="text-gray-700 hover:text-[#2d5016] font-medium transition-colors">
+          <Link to="/contact-us" className="text-gray-700 hover:text-[#059669] font-medium transition-colors">
             Contact Us
           </Link>
         </nav>
@@ -64,7 +65,7 @@ const Header: React.FC = () => {
           >
             <ShoppingCart size={22} className="text-gray-700" />
             {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#2d5016] text-white text-xs font-bold rounded-full min-w-[20px] h-[20px] flex items-center justify-center px-1">
+              <span className="absolute -top-1 -right-1 bg-[#059669] text-white text-xs font-bold rounded-full min-w-[20px] h-[20px] flex items-center justify-center px-1">
                 {cartCount > 99 ? '99+' : cartCount}
               </span>
             )}
@@ -79,7 +80,7 @@ const Header: React.FC = () => {
                   {user.avatar ? (
                     <img src={user.avatar} alt={`${user.first_name} ${user.last_name}`} className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-sm font-bold text-[#2d5016]">{getInitials(`${user.first_name} ${user.last_name}`)}</span>
+                    <span className="text-sm font-bold text-[#059669]">{getInitials(`${user.first_name} ${user.last_name}`)}</span>
                   )}
                 </div>
               </Link>
@@ -97,7 +98,7 @@ const Header: React.FC = () => {
           ) : (
             <Link
               to="/login"
-              className="hidden lg:flex items-center gap-2 px-4 py-2 bg-[#2d5016] text-white rounded-full text-sm font-bold hover:bg-[#3d6622] transition-colors"
+              className="hidden lg:flex items-center gap-2 px-4 py-2 bg-[#059669] text-white rounded-full text-sm font-bold hover:bg-[#006638] transition-colors"
             >
               <UserIcon size={16} />
               <span>Login</span>

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Twitter, Youtube, Mail, MapPin, Phone, CheckCircle, Package, Clock, Linkedin } from 'lucide-react';
 import { useCompanyStore } from '../../store/useCompanyStore';
-import Logo from '../common/Logo';
 
 const Footer: React.FC = () => {
   const { companyContact, fetchCompanyContact } = useCompanyStore();
@@ -20,7 +19,7 @@ const Footer: React.FC = () => {
   ].filter(link => link.show);
 
   return (
-    <footer className="bg-[#1a3a0f] text-white">
+    <footer className="bg-[#064e3b] text-white">
       {/* Features Strip */}
       <div className="border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-8">
@@ -31,7 +30,7 @@ const Footer: React.FC = () => {
               { icon: Clock, title: 'Support', desc: 'Expert care advice always available' },
             ].map((feature, index) => (
               <div key={index} className="flex items-start gap-3">
-                <feature.icon size={18} className="text-[#d4af37] shrink-0 mt-0.5" />
+                <feature.icon size={18} className="text-[#059669] shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-sm font-bold text-white mb-0.5">{feature.title}</h4>
                   <p className="text-xs text-white/50">{feature.desc}</p>
@@ -47,8 +46,7 @@ const Footer: React.FC = () => {
           {/* Brand Section */}
           <div className="space-y-6">
             <Link to="/" className="flex items-center gap-2">
-              <Logo className="w-10 h-10 rounded-xl shadow-sm" />
-              <span className="text-2xl font-bold font-['Playfair_Display']">{companyContact?.company_name || 'fernrie'}</span>
+              <span className="text-2xl font-bold">{companyContact?.company_name || 'catsclaw'}</span>
             </Link>
             <p className="text-white/60 leading-relaxed text-sm max-w-xs">
               Bringing nature closer to you with our premium collection of plants, aquatics, and accessories.
@@ -60,7 +58,7 @@ const Footer: React.FC = () => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#d4af37] hover:text-[#1a3a0f] transition-all duration-300"
+                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#059669] hover:text-[#064e3b] transition-all duration-300"
                 >
                   <social.icon size={18} />
                 </a>
@@ -70,20 +68,20 @@ const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold font-['Playfair_Display'] mb-6">Quick Links</h3>
+            <h3 className="text-lg font-bold mb-6">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/search" className="text-white/60 hover:text-[#d4af37] transition-colors text-sm">
+                <Link to="/search" className="text-white/60 hover:text-[#059669] transition-colors text-sm">
                   Shop Collection
                 </Link>
               </li>
               <li>
-                <Link to="/bestsellers" className="text-white/60 hover:text-[#d4af37] transition-colors text-sm">
+                <Link to="/bestsellers" className="text-white/60 hover:text-[#059669] transition-colors text-sm">
                   Bestsellers
                 </Link>
               </li>
               <li>
-                <Link to="/contact-us" className="text-white/60 hover:text-[#d4af37] transition-colors text-sm">
+                <Link to="/contact-us" className="text-white/60 hover:text-[#059669] transition-colors text-sm">
                   Contact Us
                 </Link>
               </li>
@@ -93,29 +91,29 @@ const Footer: React.FC = () => {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-bold font-['Playfair_Display'] mb-6">Get in Touch</h3>
+            <h3 className="text-lg font-bold mb-6">Get in Touch</h3>
             <ul className="space-y-4 mb-6">
               <li className="flex items-start gap-3 text-white/60 text-sm">
-                <MapPin size={18} className="text-[#d4af37] shrink-0 mt-0.5" />
+                <MapPin size={18} className="text-[#059669] shrink-0 mt-0.5" />
                 <span>
                   {companyContact?.company_address || '123 Green Street, Eco Valley'}<br />
                   {companyContact?.company_city}, {companyContact?.company_state} {companyContact?.company_zip}
                 </span>
               </li>
               <li className="flex items-center gap-3 text-white/60 text-sm">
-                <Phone size={18} className="text-[#d4af37] shrink-0" />
-                <a href={`tel:${companyContact?.company_phone}`} className="hover:text-[#d4af37] transition-colors">
+                <Phone size={18} className="text-[#059669] shrink-0" />
+                <a href={`tel:${companyContact?.company_phone}`} className="hover:text-[#059669] transition-colors">
                   {companyContact?.company_phone || '+91 98765 43210'}
                 </a>
               </li>
               <li className="flex items-center gap-3 text-white/60 text-sm">
-                <Mail size={18} className="text-[#d4af37] shrink-0" />
-                <a href={`mailto:${companyContact?.company_email}`} className="hover:text-[#d4af37] transition-colors">
-                  {companyContact?.company_email || 'hello@fernrie.com'}
+                <Mail size={18} className="text-[#059669] shrink-0" />
+                <a href={`mailto:${companyContact?.company_email}`} className="hover:text-[#059669] transition-colors">
+                  {companyContact?.company_email || 'hello@catsclaw.com'}
                 </a>
               </li>
             </ul>
-            <Link to="/contact-us" className="inline-flex items-center gap-2 bg-[#d4af37] text-[#1a3a0f] px-5 py-2.5 rounded-full text-sm font-bold hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl">
+            <Link to="/contact-us" className="inline-flex items-center gap-2 bg-[#059669] text-[#064e3b] px-5 py-2.5 rounded-full text-sm font-bold hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl">
               <Mail size={16} />
               Contact Us
             </Link>
@@ -123,7 +121,7 @@ const Footer: React.FC = () => {
 
           {/* Newsletter */}
           {/* <div>
-            <h3 className="text-lg font-bold font-['Playfair_Display'] mb-6">Newsletter</h3>
+            <h3 className="text-lg font-bold font-['Poppins'] mb-6">Newsletter</h3>
             <p className="text-white/60 text-sm mb-4">
               Subscribe to get special offers and updates.
             </p>
@@ -131,9 +129,9 @@ const Footer: React.FC = () => {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] transition-all text-sm"
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-[#059669] transition-all text-sm"
               />
-              <button className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-[#d4af37] text-[#1a3a0f] rounded-md hover:bg-white transition-colors">
+              <button className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-[#059669] text-[#064e3b] rounded-md hover:bg-white transition-colors">
                 <ArrowRight size={16} />
               </button>
             </div>
@@ -143,12 +141,12 @@ const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/50 text-sm">
-            © {new Date().getFullYear()} {companyContact?.company_name || 'fernrie'}. All rights reserved.
+            © {new Date().getFullYear()} {companyContact?.company_name || 'catsclaw'}. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-sm text-white/50">
-            <Link to="/privacy" className="hover:text-[#d4af37] transition-colors">Privacy Policy</Link>
-            <Link to="/terms" className="hover:text-[#d4af37] transition-colors">Terms of Service</Link>
-            <Link to="/shipping" className="hover:text-[#d4af37] transition-colors">Shipping Info</Link>
+            <Link to="/privacy" className="hover:text-[#059669] transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-[#059669] transition-colors">Terms of Service</Link>
+            <Link to="/shipping" className="hover:text-[#059669] transition-colors">Shipping Info</Link>
           </div>
         </div>
       </div>

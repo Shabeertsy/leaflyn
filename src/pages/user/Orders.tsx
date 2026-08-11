@@ -101,7 +101,7 @@ const Orders: React.FC = () => {
               <ArrowLeft size={24} className="text-gray-700" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">My Orders</h1>
+              <h1 className="text-2xl font-bold text-[#059669] font-['Poppins']">My Orders</h1>
               <p className="text-sm text-gray-500">{orders.length} order{orders.length !== 1 ? 's' : ''}</p>
             </div>
           </div>
@@ -112,14 +112,14 @@ const Orders: React.FC = () => {
       <div className="max-w-4xl mx-auto px-6 py-6">
         {isLoading && currentPage === 1 ? (
           <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2d5016]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#059669]"></div>
           </div>
         ) : orders.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
             <div className="w-24 h-24 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Package size={40} className="text-gray-400" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-3 font-['Playfair_Display']">
+            <h3 className="text-2xl font-bold text-gray-900 mb-3 font-['Poppins']">
               No orders yet
             </h3>
             <p className="text-gray-500 mb-8 max-w-md mx-auto">
@@ -127,7 +127,7 @@ const Orders: React.FC = () => {
             </p>
             <Link
               to="/search"
-              className="inline-block px-8 py-3 bg-[#2d5016] text-white rounded-full font-bold hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+              className="inline-block px-8 py-3 bg-[#059669] text-white rounded-full font-bold hover:bg-[#006638] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
               Start Shopping
             </Link>
@@ -190,7 +190,7 @@ const Orders: React.FC = () => {
                     <div className="mt-4 pt-4 border-t border-gray-100">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-semibold text-gray-700">Total Amount</span>
-                        <span className="text-lg font-bold text-[#2d5016]">₹{parseFloat(order.total || (order as any).total_amount).toFixed(2)}</span>
+                        <span className="text-lg font-bold text-[#059669]">₹{parseFloat(order.total || (order as any).total_amount).toFixed(2)}</span>
                       </div>
                     </div>
 
@@ -198,7 +198,7 @@ const Orders: React.FC = () => {
                     <div className="mt-4 flex gap-2">
                       <Link
                         to={`/orders/${order.uuid}`}
-                        className="flex-1 text-center px-4 py-2 bg-[#2d5016] text-white rounded-lg font-semibold hover:bg-[#3d6622] transition-colors text-sm"
+                        className="flex-1 text-center px-4 py-2 bg-[#059669] text-white rounded-lg font-semibold hover:bg-[#006638] transition-colors text-sm"
                       >
                         View Details
                       </Link>
@@ -216,7 +216,7 @@ const Orders: React.FC = () => {
             {/* Infinite Scroll Trigger */}
             {nextPage && (
               <div ref={observerTarget} className="mt-8 flex justify-center items-center py-8">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#2d5016]"></div>
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#059669]"></div>
               </div>
             )}
 

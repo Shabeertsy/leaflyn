@@ -2,9 +2,9 @@
 
 @layer theme {
   :root {
-    --color-primary: #2d5016;
-    --color-secondary: #8b7355;
-    --color-accent: #d4af37;
+    --color-primary: #059669;
+    --color-secondary: #006638;
+    --color-accent: #059669;
     --bottom-nav-height: 64px;
     --header-height: 56px;
   }
@@ -18,11 +18,11 @@
   body {
     @apply bg-neutral-50 text-gray-900 antialiased;
     -webkit-tap-highlight-color: transparent;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
   h1, h2, h3 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Poppins', sans-serif;
     letter-spacing: -0.02em;
   }
 
@@ -90,7 +90,7 @@
 
 /* Premium Gradient Text */
 .gradient-text {
-  background: linear-gradient(135deg, #2d5016 0%, #5a7c3e 100%);
+  background: linear-gradient(135deg, #059669 0%, #5a7c3e 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

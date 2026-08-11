@@ -110,7 +110,7 @@ const Services: React.FC = () => {
 
                 {/* Banner text */}
                 <div className="absolute left-0 right-0 bottom-7 flex flex-col items-center px-3 pointer-events-none z-20">
-                  <h1 className="text-white text-lg font-bold font-['Playfair_Display'] drop-shadow-md text-center leading-tight max-w-[260px]">
+                  <h1 className="text-white text-lg font-bold font-['Poppins'] drop-shadow-md text-center leading-tight max-w-[260px]">
                     {serviceHeroImages[currentImageIndex].heading}
                   </h1>
                   <span className="mt-1 text-sm text-white/90 drop-shadow font-normal text-center leading-snug max-w-[225px]">
@@ -123,19 +123,19 @@ const Services: React.FC = () => {
               <div className="flex items-center justify-between px-4 py-2.5 bg-white/99 border-t border-neutral-200 z-20" style={{ minHeight: 44 }}>
                 <a
                   href="#contact"
-                  className="inline-flex items-center px-5 py-2.5 rounded-[999px] bg-[#2d5016] text-white font-bold text-[15px] shadow hover:bg-[#263c11] active:scale-95 transition-all"
+                  className="inline-flex items-center px-5 py-2.5 rounded-[999px] bg-[#059669] text-white font-bold text-[15px] shadow hover:bg-[#263c11] active:scale-95 transition-all"
                 >
                   Book Now
                   <ArrowRight size={16} className="ml-1" />
                 </a>
-                <div className="flex gap-4 items-center text-sm text-[#2d5016] font-semibold ml-2">
+                <div className="flex gap-4 items-center text-sm text-[#059669] font-semibold ml-2">
                   <div className="flex items-center gap-0.5">
-                    <span className="font-bold text-[#d4af37] text-lg">500+</span>
+                    <span className="font-bold text-[#059669] text-lg">500+</span>
                     <span className="ml-0.5">Clients</span>
                   </div>
                   <span className="w-1.5 h-1.5 rounded-full bg-neutral-300 inline-block mx-1" />
                   <div className="flex items-center gap-0.5">
-                    <span className="font-bold text-[#d4af37] text-lg">4.9</span>
+                    <span className="font-bold text-[#059669] text-lg">4.9</span>
                     <span className="ml-0.5">★</span>
                   </div>
                 </div>
@@ -146,55 +146,40 @@ const Services: React.FC = () => {
 
         {/* DESKTOP: Original Hero Section */}
         <div className="hidden md:block">
-          <div className="relative bg-gradient-to-br from-[#1a3a0f] via-[#2d5016] to-[#1f4412] text-white overflow-hidden">
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute inset-0" style={{
-                backgroundImage: 'linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)',
-                backgroundSize: '50px 50px'
-              }} />
-            </div>
-            
-            <div className="relative px-4 md:px-6 py-12 md:py-20 max-w-7xl mx-auto">
-              <div className="max-w-3xl">
-                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl px-4 py-2 rounded-full border border-white/20 mb-6">
-                  <div className="w-2 h-2 bg-[#d4af37] rounded-full animate-pulse" />
-                  <span className="text-white/90 font-semibold tracking-wider uppercase text-xs">Professional Services</span>
+          <div className="relative bg-neutral-50 overflow-hidden border-b border-gray-100">
+            <div className="relative px-4 md:px-6 py-12 md:py-24 max-w-7xl mx-auto text-center">
+              <div className="max-w-3xl mx-auto">
+                <div className="inline-flex items-center gap-2.5 bg-[#059669]/10 px-5 py-2.5 rounded-full border border-[#059669]/20 mb-6">
+                  <div className="w-1.5 h-1.5 bg-[#059669] rounded-full" />
+                  <span className="text-[#059669] font-semibold tracking-wider uppercase text-xs">Professional Services</span>
                 </div>
                 
-                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight font-['Playfair_Display'] mb-4">
-                  <span className="text-white">Expert Care for Your</span>
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight font-['Poppins'] mb-6 text-gray-900">
+                  <span>Expert Care for Your</span>
                   <br />
-                  <span className="bg-gradient-to-r from-[#f4d03f] via-[#d4af37] to-[#c9a961] bg-clip-text text-transparent">
-                    Green Spaces
-                  </span>
+                  <span className="text-[#059669]">Green Spaces</span>
                 </h1>
                 
-                <p className="text-base md:text-lg text-white/70 leading-relaxed mb-8">
+                <p className="text-base md:text-lg text-gray-500 leading-relaxed mb-8 max-w-2xl mx-auto">
                   From plant maintenance to complete landscaping solutions, our professional services ensure your plants thrive and your spaces flourish.
                 </p>
                 
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-4 justify-center">
                   <a 
                     href="#contact" 
-                    className="group inline-flex items-center gap-2 px-6 md:px-8 py-3 md:py-3.5 bg-white text-[#2d5016] rounded-full font-bold transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105"
+                    className="group inline-flex items-center gap-2 px-8 py-3.5 bg-[#059669] text-white rounded font-medium text-sm hover:bg-[#006638] transition-colors shadow-lg shadow-[#059669]/20"
                   >
                     <span>Get Started</span>
                     <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                   </a>
                   <a 
                     href="#categories" 
-                    className="inline-flex items-center gap-2 px-6 md:px-7 py-3 md:py-3.5 bg-white/5 backdrop-blur-xl text-white rounded-full font-semibold hover:bg-white/10 transition-all duration-300 border border-white/20"
+                    className="inline-flex items-center gap-2 px-7 py-3.5 bg-gray-100 text-gray-900 rounded font-medium text-sm hover:bg-gray-200 transition-colors"
                   >
                     <span>View Services</span>
                   </a>
                 </div>
               </div>
-            </div>
-            
-            <div className="absolute bottom-0 left-0 right-0">
-              <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-                <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#fafaf9"/>
-              </svg>
             </div>
           </div>
         </div>
@@ -204,8 +189,8 @@ const Services: React.FC = () => {
       <section id="categories" className="py-8 md:py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="text-center mb-8 md:mb-12">
-            <span className="text-[#d4af37] font-bold tracking-widest uppercase text-xs mb-2 block">Our Services</span>
-            <h2 className="text-2xl md:text-4xl font-bold text-[#2d5016] font-['Playfair_Display'] mb-3">
+            <span className="text-[#059669] font-bold tracking-widest uppercase text-xs mb-2 block">Our Services</span>
+            <h2 className="text-2xl md:text-4xl font-bold text-[#059669] font-['Poppins'] mb-3">
               Service Categories
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
@@ -273,7 +258,7 @@ const Services: React.FC = () => {
           {currentCategory && (
             <div className="bg-gradient-to-r from-emerald-50 to-green-50 rounded-2xl p-6 mb-8 border border-emerald-100">
               <p className="text-gray-700 text-center md:text-left">
-                <span className="font-bold text-[#2d5016]">{currentCategory.name}:</span> {currentCategory.description}
+                <span className="font-bold text-[#059669]">{currentCategory.name}:</span> {currentCategory.description}
               </p>
             </div>
           )}
@@ -284,7 +269,7 @@ const Services: React.FC = () => {
               {currentCategory.services.map((service) => (
                 <div
                   key={service.id}
-                  className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-[#2d5016]/20 hover:shadow-xl transition-all duration-300"
+                  className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-[#059669]/20 hover:shadow-xl transition-all duration-300"
                 >
                   {/* Service Banner */}
                   <div className="relative h-48 md:h-56 overflow-hidden">
@@ -295,7 +280,7 @@ const Services: React.FC = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                     <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className="text-xl md:text-2xl font-bold text-white font-['Playfair_Display'] mb-1">
+                      <h3 className="text-xl md:text-2xl font-bold text-white font-['Poppins'] mb-1">
                         {service.title}
                       </h3>
                     </div>
@@ -310,13 +295,13 @@ const Services: React.FC = () => {
                     {/* Features */}
                     <div className="mb-4">
                       <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                        <CheckCircle2 size={18} className="text-[#2d5016]" />
+                        <CheckCircle2 size={18} className="text-[#059669]" />
                         What's Included
                       </h4>
                       <ul className="space-y-2">
                         {service.features.map((feature, idx) => (
                           <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
-                            <div className="w-1.5 h-1.5 rounded-full bg-[#d4af37] mt-1.5 flex-shrink-0" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#059669] mt-1.5 flex-shrink-0" />
                             <span>{feature}</span>
                           </li>
                         ))}
@@ -326,7 +311,7 @@ const Services: React.FC = () => {
                     {/* Action Button */}
                     <Link
                       to={`/services/${service.id}`}
-                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#2d5016] to-[#3d6622] text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 group/btn"
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#059669] to-[#006638] text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 group/btn"
                     >
                       <span>View Gallery & Contact</span>
                       <ChevronRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
@@ -347,7 +332,7 @@ const Services: React.FC = () => {
           <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-emerald-100">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-[#2d5016] font-['Playfair_Display'] mb-4">
+                <h2 className="text-3xl md:text-4xl font-bold text-[#059669] font-['Poppins'] mb-4">
                   Need Expert Advice?
                 </h2>
                 <p className="text-gray-600 leading-relaxed mb-6">
@@ -356,7 +341,7 @@ const Services: React.FC = () => {
                 <div className="flex flex-wrap gap-3">
                   <Link
                     to="/contact-us"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#2d5016] to-[#3d6622] text-white rounded-full font-bold hover:shadow-lg transition-all duration-300"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#059669] to-[#006638] text-white rounded-full font-bold hover:shadow-lg transition-all duration-300"
                   >
                     <span>Contact Us</span>
                     <ArrowRight size={18} />
@@ -372,19 +357,19 @@ const Services: React.FC = () => {
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gradient-to-br from-emerald-50 to-green-100 rounded-2xl p-6 text-center">
-                  <div className="text-4xl font-bold text-[#2d5016] mb-2">500+</div>
+                  <div className="text-4xl font-bold text-[#059669] mb-2">500+</div>
                   <div className="text-sm text-gray-600">Happy Clients</div>
                 </div>
                 <div className="bg-gradient-to-br from-teal-50 to-cyan-100 rounded-2xl p-6 text-center">
-                  <div className="text-4xl font-bold text-[#2d5016] mb-2">15+</div>
+                  <div className="text-4xl font-bold text-[#059669] mb-2">15+</div>
                   <div className="text-sm text-gray-600">Years Experience</div>
                 </div>
                 <div className="bg-gradient-to-br from-amber-50 to-orange-100 rounded-2xl p-6 text-center">
-                  <div className="text-4xl font-bold text-[#2d5016] mb-2">4.9</div>
+                  <div className="text-4xl font-bold text-[#059669] mb-2">4.9</div>
                   <div className="text-sm text-gray-600">Average Rating</div>
                 </div>
                 <div className="bg-gradient-to-br from-pink-50 to-rose-100 rounded-2xl p-6 text-center">
-                  <div className="text-4xl font-bold text-[#2d5016] mb-2">24/7</div>
+                  <div className="text-4xl font-bold text-[#059669] mb-2">24/7</div>
                   <div className="text-sm text-gray-600">Support</div>
                 </div>
               </div>

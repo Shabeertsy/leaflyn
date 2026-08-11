@@ -40,7 +40,7 @@ const Addresses: React.FC = () => {
   if (isLoading && addresses.length === 0) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-neutral-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2d5016]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#059669]"></div>
       </div>
     );
   }
@@ -52,10 +52,10 @@ const Addresses: React.FC = () => {
         <button onClick={() => navigate(-1)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
           <ArrowLeft size={24} className="text-gray-700" />
         </button>
-        <h1 className="text-xl font-bold text-[#2d5016] font-['Playfair_Display']">Saved Addresses</h1>
+        <h1 className="text-xl font-bold text-[#059669] font-['Poppins']">Saved Addresses</h1>
         <button 
           onClick={() => navigate('/addresses/add')} // We might need to create this route/page too, or use a modal
-          className="ml-auto p-2 bg-[#2d5016]/10 text-[#2d5016] rounded-full hover:bg-[#2d5016]/20 transition-colors"
+          className="ml-auto p-2 bg-[#059669]/10 text-[#059669] rounded-full hover:bg-[#059669]/20 transition-colors"
         >
           <Plus size={24} />
         </button>
@@ -71,7 +71,7 @@ const Addresses: React.FC = () => {
             <p className="text-gray-500 mb-6">Add a new address to speed up checkout</p>
             <button
               onClick={() => navigate('/addresses/add')}
-              className="px-6 py-3 bg-[#2d5016] text-white rounded-xl font-bold hover:bg-[#3d6622] transition-colors shadow-lg"
+              className="px-6 py-3 bg-[#059669] text-white rounded-xl font-bold hover:bg-[#006638] transition-colors shadow-lg"
             >
               Add New Address
             </button>
@@ -81,14 +81,14 @@ const Addresses: React.FC = () => {
             <div 
               key={address.uuid}
               className={`bg-white rounded-2xl p-4 sm:p-6 shadow-sm border transition-all ${
-                address.isDefault ? 'border-[#2d5016] ring-1 ring-[#2d5016]' : 'border-gray-100 hover:border-gray-200'
+                address.isDefault ? 'border-[#059669] ring-1 ring-[#059669]' : 'border-gray-100 hover:border-gray-200'
               }`}
             >
               {/* Header with name and default badge */}
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                   <div className={`w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center ${
-                    address.isDefault ? 'bg-[#2d5016] text-white' : 'bg-gray-100 text-gray-500'
+                    address.isDefault ? 'bg-[#059669] text-white' : 'bg-gray-100 text-gray-500'
                   }`}>
                     <MapPin size={20} />
                   </div>
@@ -98,7 +98,7 @@ const Addresses: React.FC = () => {
                   </div>
                 </div>
                 {address.isDefault && (
-                  <span className="bg-[#2d5016]/10 text-[#2d5016] text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap ml-2">
+                  <span className="bg-[#059669]/10 text-[#059669] text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap ml-2">
                     Default
                   </span>
                 )}
@@ -140,7 +140,7 @@ const Addresses: React.FC = () => {
                 {!address.isDefault && (
                   <button 
                     onClick={() => handleSetDefault(address.uuid)}
-                    className="w-full sm:w-auto sm:ml-auto px-4 py-2.5 text-sm font-semibold text-[#2d5016] bg-[#2d5016]/10 hover:bg-[#2d5016]/20 rounded-lg transition-colors"
+                    className="w-full sm:w-auto sm:ml-auto px-4 py-2.5 text-sm font-semibold text-[#059669] bg-[#059669]/10 hover:bg-[#059669]/20 rounded-lg transition-colors"
                   >
                     Set as Default
                   </button>

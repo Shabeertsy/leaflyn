@@ -61,40 +61,20 @@ const ContactUsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-white pb-20 lg:pb-8">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#1a3a0f] via-[#2d5016] to-[#1f4412] text-white overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-[#d4af37]/30 to-transparent rounded-full blur-3xl animate-pulse"
-            style={{ animationDuration: '8s' }}
-          />
-          <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-tl from-[#8b7355]/20 to-transparent rounded-full blur-3xl animate-pulse"
-            style={{ animationDuration: '10s', animationDelay: '2s' }}
-          />
-        </div>
-
-        <div className="relative px-6 py-20 lg:py-24 max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2.5 bg-white/10 backdrop-blur-xl px-5 py-2.5 rounded-full border border-white/30 mb-6">
-            <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full animate-pulse" />
-            <span className="text-white/90 font-semibold tracking-widest uppercase text-xs">We're Here to Help</span>
+      <section className="bg-neutral-50 border-b border-gray-100">
+        <div className="px-6 py-20 lg:py-24 max-w-7xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2.5 bg-[#059669]/10 px-5 py-2.5 rounded-full border border-[#059669]/20 mb-6">
+            <div className="w-1.5 h-1.5 bg-[#059669] rounded-full" />
+            <span className="text-[#059669] font-semibold tracking-widest uppercase text-xs">We're Here to Help</span>
           </div>
 
-          <h1 className="text-4xl lg:text-6xl font-bold leading-tight font-['Playfair_Display'] mb-6"
-            style={{
-              textShadow: '0 4px 20px rgba(0,0,0,0.4)',
-              letterSpacing: '-0.02em'
-            }}
-          >
-            Get in <span className="bg-gradient-to-r from-[#f4d03f] via-[#d4af37] to-[#c9a961] bg-clip-text text-transparent">Touch</span>
+          <h1 className="text-4xl lg:text-6xl font-bold leading-tight font-['Poppins'] mb-6 text-gray-900">
+            Get in <span className="text-[#059669]">Touch</span>
           </h1>
 
-          <p className="text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
             Have questions about our plants or services? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
           </p>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#fafaf9" />
-          </svg>
         </div>
       </section>
 
@@ -104,7 +84,7 @@ const ContactUsPage: React.FC = () => {
           {/* Contact Information */}
           <div className="space-y-8">
             <div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 font-['Playfair_Display']">
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 font-['Poppins']">
                 Contact Information
               </h2>
               <p className="text-gray-600 leading-relaxed">
@@ -114,39 +94,39 @@ const ContactUsPage: React.FC = () => {
 
             {/* Contact Cards */}
             <div className="space-y-4">
-              <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#2d5016]/20 hover:shadow-lg transition-all duration-300">
+              <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#059669]/20 hover:shadow-lg transition-all duration-300">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#2d5016] to-[#3d6622] rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 bg-[#059669] rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                     <Phone className="text-white" size={20} />
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Phone</h3>
                     <p className="text-gray-600 text-sm mb-2">Mon-Sat from 9am to 6pm</p>
-                    <a href={`tel:${companyContact?.company_phone}`} className="text-[#2d5016] font-semibold hover:text-[#d4af37] transition-colors">
+                    <a href={`tel:${companyContact?.company_phone}`} className="text-[#059669] font-semibold hover:text-[#059669] transition-colors">
                       {companyContact?.company_phone || '+91 98765 43210'}
                     </a>
                   </div>
                 </div>
               </div>
 
-              <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#2d5016]/20 hover:shadow-lg transition-all duration-300">
+              <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#059669]/20 hover:shadow-lg transition-all duration-300">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#d4af37] to-[#c9a961] rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 bg-[#059669] rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                     <Mail className="text-white" size={20} />
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Email</h3>
                     <p className="text-gray-600 text-sm mb-2">Our friendly team is here to help</p>
-                    <a href={`mailto:${companyContact?.company_email}`} className="text-[#2d5016] font-semibold hover:text-[#d4af37] transition-colors">
-                      {companyContact?.company_email || 'hello@fernrie.com'}
+                    <a href={`mailto:${companyContact?.company_email}`} className="text-[#059669] font-semibold hover:text-[#059669] transition-colors">
+                      {companyContact?.company_email || 'hello@catsclaw.com'}
                     </a>
                   </div>
                 </div>
               </div>
 
-              <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#2d5016]/20 hover:shadow-lg transition-all duration-300">
+              <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#059669]/20 hover:shadow-lg transition-all duration-300">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-teal-600 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 bg-[#059669] rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                     <MapPin className="text-white" size={20} />
                   </div>
                   <div>
@@ -162,14 +142,14 @@ const ContactUsPage: React.FC = () => {
             </div>
 
             {/* Additional Info */}
-            <div className="bg-gradient-to-br from-[#2d5016] to-[#1a3a0f] rounded-2xl p-8 text-white">
-              <h3 className="text-xl font-bold mb-3 font-['Playfair_Display']">Need Immediate Help?</h3>
+            <div className="bg-[#059669] rounded-2xl p-8 text-white">
+              <h3 className="text-xl font-bold mb-3 font-['Poppins']">Need Immediate Help?</h3>
               <p className="text-white/80 mb-4 leading-relaxed">
                 For urgent plant care questions or order issues, our support team is ready to assist you immediately.
               </p>
               <a
                 href={`tel:${companyContact?.company_phone}`}
-                className="inline-flex items-center gap-2 bg-white text-[#2d5016] px-6 py-3 rounded-full font-bold hover:bg-[#d4af37] hover:text-white transition-all duration-300"
+                className="inline-flex items-center gap-2 bg-white text-[#059669] px-6 py-3 rounded-full font-bold hover:bg-[#059669] hover:text-white transition-all duration-300"
               >
                 <Phone size={18} />
                 Call Now
@@ -179,7 +159,7 @@ const ContactUsPage: React.FC = () => {
 
           {/* Contact Form */}
           <div className="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-xl">
-            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-6 font-['Playfair_Display']">
+            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-6 font-['Poppins']">
               Send us a Message
             </h2>
 
@@ -211,7 +191,7 @@ const ContactUsPage: React.FC = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2d5016] focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#059669] focus:border-transparent transition-all"
                   placeholder="John Doe"
                 />
               </div>
@@ -227,7 +207,7 @@ const ContactUsPage: React.FC = () => {
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2d5016] focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#059669] focus:border-transparent transition-all"
                   placeholder="Subject"
                 />
               </div>
@@ -243,7 +223,7 @@ const ContactUsPage: React.FC = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2d5016] focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#059669] focus:border-transparent transition-all"
                   placeholder="john@example.com"
                 />
               </div>
@@ -259,7 +239,7 @@ const ContactUsPage: React.FC = () => {
                   value={formData.phone}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2d5016] focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#059669] focus:border-transparent transition-all"
                   placeholder="+91 98765 43210"
                 />
               </div>
@@ -275,7 +255,7 @@ const ContactUsPage: React.FC = () => {
                   onChange={handleChange}
                   required
                   rows={6}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2d5016] focus:border-transparent transition-all resize-none"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#059669] focus:border-transparent transition-all resize-none"
                   placeholder="Tell us how we can help you..."
                 />
               </div>
@@ -283,7 +263,7 @@ const ContactUsPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-[#2d5016] to-[#1a3a0f] text-white py-4 rounded-xl font-bold hover:from-[#d4af37] hover:to-[#c9a961] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+                className="w-full bg-[#059669] text-white py-4 rounded-xl font-bold hover:bg-[#006638] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-[#059669]/20"
               >
                 {isSubmitting ? (
                   <>
@@ -305,7 +285,7 @@ const ContactUsPage: React.FC = () => {
       {/* FAQ Section */}
       <section className="max-w-7xl mx-auto px-6 py-16 bg-white rounded-3xl border border-gray-100">
         <div className="text-center mb-12">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 font-['Playfair_Display']">
+          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 font-['Poppins']">
             Frequently Asked Questions
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">

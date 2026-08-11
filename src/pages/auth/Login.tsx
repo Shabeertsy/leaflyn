@@ -61,14 +61,11 @@ const Login: React.FC = () => {
         <div className="p-8 md:p-10">
           <div className="text-center mb-8">
             <Link to="/" className="inline-block mb-6">
-              <div className="flex items-center justify-center gap-2">
-                <div className="w-10 h-10 bg-[#2d5016] rounded-full flex items-center justify-center">
-                  <span className="text-white text-xl font-bold">f</span>
-                </div>
-                <span className="text-2xl font-bold text-[#2d5016] font-['Playfair_Display']">fernrie</span>
+              <div className="flex items-center gap-2 mb-8 justify-center">
+                <span className="text-2xl font-bold text-[#059669] font-['Poppins']">catsclaw</span>
               </div>
             </Link>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2 font-['Playfair_Display']">Welcome Back</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2 font-['Poppins']">Welcome Back</h1>
             <p className="text-gray-500">Sign in to continue to your green space</p>
           </div>
 
@@ -89,7 +86,7 @@ const Login: React.FC = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#2d5016] focus:ring-0 outline-none transition-all font-medium"
+                  className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#059669] focus:ring-0 outline-none transition-all font-medium"
                   placeholder="john@example.com"
                   required
                 />
@@ -99,7 +96,7 @@ const Login: React.FC = () => {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-bold text-gray-700 uppercase tracking-wide">Password</label>
-                <Link to="/forgot-password" className="text-xs font-semibold text-[#2d5016] hover:underline">
+                <Link to="/forgot-password" className="text-xs font-semibold text-[#059669] hover:underline">
                   Forgot Password?
                 </Link>
               </div>
@@ -111,7 +108,7 @@ const Login: React.FC = () => {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-12 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#2d5016] focus:ring-0 outline-none transition-all font-medium"
+                  className="w-full pl-12 pr-12 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#059669] focus:ring-0 outline-none transition-all font-medium"
                   placeholder="••••••••"
                   required
                 />
@@ -128,7 +125,7 @@ const Login: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#2d5016] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#3d6622] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-[#059669] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#006638] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <Loader2 size={24} className="animate-spin" />
@@ -143,7 +140,7 @@ const Login: React.FC = () => {
           <div className="mt-8 text-center">
             <p className="text-gray-500">
               Don't have an account?{' '}
-              <Link to="/register" className="font-bold text-[#2d5016] hover:underline">
+              <Link to="/register" className="font-bold text-[#059669] hover:underline">
                 Create Account
               </Link>
             </p>

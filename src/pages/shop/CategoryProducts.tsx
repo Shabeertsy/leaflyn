@@ -8,13 +8,7 @@ import { mapVariantToProduct } from '../../lib/mappers';
 import type { Product } from '../../types';
 import { useCategoryUIStore } from '../../store/useCategoryUIStore';
 
-// Get base URL for images
-const getImageUrl = (imagePath: string) => {
-  if (!imagePath) return '';
-  if (imagePath.startsWith('http')) return imagePath;
-  const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-  return `${baseURL}${imagePath}`;
-};
+
 
 const CategoryProducts: React.FC = () => {
   const { slug } = useParams<{ slug?: string }>();
@@ -225,7 +219,7 @@ const CategoryProducts: React.FC = () => {
         <div className="min-h-screen bg-neutral-50 flex flex-col items-center justify-center p-4">
            <h2 className="text-2xl font-bold text-gray-900 mb-2">Category Not Found</h2>
            <p className="text-gray-500 mb-6">We couldn't find the category you're looking for.</p>
-           <Link to="/" className="px-6 py-3 bg-[#2d5016] text-white rounded-full font-bold">
+           <Link to="/" className="px-6 py-3 bg-[#059669] text-white rounded-full font-bold">
               Back to Home
            </Link>
         </div>
@@ -249,7 +243,7 @@ const CategoryProducts: React.FC = () => {
         </div>
         {/* Mobile Filter Tabs (Horizontal Scroll) */}
         <div className="flex items-center gap-2 px-4 pb-3 overflow-x-auto no-scrollbar">
-           <button className="flex-shrink-0 px-4 py-1.5 bg-[#2d5016] text-white text-xs font-bold rounded-full shadow-sm">
+           <button className="flex-shrink-0 px-4 py-1.5 bg-[#059669] text-white text-xs font-bold rounded-full shadow-sm">
              All
            </button>
            <button className="flex-shrink-0 px-4 py-1.5 bg-white border border-gray-200 text-gray-600 text-xs font-medium rounded-full">
@@ -265,35 +259,21 @@ const CategoryProducts: React.FC = () => {
       </div>
 
       {/* Desktop Hero Header (Hidden on Mobile) */}
-      <div className="hidden md:block relative bg-[#2d5016] text-white overflow-hidden">
-        {/* Background Pattern/Image */}
-        <div className="absolute inset-0 opacity-20">
-            {currentCategory?.icon ? (
-                <img 
-                  src={getImageUrl(currentCategory.icon)} 
-                  alt="" 
-                  className="w-full h-full object-cover blur-sm scale-110"
-                />
-            ) : (
-                <div className="w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-            )}
-            <div className="absolute inset-0 bg-[#2d5016]/80 mix-blend-multiply"></div>
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-16">
-          <Link to="/" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors">
-            <ArrowLeft size={20} />
-            <span className="font-medium">Back to Home</span>
+      <div className="hidden md:block bg-white border-b border-gray-100 pt-10 pb-12 px-4 md:px-6">
+        <div className="max-w-7xl mx-auto">
+          <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-[#059669] mb-6 transition-colors">
+            <ArrowLeft size={18} />
+            <span className="font-medium text-sm">Back to Home</span>
           </Link>
           
           <div className="max-w-3xl">
-            <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold tracking-widest uppercase mb-4 border border-white/10">
+            <span className="inline-block px-3 py-1 bg-gray-100 text-gray-600 rounded-md text-xs font-bold tracking-widest uppercase mb-4">
               Collection
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-['Playfair_Display'] mb-4 leading-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
               {currentCategory?.category_name || 'Loading...'}
             </h1>
-            <p className="text-lg text-white/80 font-light leading-relaxed max-w-2xl">
+            <p className="text-base text-gray-500 max-w-2xl">
               {currentCategory?.description || `Explore our premium selection of ${currentCategory?.category_name || 'products'}.`}
             </p>
           </div>
@@ -302,18 +282,18 @@ const CategoryProducts: React.FC = () => {
 
       {/* Main Content */}
       <div 
-        className="max-w-7xl mx-auto px-3 md:px-6 py-4 md:py-8 md:-mt-8 relative z-10"
+        className="max-w-7xl mx-auto px-3 md:px-6 py-4 md:py-6 relative z-10"
         style={{ minHeight: isRestoredRef.current ? storedScrollPosition + 800 : 'auto' }}
       >
         {/* Desktop Stats / Filter Bar */}
-        <div className="hidden md:flex bg-white rounded-2xl shadow-lg p-4 md:p-6 mb-8 flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="hidden md:flex bg-transparent border-b border-gray-100 pb-6 mb-8 flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <p className="text-gray-500 text-sm">
-              Showing <span className="font-bold text-[#2d5016]">{totalCount}</span> products
+              Showing <span className="font-bold text-gray-900">{totalCount}</span> products
             </p>
           </div>
           
-          <div className="flex items-center gap-2 text-sm font-medium text-gray-600 bg-gray-50 px-4 py-2 rounded-lg border border-gray-100">
+          <div className="flex items-center gap-2 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 px-4 py-2 rounded-lg border border-gray-200 cursor-pointer transition-colors">
              <Filter size={16} />
              <span>Default Sorting</span>
           </div>
@@ -322,7 +302,7 @@ const CategoryProducts: React.FC = () => {
         {/* Products Grid */}
         {isLoading && page === 1 ? (
           <div className="flex justify-center items-center py-32">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2d5016]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#059669]"></div>
           </div>
         ) : displayProducts.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
@@ -344,7 +324,7 @@ const CategoryProducts: React.FC = () => {
             {/* Infinite Scroll Loader */}
             {(isLoadingMore || isLoading) && (
               <div ref={observerTarget} className="mt-8 md:mt-12 flex justify-center items-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 md:h-10 md:w-10 border-b-2 border-[#2d5016]"></div>
+                <div className="animate-spin rounded-full h-8 w-8 md:h-10 md:w-10 border-b-2 border-[#059669]"></div>
               </div>
             )}
             

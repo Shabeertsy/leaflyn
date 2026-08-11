@@ -23,7 +23,7 @@ const ServiceDetail: React.FC = () => {
         <p className="text-gray-600 mb-6">The service you are looking for does not exist.</p>
         <Link 
           to="/services" 
-          className="px-6 py-2.5 bg-[#2d5016] text-white rounded-full font-semibold hover:bg-[#3d6622] transition-colors"
+          className="px-6 py-2.5 bg-[#059669] text-white rounded-full font-semibold hover:bg-[#006638] transition-colors"
         >
           Back to Services
         </Link>
@@ -49,7 +49,7 @@ const ServiceDetail: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8">
         {/* Header & Description */}
         <div className="mb-6 md:mb-8 text-center md:text-left">
-          <h1 className="text-2xl md:text-4xl font-bold text-[#2d5016] font-['Playfair_Display'] mb-3">
+          <h1 className="text-2xl md:text-4xl font-bold text-[#059669] font-['Poppins'] mb-3">
             {service.title}
           </h1>
           <p className="text-gray-600 leading-relaxed max-w-3xl text-sm md:text-base">
@@ -76,13 +76,13 @@ const ServiceDetail: React.FC = () => {
         <div className="grid md:grid-cols-3 gap-8 mb-12">
           <div className="md:col-span-2">
             <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <CheckCircle2 className="text-[#2d5016]" size={24} />
+              <CheckCircle2 className="text-[#059669]" size={24} />
               Service Features
             </h2>
             <div className="grid sm:grid-cols-2 gap-4">
               {service.features.map((feature, idx) => (
                 <div key={idx} className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="w-2 h-2 rounded-full bg-[#d4af37] mt-2 flex-shrink-0" />
+                  <div className="w-2 h-2 rounded-full bg-[#059669] mt-2 flex-shrink-0" />
                   <span className="text-gray-700 font-medium">{feature}</span>
                 </div>
               ))}
@@ -94,7 +94,7 @@ const ServiceDetail: React.FC = () => {
             <h3 className="font-bold text-lg text-gray-900 mb-4">Interested in this service?</h3>
             <div className="space-y-3">
               <a href="tel:+1234567890" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-200">
-                <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-[#2d5016]">
+                <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-[#059669]">
                   <Phone size={18} />
                 </div>
                 <div>
@@ -103,7 +103,7 @@ const ServiceDetail: React.FC = () => {
                 </div>
               </a>
               <a href="mailto:info@leafin.com" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-200">
-                <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-[#2d5016]">
+                <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-[#059669]">
                   <Mail size={18} />
                 </div>
                 <div>
@@ -112,7 +112,7 @@ const ServiceDetail: React.FC = () => {
                 </div>
               </a>
               <a href="https://wa.me/1234567890" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-200">
-                <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-[#2d5016]">
+                <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-[#059669]">
                   <MessageCircle size={18} />
                 </div>
                 <div>
@@ -123,7 +123,7 @@ const ServiceDetail: React.FC = () => {
             </div>
             <Link 
               to="/contact-us"
-              className="mt-6 w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#2d5016] text-white rounded-xl font-bold hover:bg-[#3d6622] transition-colors"
+              className="mt-6 w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#059669] text-white rounded-xl font-bold hover:bg-[#006638] transition-colors"
             >
               <span>Get a Quote</span>
               <ArrowRight size={18} />
@@ -133,7 +133,7 @@ const ServiceDetail: React.FC = () => {
 
         {/* Gallery Grid */}
         <div>
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 font-['Playfair_Display']">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 font-['Poppins']">
             Project Gallery
           </h2>
           {/* Grid Layout similar to Search Page */}

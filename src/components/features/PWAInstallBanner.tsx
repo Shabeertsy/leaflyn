@@ -42,14 +42,14 @@ const PWAInstallBanner: React.FC = () => {
 
   return (
     <div className="fixed top-20 left-4 right-4 z-50 lg:hidden animate-slide-down">
-      <div className="bg-gradient-to-r from-[#2d5016] to-[#3d6622] text-white rounded-2xl shadow-2xl p-4 border border-white/20">
+      <div className="bg-gradient-to-r from-[#059669] to-[#006638] text-white rounded-2xl shadow-2xl p-4 border border-white/20">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0 w-12 h-12 bg-white rounded-xl flex items-center justify-center">
-            <Download size={24} className="text-[#2d5016]" />
+            <Download size={24} className="text-[#059669]" />
           </div>
 
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-base mb-1">Install fernrie App</h3>
+            <h3 className="font-bold text-base mb-1">Install catsclaw App</h3>
             <p className="text-sm text-white/90 leading-snug">
               Add to your home screen for a better experience!
             </p>
@@ -57,7 +57,7 @@ const PWAInstallBanner: React.FC = () => {
             <div className="flex gap-2 mt-3">
               <button
                 onClick={handleInstall}
-                className="flex-1 bg-white text-[#2d5016] font-bold text-sm py-2 px-4 rounded-lg hover:bg-white/90 transition-colors"
+                className="flex-1 bg-white text-[#059669] font-bold text-sm py-2 px-4 rounded-lg hover:bg-white/90 transition-colors"
               >
                 Install
               </button>
